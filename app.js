@@ -1,0 +1,413 @@
+const searchInput = document.querySelector("#searchInput");
+const typeFilter = document.querySelector("#typeFilter");
+const brandFilter = document.querySelector("#brandFilter");
+const catalogGrid = document.querySelector(".catalog-grid");
+const totalRecords = document.querySelector("#totalRecords");
+const matchingRecords = document.querySelector("#matchingRecords");
+const totalRecordsLabel = document.querySelector("#totalRecordsLabel");
+const matchingRecordsLabel = document.querySelector("#matchingRecordsLabel");
+const pageStatus = document.querySelector("#pageStatus");
+const paginationStatus = document.querySelector("#paginationStatus");
+const prevPageButton = document.querySelector("#prevPage");
+const nextPageButton = document.querySelector("#nextPage");
+const emptyStateMessage = document.querySelector("#emptyStateMessage");
+const catalogEyebrow = document.querySelector("#catalogEyebrow");
+const catalogTitle = document.querySelector("#catalogTitle");
+const languageLabel = document.querySelector("#languageLabel");
+const themeLabel = document.querySelector("#themeLabel");
+const languageEnglishButton = document.querySelector("#languageEnglish");
+const languageKhmerButton = document.querySelector("#languageKhmer");
+const themeLightButton = document.querySelector("#themeLight");
+const themeDarkButton = document.querySelector("#themeDark");
+const searchLabel = document.querySelector("#searchLabel");
+const typeFilterLabel = document.querySelector("#typeFilterLabel");
+const brandFilterLabel = document.querySelector("#brandFilterLabel");
+const pagination = document.querySelector(".pagination");
+const languageButtons = [...document.querySelectorAll("[data-language-option]")];
+const themeButtons = [...document.querySelectorAll("[data-theme-option]")];
+
+const typeOptions = {
+  all: document.querySelector("#typeOptionAll"),
+  featured: document.querySelector("#typeOptionFeatured"),
+  sprayer: document.querySelector("#typeOptionSprayer"),
+  battery: document.querySelector("#typeOptionBattery"),
+};
+
+const STORAGE_KEYS = {
+  language: "agt-language",
+  theme: "agt-theme",
+};
+
+const RECORDS_PER_PAGE = 20;
+const products = Array.isArray(window.catalogProducts) ? window.catalogProducts : [];
+
+const translations = {
+  en: {
+    pageTitle: "Product Price List | Angkor Garden Tools",
+    catalogEyebrow: "Angkor Garden Tools",
+    catalogTitle: "Product Price List",
+    languageLabel: "Language",
+    themeLabel: "Theme",
+    languageEnglish: "English",
+    languageKhmer: "Khmer",
+    themeLight: "White Mode",
+    themeDark: "Dark Mode",
+    searchLabel: "Search catalog",
+    searchPlaceholder: "Search model, brand, capacity, or series",
+    typeLabel: "Product Type",
+    brandLabel: "Brand",
+    typeAll: "All Items",
+    typeFeatured: "Featured",
+    typeSprayer: "Sprayers",
+    typeBattery: "Battery Units",
+    allBrands: "All Brands",
+    totalRecordsLabel: "Total records",
+    matchingLabel: "Matching",
+    previous: "Previous",
+    next: "Next",
+    emptyState: "No catalog items match that search.",
+    paginationLabel: "Catalog pagination",
+    code: "Code",
+    series: "Series",
+    depot: "Depo",
+    user: "User",
+    openDetails: "Open product details",
+    pageOf(page, total) {
+      return `Page ${page} of ${total}`;
+    },
+    showing(start, end, total) {
+      return `Showing ${start}-${end} of ${total}`;
+    },
+  },
+  km: {
+    pageTitle: "តារាងតម្លៃផលិតផល | Angkor Garden Tools",
+    catalogEyebrow: "អង្គរឧបករណ៍កសិកម្ម",
+    catalogTitle: "តារាងតម្លៃផលិតផល",
+    languageLabel: "ភាសា",
+    themeLabel: "ម៉ូដពណ៌",
+    languageEnglish: "English",
+    languageKhmer: "ខ្មែរ",
+    themeLight: "ម៉ូដស",
+    themeDark: "ម៉ូដងងឹត",
+    searchLabel: "ស្វែងរកផលិតផល",
+    searchPlaceholder: "ស្វែងរកម៉ូដែល ម៉ាក ចំណុះ ឬស៊េរី",
+    typeLabel: "ប្រភេទផលិតផល",
+    brandLabel: "ម៉ាក",
+    typeAll: "ទាំងអស់",
+    typeFeatured: "ពេញនិយម",
+    typeSprayer: "ម៉ាស៊ីនបាញ់",
+    typeBattery: "បាតឺរី",
+    allBrands: "ម៉ាកទាំងអស់",
+    totalRecordsLabel: "ទំនិញសរុប",
+    matchingLabel: "ត្រូវនឹង",
+    previous: "មុន",
+    next: "បន្ទាប់",
+    emptyState: "មិនមានផលិតផលត្រូវនឹងការស្វែងរកនេះទេ។",
+    paginationLabel: "ការបែងចែកទំព័រផលិតផល",
+    code: "លេខកូដ",
+    series: "ស៊េរី",
+    depot: "ដេប៉ូ",
+    user: "អ្នកប្រើ",
+    openDetails: "បើកព័ត៌មានលម្អិតផលិតផល",
+    pageOf(page, total) {
+      return `ទំព័រ ${page} នៃ ${total}`;
+    },
+    showing(start, end, total) {
+      return `បង្ហាញ ${start}-${end} នៃ ${total}`;
+    },
+  },
+};
+
+let currentLanguage = readStoredPreference(STORAGE_KEYS.language, ["en", "km"], "km");
+let currentTheme = readStoredPreference(STORAGE_KEYS.theme, ["light", "dark"], "light");
+let currentPage = 1;
+
+function getDictionary() {
+  return translations[currentLanguage] ?? translations.km;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function readStoredPreference(key, allowedValues, fallbackValue) {
+  try {
+    const storedValue = window.localStorage.getItem(key);
+
+    if (storedValue && allowedValues.includes(storedValue)) {
+      return storedValue;
+    }
+  } catch (error) {
+    return fallbackValue;
+  }
+
+  return fallbackValue;
+}
+
+function savePreference(key, value) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch (error) {
+    return;
+  }
+}
+
+function buildBrandOptions() {
+  const selectedValue = brandFilter.value;
+  const uniqueBrands = [...new Set(products.map((product) => product.brand).filter(Boolean))].sort((left, right) =>
+    left.localeCompare(right),
+  );
+
+  brandFilter.innerHTML = "";
+
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  brandFilter.append(allOption);
+
+  for (const brand of uniqueBrands) {
+    const option = document.createElement("option");
+    option.value = brand.toLowerCase();
+    option.textContent = brand;
+    brandFilter.append(option);
+  }
+
+  if ([...brandFilter.options].some((option) => option.value === selectedValue)) {
+    brandFilter.value = selectedValue;
+  } else {
+    brandFilter.value = "all";
+  }
+}
+
+function matchesType(product) {
+  if (typeFilter.value === "all") {
+    return true;
+  }
+
+  if (typeFilter.value === "featured") {
+    return Boolean(product.featured);
+  }
+
+  return product.filterType === typeFilter.value;
+}
+
+function matchesBrand(product) {
+  if (brandFilter.value === "all") {
+    return true;
+  }
+
+  return product.brand.toLowerCase() === brandFilter.value;
+}
+
+function matchesSearch(product) {
+  const query = searchInput.value.trim().toLowerCase();
+
+  if (!query) {
+    return true;
+  }
+
+  return product.searchText.includes(query);
+}
+
+function getFilteredProducts() {
+  return products.filter((product) => matchesType(product) && matchesBrand(product) && matchesSearch(product));
+}
+
+function getCardSeriesText(product, dictionary) {
+  if (currentLanguage === "km") {
+    return product.series;
+  }
+
+  return `${dictionary.series}: ${product.series}`;
+}
+
+function buildCatalogCardMarkup(product, dictionary) {
+  const detailLabel = `${product.code} - ${dictionary.openDetails}`;
+
+  return `
+    <a
+      class="catalog-card catalog-card--link"
+      href="detail.html?code=${encodeURIComponent(product.code)}"
+      aria-label="${escapeHtml(detailLabel)}"
+    >
+      <div class="catalog-card__head">
+        <span class="catalog-card__label"${currentLanguage === "km" ? ' lang="km"' : ""}>${escapeHtml(dictionary.code)}</span>
+        <span class="catalog-card__code">${escapeHtml(product.code)}</span>
+      </div>
+      <div class="catalog-card__band">
+        <span class="catalog-card__brand">${escapeHtml(product.brand)}</span>
+        <span class="catalog-card__volume">${escapeHtml(product.volume)}</span>
+      </div>
+      <div class="catalog-card__body">
+        <h3 lang="km">${escapeHtml(product.title)}</h3>
+        <p lang="km">${escapeHtml(product.description)}</p>
+      </div>
+      <div class="catalog-card__art" style="--art-bg:${escapeHtml(product.artBg)}; --art-color:${escapeHtml(product.artColor)};">
+        <svg viewBox="0 0 220 220" aria-hidden="true"><use href="#icon-${escapeHtml(product.icon)}"></use></svg>
+      </div>
+      <div class="catalog-card__meta">
+        <span>${escapeHtml(getCardSeriesText(product, dictionary))}</span>
+        <div class="catalog-card__price-stack">
+          <div class="catalog-card__price-row">
+            <small>${escapeHtml(dictionary.depot)}</small>
+            <strong>${escapeHtml(product.depoPrice)}</strong>
+          </div>
+          <div class="catalog-card__price-row">
+            <small>${escapeHtml(dictionary.user)}</small>
+            <strong>${escapeHtml(product.userPrice)}</strong>
+          </div>
+        </div>
+      </div>
+    </a>
+  `;
+}
+
+function renderCatalog() {
+  const dictionary = getDictionary();
+  const filteredProducts = getFilteredProducts();
+  const totalMatches = filteredProducts.length;
+  const totalPages = totalMatches === 0 ? 0 : Math.ceil(totalMatches / RECORDS_PER_PAGE);
+
+  if (totalPages === 0) {
+    currentPage = 1;
+  } else if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
+
+  const startIndex = totalPages === 0 ? 0 : (currentPage - 1) * RECORDS_PER_PAGE;
+  const visibleProducts = filteredProducts.slice(startIndex, startIndex + RECORDS_PER_PAGE);
+  const startRecord = totalMatches === 0 ? 0 : startIndex + 1;
+  const endRecord = totalMatches === 0 ? 0 : startIndex + visibleProducts.length;
+
+  catalogGrid.innerHTML = visibleProducts.map((product) => buildCatalogCardMarkup(product, dictionary)).join("");
+  emptyStateMessage.hidden = totalMatches !== 0;
+  totalRecords.textContent = String(products.length);
+  matchingRecords.textContent = String(totalMatches);
+  pageStatus.textContent = totalPages === 0 ? dictionary.pageOf(0, 0) : dictionary.pageOf(currentPage, totalPages);
+  paginationStatus.textContent = dictionary.showing(startRecord, endRecord, totalMatches);
+  prevPageButton.disabled = totalPages <= 1 || currentPage === 1;
+  nextPageButton.disabled = totalPages <= 1 || currentPage === totalPages;
+}
+
+function syncLanguageButtons() {
+  for (const button of languageButtons) {
+    const isActive = button.dataset.languageOption === currentLanguage;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  }
+}
+
+function syncThemeButtons() {
+  document.body.dataset.theme = currentTheme;
+
+  for (const button of themeButtons) {
+    const isActive = button.dataset.themeOption === currentTheme;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  }
+}
+
+function applyLanguage() {
+  const dictionary = getDictionary();
+
+  document.documentElement.lang = currentLanguage;
+  document.title = dictionary.pageTitle;
+  catalogEyebrow.textContent = dictionary.catalogEyebrow;
+  catalogTitle.textContent = dictionary.catalogTitle;
+  languageLabel.textContent = dictionary.languageLabel;
+  themeLabel.textContent = dictionary.themeLabel;
+  languageEnglishButton.setAttribute("aria-label", dictionary.languageEnglish);
+  languageEnglishButton.setAttribute("title", dictionary.languageEnglish);
+  languageKhmerButton.setAttribute("aria-label", dictionary.languageKhmer);
+  languageKhmerButton.setAttribute("title", dictionary.languageKhmer);
+  themeLightButton.setAttribute("aria-label", dictionary.themeLight);
+  themeLightButton.setAttribute("title", dictionary.themeLight);
+  themeDarkButton.setAttribute("aria-label", dictionary.themeDark);
+  themeDarkButton.setAttribute("title", dictionary.themeDark);
+  searchLabel.textContent = dictionary.searchLabel;
+  searchInput.placeholder = dictionary.searchPlaceholder;
+  typeFilterLabel.textContent = dictionary.typeLabel;
+  brandFilterLabel.textContent = dictionary.brandLabel;
+  totalRecordsLabel.textContent = dictionary.totalRecordsLabel;
+  matchingRecordsLabel.textContent = dictionary.matchingLabel;
+  typeOptions.all.textContent = dictionary.typeAll;
+  typeOptions.featured.textContent = dictionary.typeFeatured;
+  typeOptions.sprayer.textContent = dictionary.typeSprayer;
+  typeOptions.battery.textContent = dictionary.typeBattery;
+  brandFilter.options[0].textContent = dictionary.allBrands;
+  emptyStateMessage.textContent = dictionary.emptyState;
+  prevPageButton.textContent = dictionary.previous;
+  nextPageButton.textContent = dictionary.next;
+  pagination.setAttribute("aria-label", dictionary.paginationLabel);
+  syncLanguageButtons();
+  renderCatalog();
+}
+
+function setLanguage(language) {
+  if (!translations[language] || currentLanguage === language) {
+    return;
+  }
+
+  currentLanguage = language;
+  savePreference(STORAGE_KEYS.language, language);
+  applyLanguage();
+}
+
+function setTheme(theme) {
+  if (!["light", "dark"].includes(theme) || currentTheme === theme) {
+    return;
+  }
+
+  currentTheme = theme;
+  savePreference(STORAGE_KEYS.theme, theme);
+  syncThemeButtons();
+}
+
+function resetAndRender() {
+  currentPage = 1;
+  renderCatalog();
+}
+
+for (const button of languageButtons) {
+  button.addEventListener("click", () => {
+    setLanguage(button.dataset.languageOption);
+  });
+}
+
+for (const button of themeButtons) {
+  button.addEventListener("click", () => {
+    setTheme(button.dataset.themeOption);
+  });
+}
+
+searchInput.addEventListener("input", resetAndRender);
+typeFilter.addEventListener("change", resetAndRender);
+brandFilter.addEventListener("change", resetAndRender);
+
+prevPageButton.addEventListener("click", () => {
+  if (currentPage <= 1) {
+    return;
+  }
+
+  currentPage -= 1;
+  renderCatalog();
+});
+
+nextPageButton.addEventListener("click", () => {
+  const totalPages = Math.ceil(getFilteredProducts().length / RECORDS_PER_PAGE);
+
+  if (currentPage >= totalPages) {
+    return;
+  }
+
+  currentPage += 1;
+  renderCatalog();
+});
+
+buildBrandOptions();
+syncThemeButtons();
+applyLanguage();
