@@ -14,17 +14,13 @@ const emptyStateMessage = document.querySelector("#emptyStateMessage");
 const catalogEyebrow = document.querySelector("#catalogEyebrow");
 const catalogTitle = document.querySelector("#catalogTitle");
 const languageLabel = document.querySelector("#languageLabel");
-const themeLabel = document.querySelector("#themeLabel");
 const languageEnglishButton = document.querySelector("#languageEnglish");
 const languageKhmerButton = document.querySelector("#languageKhmer");
-const themeLightButton = document.querySelector("#themeLight");
-const themeDarkButton = document.querySelector("#themeDark");
 const searchLabel = document.querySelector("#searchLabel");
 const typeFilterLabel = document.querySelector("#typeFilterLabel");
 const brandFilterLabel = document.querySelector("#brandFilterLabel");
 const pagination = document.querySelector(".pagination");
 const languageButtons = [...document.querySelectorAll("[data-language-option]")];
-const themeButtons = [...document.querySelectorAll("[data-theme-option]")];
 
 const typeOptions = {
   all: document.querySelector("#typeOptionAll"),
@@ -35,7 +31,6 @@ const typeOptions = {
 
 const STORAGE_KEYS = {
   language: "agt-language",
-  theme: "agt-theme",
 };
 
 const RECORDS_PER_PAGE = 20;
@@ -47,11 +42,8 @@ const translations = {
     catalogEyebrow: "Angkor Garden Tools",
     catalogTitle: "Product Price List",
     languageLabel: "Language",
-    themeLabel: "Theme",
     languageEnglish: "English",
     languageKhmer: "Khmer",
-    themeLight: "White Mode",
-    themeDark: "Dark Mode",
     searchLabel: "Search catalog",
     searchPlaceholder: "Search model, brand, capacity, or series",
     typeLabel: "Product Type",
@@ -84,11 +76,8 @@ const translations = {
     catalogEyebrow: "អង្គរឧបករណ៍កសិកម្ម",
     catalogTitle: "តារាងតម្លៃផលិតផល",
     languageLabel: "ភាសា",
-    themeLabel: "ម៉ូដពណ៌",
     languageEnglish: "English",
     languageKhmer: "ខ្មែរ",
-    themeLight: "ម៉ូដស",
-    themeDark: "ម៉ូដងងឹត",
     searchLabel: "ស្វែងរកផលិតផល",
     searchPlaceholder: "ស្វែងរកម៉ូដែល ម៉ាក ចំណុះ ឬស៊េរី",
     typeLabel: "ប្រភេទផលិតផល",
@@ -119,8 +108,9 @@ const translations = {
 };
 
 let currentLanguage = readStoredPreference(STORAGE_KEYS.language, ["en", "km"], "km");
-let currentTheme = readStoredPreference(STORAGE_KEYS.theme, ["light", "dark"], "light");
 let currentPage = 1;
+
+document.body.removeAttribute("data-theme");
 
 function getDictionary() {
   return translations[currentLanguage] ?? translations.km;
@@ -301,16 +291,6 @@ function syncLanguageButtons() {
   }
 }
 
-function syncThemeButtons() {
-  document.body.dataset.theme = currentTheme;
-
-  for (const button of themeButtons) {
-    const isActive = button.dataset.themeOption === currentTheme;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  }
-}
-
 function applyLanguage() {
   const dictionary = getDictionary();
 
@@ -319,15 +299,10 @@ function applyLanguage() {
   catalogEyebrow.textContent = dictionary.catalogEyebrow;
   catalogTitle.textContent = dictionary.catalogTitle;
   languageLabel.textContent = dictionary.languageLabel;
-  themeLabel.textContent = dictionary.themeLabel;
   languageEnglishButton.setAttribute("aria-label", dictionary.languageEnglish);
   languageEnglishButton.setAttribute("title", dictionary.languageEnglish);
   languageKhmerButton.setAttribute("aria-label", dictionary.languageKhmer);
   languageKhmerButton.setAttribute("title", dictionary.languageKhmer);
-  themeLightButton.setAttribute("aria-label", dictionary.themeLight);
-  themeLightButton.setAttribute("title", dictionary.themeLight);
-  themeDarkButton.setAttribute("aria-label", dictionary.themeDark);
-  themeDarkButton.setAttribute("title", dictionary.themeDark);
   searchLabel.textContent = dictionary.searchLabel;
   searchInput.placeholder = dictionary.searchPlaceholder;
   typeFilterLabel.textContent = dictionary.typeLabel;
@@ -357,16 +332,6 @@ function setLanguage(language) {
   applyLanguage();
 }
 
-function setTheme(theme) {
-  if (!["light", "dark"].includes(theme) || currentTheme === theme) {
-    return;
-  }
-
-  currentTheme = theme;
-  savePreference(STORAGE_KEYS.theme, theme);
-  syncThemeButtons();
-}
-
 function resetAndRender() {
   currentPage = 1;
   renderCatalog();
@@ -375,12 +340,6 @@ function resetAndRender() {
 for (const button of languageButtons) {
   button.addEventListener("click", () => {
     setLanguage(button.dataset.languageOption);
-  });
-}
-
-for (const button of themeButtons) {
-  button.addEventListener("click", () => {
-    setTheme(button.dataset.themeOption);
   });
 }
 
@@ -409,5 +368,4 @@ nextPageButton.addEventListener("click", () => {
 });
 
 buildBrandOptions();
-syncThemeButtons();
 applyLanguage();

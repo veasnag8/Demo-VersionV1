@@ -1,10 +1,7 @@
 const heroLogoLink = document.querySelector("#heroLogoLink");
 const languageLabel = document.querySelector("#languageLabel");
-const themeLabel = document.querySelector("#themeLabel");
 const languageEnglishButton = document.querySelector("#languageEnglish");
 const languageKhmerButton = document.querySelector("#languageKhmer");
-const themeLightButton = document.querySelector("#themeLight");
-const themeDarkButton = document.querySelector("#themeDark");
 const detailHeroSubline = document.querySelector("#detailHeroSubline");
 const detailEyebrow = document.querySelector("#detailEyebrow");
 const detailHeading = document.querySelector("#detailHeading");
@@ -42,16 +39,13 @@ const similarGrid = document.querySelector("#similarGrid");
 const detailFooterText = document.querySelector("#detailFooterText");
 const detailFooterPage = document.querySelector("#detailFooterPage");
 const languageButtons = [...document.querySelectorAll("[data-language-option]")];
-const themeButtons = [...document.querySelectorAll("[data-theme-option]")];
 
 const STORAGE_KEYS = {
   language: "agt-language",
-  theme: "agt-theme",
 };
 
 const products = Array.isArray(window.catalogProducts) ? window.catalogProducts : [];
-const productCode = new URLSearchParams(window.location.search).get("code");
-const currentProduct = products.find((product) => product.code.toLowerCase() === String(productCode).toLowerCase()) ?? null;
+let currentProduct = getProductFromLocation();
 
 const translations = {
   en: {
@@ -63,11 +57,8 @@ const translations = {
     detailHeading: "Product Details",
     detailCopyEyebrow: "Catalog item",
     languageLabel: "Language",
-    themeLabel: "Theme",
     languageEnglish: "English",
     languageKhmer: "Khmer",
-    themeLight: "White Mode",
-    themeDark: "Dark Mode",
     back: "Back to catalog",
     backLabel: "Back to product list",
     code: "Code",
@@ -105,11 +96,8 @@ const translations = {
     detailHeading: "ព័ត៌មានលម្អិតផលិតផល",
     detailCopyEyebrow: "ទំនិញក្នុងតារាង",
     languageLabel: "ភាសា",
-    themeLabel: "ម៉ូដពណ៌",
     languageEnglish: "English",
     languageKhmer: "ខ្មែរ",
-    themeLight: "ម៉ូដស",
-    themeDark: "ម៉ូដងងឹត",
     back: "ត្រឡប់ទៅតារាង",
     backLabel: "ត្រឡប់ទៅតារាងផលិតផល",
     code: "លេខកូដ",
@@ -141,7 +129,8 @@ const translations = {
 };
 
 let currentLanguage = readStoredPreference(STORAGE_KEYS.language, ["en", "km"], "km");
-let currentTheme = readStoredPreference(STORAGE_KEYS.theme, ["light", "dark"], "light");
+
+document.body.removeAttribute("data-theme");
 
 function getDictionary() {
   return translations[currentLanguage] ?? translations.km;
@@ -176,6 +165,22 @@ function savePreference(key, value) {
   } catch (error) {
     return;
   }
+}
+
+function getProductByCode(code) {
+  if (!code) {
+    return null;
+  }
+
+  return products.find((product) => product.code.toLowerCase() === String(code).toLowerCase()) ?? null;
+}
+
+function getProductFromLocation() {
+  return getProductByCode(new URLSearchParams(window.location.search).get("code"));
+}
+
+function buildDetailUrl(code) {
+  return `detail.html?code=${encodeURIComponent(code)}`;
 }
 
 function getTypeText(product, dictionary) {
@@ -250,7 +255,7 @@ function buildSimilarCardMarkup(product, dictionary) {
   return `
     <a
       class="catalog-card catalog-card--link"
-      href="detail.html?code=${encodeURIComponent(product.code)}"
+      href="${buildDetailUrl(product.code)}"
       aria-label="${escapeHtml(detailLabel)}"
     >
       <div class="catalog-card__head">
@@ -302,7 +307,7 @@ function buildSizeChipMarkup(size) {
 function buildSizeVariantMarkup(variant, currentCode, duplicateCounts) {
   const isActive = variant.code === currentCode;
   const needsCode = (duplicateCounts.get(variant.volume) ?? 0) > 1;
-  const label = needsCode ? `${variant.volume} • ${variant.code}` : variant.volume;
+  const label = needsCode ? `${variant.volume} | ${variant.code}` : variant.volume;
 
   if (isActive) {
     return `<span class="detail-chip detail-chip--link is-active">${escapeHtml(label)}</span>`;
@@ -311,7 +316,7 @@ function buildSizeVariantMarkup(variant, currentCode, duplicateCounts) {
   return `
     <a
       class="detail-chip detail-chip--link"
-      href="detail.html?code=${encodeURIComponent(variant.code)}"
+      href="${buildDetailUrl(variant.code)}"
       aria-label="${escapeHtml(label)}"
     >
       ${escapeHtml(label)}
@@ -356,6 +361,17 @@ function renderMissingState(dictionary) {
   detailMissing.hidden = false;
   detailMissing.textContent = dictionary.notFound;
   similarSection.hidden = true;
+}
+
+function renderCurrentProduct() {
+  const dictionary = getDictionary();
+
+  if (currentProduct) {
+    renderProduct(currentProduct);
+    return;
+  }
+
+  renderMissingState(dictionary);
 }
 
 function renderProduct(product) {
@@ -407,29 +423,14 @@ function syncLanguageButtons() {
   }
 }
 
-function syncThemeButtons() {
-  document.body.dataset.theme = currentTheme;
-
-  for (const button of themeButtons) {
-    const isActive = button.dataset.themeOption === currentTheme;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  }
-}
-
 function applyLanguage() {
   const dictionary = getDictionary();
 
   languageLabel.textContent = dictionary.languageLabel;
-  themeLabel.textContent = dictionary.themeLabel;
   languageEnglishButton.setAttribute("aria-label", dictionary.languageEnglish);
   languageEnglishButton.setAttribute("title", dictionary.languageEnglish);
   languageKhmerButton.setAttribute("aria-label", dictionary.languageKhmer);
   languageKhmerButton.setAttribute("title", dictionary.languageKhmer);
-  themeLightButton.setAttribute("aria-label", dictionary.themeLight);
-  themeLightButton.setAttribute("title", dictionary.themeLight);
-  themeDarkButton.setAttribute("aria-label", dictionary.themeDark);
-  themeDarkButton.setAttribute("title", dictionary.themeDark);
   detailHeroSubline.textContent = dictionary.heroSubline;
   detailEyebrow.textContent = dictionary.detailEyebrow;
   detailHeading.textContent = dictionary.detailHeading;
@@ -451,13 +452,7 @@ function applyLanguage() {
   detailFooterText.textContent = dictionary.footerText;
   detailFooterPage.textContent = dictionary.footerPage;
   syncLanguageButtons();
-
-  if (currentProduct) {
-    renderProduct(currentProduct);
-    return;
-  }
-
-  renderMissingState(dictionary);
+  renderCurrentProduct();
 }
 
 function setLanguage(language) {
@@ -470,14 +465,20 @@ function setLanguage(language) {
   applyLanguage();
 }
 
-function setTheme(theme) {
-  if (!["light", "dark"].includes(theme) || currentTheme === theme) {
-    return;
+function setCurrentProduct(product, options = {}) {
+  const { pushHistory = true, scrollToTop = false } = options;
+
+  currentProduct = product;
+
+  if (pushHistory && product) {
+    window.history.pushState({ code: product.code }, "", buildDetailUrl(product.code));
   }
 
-  currentTheme = theme;
-  savePreference(STORAGE_KEYS.theme, theme);
-  syncThemeButtons();
+  renderCurrentProduct();
+
+  if (scrollToTop) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 }
 
 for (const button of languageButtons) {
@@ -486,11 +487,43 @@ for (const button of languageButtons) {
   });
 }
 
-for (const button of themeButtons) {
-  button.addEventListener("click", () => {
-    setTheme(button.dataset.themeOption);
-  });
-}
+document.addEventListener("click", (event) => {
+  const link = event.target.closest('a[href^="detail.html?code="]');
 
-syncThemeButtons();
+  if (!link || event.defaultPrevented || event.button !== 0) {
+    return;
+  }
+
+  if (link.target && link.target !== "_self") {
+    return;
+  }
+
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+    return;
+  }
+
+  const nextUrl = new URL(link.href, window.location.href);
+  const nextProduct = getProductByCode(nextUrl.searchParams.get("code"));
+
+  if (!nextProduct) {
+    return;
+  }
+
+  event.preventDefault();
+
+  if (currentProduct?.code === nextProduct.code) {
+    return;
+  }
+
+  setCurrentProduct(nextProduct, {
+    pushHistory: true,
+    scrollToTop: Boolean(link.closest("#similarGrid")),
+  });
+});
+
+window.addEventListener("popstate", () => {
+  currentProduct = getProductFromLocation();
+  renderCurrentProduct();
+});
+
 applyLanguage();
