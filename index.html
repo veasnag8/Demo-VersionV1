@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260313-3">
 </head>
 <body>
   <svg class="catalog-symbols" aria-hidden="true" focusable="false">
@@ -177,9 +177,17 @@
         <p class="empty-state" id="emptyStateMessage" hidden>មិនមានផលិតផលត្រូវនឹងការស្វែងរកនេះទេ។</p>
 
         <div class="pagination" aria-label="Catalog pagination">
-          <button class="pagination__button" id="prevPage" type="button">មុន</button>
+          <button class="pagination__button pagination__button--icon" id="prevPage" type="button" aria-label="Previous page" title="Previous page">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14.71 6.71 9.41 12l5.3 5.29-1.42 1.42L6.59 12l6.7-6.71z"></path>
+            </svg>
+          </button>
           <p class="pagination__status" id="paginationStatus">បង្ហាញ 0-0 នៃ 0</p>
-          <button class="pagination__button" id="nextPage" type="button">បន្ទាប់</button>
+          <button class="pagination__button pagination__button--icon" id="nextPage" type="button" aria-label="Next page" title="Next page">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9.29 6.71 1.42-1.42L17.41 12l-6.7 6.71-1.42-1.42L14.59 12z"></path>
+            </svg>
+          </button>
         </div>
       </section>
 
@@ -198,6 +206,7 @@
   </div>
 
   <script src="catalog-data.js"></script>
-  <script src="app.js"></script>
+  <script src="catalog-store.js"></script>
+  <script src="app.js?v=20260313-2"></script>
 </body>
 </html>

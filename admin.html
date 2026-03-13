@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catalog Admin | Angkor Garden Tools</title>
+  <meta
+    name="description"
+    content="Admin dashboard for managing Angkor Garden Tools catalog products."
+  >
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="shortcut icon" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="stylesheet" href="styles.css?v=20260313-3">
+  <link rel="stylesheet" href="admin.css?v=20260313-4">
+  <script src="admin-auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="admin-page">
+  <div class="admin-dashboard">
+    <aside class="admin-sidebar">
+      <a class="admin-sidebar__brand" href="index.html#catalog" aria-label="Open user catalog">
+        <span class="admin-sidebar__logo-wrap">
+          <img class="admin-sidebar__logo" src="logo.png" alt="Angkor Garden Tools logo">
+        </span>
+        <span class="admin-sidebar__brand-copy">
+          <strong>Angkor Garden Tools</strong>
+          <small>Admin Control Panel</small>
+        </span>
+      </a>
+      <button
+        class="admin-sidebar-toggle"
+        id="adminSidebarToggle"
+        type="button"
+        aria-label="Hide admin menu"
+        aria-pressed="false"
+      >
+        <span class="admin-sidebar-toggle__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 5h2v14H7zm4 0h2v14h-2zm4 0h2v14h-2z"/>
+          </svg>
+        </span>
+        <span class="admin-sidebar-toggle__label">Hide menu</span>
+      </button>
+
+      <nav class="admin-sidebar__nav" aria-label="Admin navigation">
+        <button class="admin-nav__item is-active" type="button" data-admin-section-option="dashboard" aria-pressed="true">
+          <span class="admin-nav__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 13h7V3H4zm9 8h7V3h-7zm-9 0h7v-6H4z"/>
+            </svg>
+          </span>
+          <span class="admin-nav__copy">
+            <strong>Dashboard</strong>
+          </span>
+        </button>
+        <button class="admin-nav__item" type="button" data-admin-section-option="items" aria-pressed="false">
+          <span class="admin-nav__copy">
+            <strong>📦 Items</strong>
+          </span>
+        </button>
+        <button class="admin-nav__item" type="button" data-admin-section-option="brands" aria-pressed="false">
+          <span class="admin-nav__copy">
+            <strong>🏷️ Brands</strong>
+          </span>
+        </button>
+      </nav>
+
+      <div class="admin-sidebar__session">
+        <p class="admin-sidebar__label">Signed In</p>
+        <strong id="adminSessionUser">Administrator</strong>
+        <p class="admin-sidebar__hint">Protected browser session</p>
+        <button class="pagination__button admin-button admin-button--ghost" id="adminLogoutButton" type="button">Log Out</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <button
+        class="admin-sidebar-toggle admin-sidebar-toggle--reveal"
+        id="adminSidebarRevealToggle"
+        type="button"
+        aria-label="Show admin menu"
+        aria-pressed="true"
+        hidden
+      >
+        <span class="admin-sidebar-toggle__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 5h2v14H7zm4 0h2v14h-2zm4 0h2v14h-2z"/>
+          </svg>
+        </span>
+        <span class="admin-sidebar-toggle__label">Show menu</span>
+      </button>
+      <header class="admin-topbar">
+        <div class="admin-topbar__copy">
+          <p class="eyebrow" id="adminTopbarEyebrow">Admin Overview</p>
+          <h1 id="adminTopbarTitle">Dashboard</h1>
+          <p class="admin-topbar__text" id="adminTopbarText" hidden></p>
+        </div>
+
+        <div class="admin-topbar__actions">
+          <section class="admin-topbar__action-group" aria-label="User catalog actions">
+            <p class="admin-topbar__action-label">Quick Access</p>
+
+            <div class="admin-topbar__action-row">
+              <a class="admin-topbar__catalog-link" href="index.html#catalog" target="_blank" rel="noopener">
+                <span class="admin-topbar__catalog-copy">
+                  <strong>Open User Catalog</strong>
+                  <small>Open in a new tab</small>
+                </span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14 5h5v5h-2V8.41l-6.29 6.3-1.42-1.42L15.59 7H14zm-9 2h6v2H7v8h8v-4h2v6H5z"/>
+                </svg>
+              </a>
+
+              <button
+                class="admin-topbar__qr-button"
+                id="adminOpenQrButton"
+                type="button"
+                aria-label="Show catalog QR code"
+                title="Show catalog QR code"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 3h7v7H3zm2 2v3h3V5zm9-2h7v7h-7zm2 2v3h3V5zM3 14h7v7H3zm2 2v3h3v-3zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h4v4h-2v-2h-2zm-4 4h2v3h-2zm3 1h2v2h-2zm3 0h2v2h-2z"/>
+                </svg>
+                <span>QR</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </header>
+
+      <section class="admin-content-section" id="adminDashboardSection">
+        <section class="admin-overview">
+          <div class="admin-overview__intro">
+            <p class="eyebrow">Overview</p>
+            <h2>Catalog Summary</h2>
+          </div>
+
+          <div class="admin-stats">
+            <article class="admin-stat">
+              <span class="admin-stat__label">Total Products</span>
+              <strong id="adminTotalCount">0</strong>
+              <small>All active records in the shared catalog store.</small>
+            </article>
+            <article class="admin-stat">
+              <span class="admin-stat__label">Total Brands</span>
+              <strong id="adminBrandCount">0</strong>
+              <small>Unique brands currently used across catalog records.</small>
+            </article>
+            <article class="admin-stat">
+              <span class="admin-stat__label">Total Types</span>
+              <strong id="adminTypeCount">0</strong>
+              <small>Unique product types available in the catalog.</small>
+            </article>
+          </div>
+
+          <div class="admin-dashboard-grid">
+            <article class="admin-dashboard-card">
+              <div>
+                <p class="eyebrow">Items</p>
+                <h3>Open Item Management</h3>
+                <p>Browse the item list, create new records, and edit catalog details from one workspace.</p>
+              </div>
+              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="items">Go to Items</button>
+            </article>
+
+            <article class="admin-dashboard-card">
+              <div>
+                <p class="eyebrow">Brands</p>
+                <h3>Open Brand Management</h3>
+                <p>Maintain brand names, prepare new brand records, and keep item branding consistent.</p>
+              </div>
+              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="brands">Go to Brands</button>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section class="admin-content-section" id="adminItemsSection" hidden>
+        <section class="admin-workspace" id="adminWorkspace">
+          <aside class="admin-panel admin-panel--list" id="adminListPanel">
+            <div class="admin-panel__head admin-panel__head--listing">
+              <div>
+                <p class="eyebrow">Items</p>
+                <h3 id="adminListHeading">Items</h3>
+              </div>
+              <div class="admin-panel__actions">
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminImportItemsButton" type="button" aria-label="Import items from Excel" title="Import items from Excel">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v10.17l3.59-3.58L17 11l-5 5-5-5 1.41-1.41L11 13.17V3h2Z"></path>
+                    <path d="M5 19h14v2H5z"></path>
+                  </svg>
+                </button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminExportItemsButton" type="button" aria-label="Export items to Excel" title="Export items to Excel">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M11 21V10.83l-3.59 3.58L6 13l5-5 5 5-1.41 1.41L13 10.83V21h-2Z"></path>
+                    <path d="M5 3h14v2H5z"></path>
+                  </svg>
+                </button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminNewButton" type="button">New Item</button>
+              </div>
+            </div>
+
+            <div class="admin-list-tools">
+              <div class="admin-list-tools__bar">
+                <div class="admin-list-tools__meta">
+                  <p class="admin-list-tools__summary" id="adminListRange">Showing 0 records</p>
+                  <div class="admin-list-tools__pager" aria-label="Record pagination">
+                    <button class="pagination__button pagination__button--icon admin-list-tools__button" id="adminPrevPageButton" type="button" aria-label="Previous page" title="Previous page">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14.71 6.71 9.41 12l5.3 5.29-1.42 1.42L6.59 12l6.7-6.71z"></path>
+                      </svg>
+                    </button>
+                    <span class="admin-list-tools__page" id="adminPageStatus">Page 1 of 1</span>
+                    <button class="pagination__button pagination__button--icon admin-list-tools__button" id="adminNextPageButton" type="button" aria-label="Next page" title="Next page">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m9.29 6.71 1.42-1.42L17.41 12l-6.7 6.71-1.42-1.42L14.59 12z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="admin-list-tools__controls admin-list-tools__controls--items">
+                  <label class="admin-list-tools__field" for="adminListPageSize">
+                    <span>Show</span>
+                    <select id="adminListPageSize">
+                      <option value="30">30 records</option>
+                      <option value="all">All records</option>
+                    </select>
+                  </label>
+
+                  <label class="admin-list-tools__field" for="adminListBrandFilter">
+                    <span>Filter Brand</span>
+                    <select id="adminListBrandFilter">
+                      <option value="all">All brands</option>
+                    </select>
+                  </label>
+
+                  <label class="admin-list-tools__field" for="adminListStatusFilter">
+                    <span>Filter Status</span>
+                    <select id="adminListStatusFilter">
+                      <option value="all">All statuses</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </label>
+
+                  <label class="search-field admin-list-search" for="adminSearch">
+                    <span>Search Items</span>
+                    <input
+                      id="adminSearch"
+                      type="search"
+                      placeholder="Search by code, brand, title, or series"
+                      autocomplete="off"
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-list-shell">
+              <div class="admin-list-table" aria-label="Items list">
+                <div class="admin-list-table__head" aria-hidden="true">
+                  <span>Code</span>
+                  <span>Title</span>
+                  <span>Brand</span>
+                  <span>Type</span>
+                  <span>Status</span>
+                  <span>Series</span>
+                  <span>Actions</span>
+                </div>
+                <div class="admin-list" id="adminList"></div>
+              </div>
+              <p class="empty-state" id="adminListEmpty" hidden>No items match the current filters.</p>
+            </div>
+          </aside>
+
+          <section class="admin-panel admin-panel--editor" id="adminEditorPanel" hidden>
+            <div class="admin-panel__head admin-panel__head--form">
+              <div class="admin-panel__head-main">
+                <div>
+                  <!-- <p class="eyebrow">Editor</p> -->
+                  <h3 id="adminFormHeading">Edit Item</h3>
+                </div>
+                <div class="admin-panel__actions admin-panel__actions--form">
+                  <button class="admin-toolbar-action admin-toolbar-action--compact admin-toolbar-action--back" id="adminToggleListButton" type="button" hidden>
+                    <span class="admin-toolbar-action__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M10.41 7.41 9 6l-6 6 6 6 1.41-1.41L6.83 13H21v-2H6.83z"/>
+                      </svg>
+                    </span>
+                    <span class="admin-toolbar-action__copy">
+                      <strong>Back to Items</strong>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <span class="stock-pill stock-pill--in" id="adminModeBadge">Editing</span>
+            </div>
+
+            <p class="empty-state admin-status" id="adminStatus" hidden></p>
+
+            <form id="adminForm" class="admin-form admin-form--compact">
+              <div class="admin-form__grid admin-form__grid--editor">
+                <label class="admin-field">
+                  <span>Code</span>
+                  <input name="code" type="text" required>
+                </label>
+
+                <label class="admin-field">
+                  <span>Brand</span>
+                  <select name="brand" id="adminBrandSelect" required>
+                    <option value="">Select brand</option>
+                  </select>
+                </label>
+
+                <div class="admin-field admin-field--toggle">
+                  <span>Visibility</span>
+                  <label class="admin-checkbox admin-checkbox--inline">
+                    <input name="showOnUserPage" type="checkbox">
+                    <span>For Site</span>
+                  </label>
+                </div>
+
+                <label class="admin-field">
+                  <span>Product Type</span>
+                  <select name="filterType">
+                    <option value="sprayer">Sprayer</option>
+                    <option value="battery">Battery</option>
+                  </select>
+                </label>
+
+                <label class="admin-field">
+                  <span>Status</span>
+                  <select name="status">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                  <small>Inactive items save with no stock.</small>
+                </label>
+
+                <label class="admin-field">
+                  <span>Similar Group</span>
+                  <select name="similarKey">
+                    <option value="sprayer">Sprayer</option>
+                    <option value="battery">Battery</option>
+                    <option value="mister">Mister</option>
+                  </select>
+                </label>
+
+                <label class="admin-field">
+                  <span>Icon</span>
+                  <select name="icon">
+                    <option value="sprayer">Sprayer</option>
+                    <option value="battery">Battery</option>
+                    <option value="mister">Mister</option>
+                  </select>
+                </label>
+
+                <label class="admin-field">
+                  <span>Volume</span>
+                  <input name="volume" type="text">
+                </label>
+
+                <label class="admin-field">
+                  <span>Series</span>
+                  <input name="series" type="text">
+                </label>
+
+                <label class="admin-field">
+                  <span>Depot Price</span>
+                  <div class="admin-currency-input">
+                    <span class="admin-currency-input__prefix" aria-hidden="true">$</span>
+                    <input name="depoPrice" type="number" min="0" step="0.01" inputmode="decimal">
+                  </div>
+                </label>
+
+                <label class="admin-field">
+                  <span>User Price</span>
+                  <div class="admin-currency-input">
+                    <span class="admin-currency-input__prefix" aria-hidden="true">$</span>
+                    <input name="userPrice" type="number" min="0" step="0.01" inputmode="decimal">
+                  </div>
+                </label>
+
+                <label class="admin-field admin-field--wide">
+                  <span>Image URL</span>
+                  <input name="image" type="text" placeholder="images/item.png or https://example.com/item.png">
+                  <small>Optional. If empty, the selected icon will be shown.</small>
+                </label>
+
+                <label class="admin-field admin-field--wide">
+                  <span>Product Title</span>
+                  <input name="title" type="text" placeholder="Khmer product title" required>
+                </label>
+
+                <label class="admin-field admin-field--span-2">
+                  <span>Description</span>
+                  <textarea name="description" rows="3" placeholder="Khmer product description"></textarea>
+                </label>
+
+                <label class="admin-field">
+                  <span>Sizes</span>
+                  <textarea name="sizes" rows="3" placeholder="25L, Backpack"></textarea>
+                  <small>Separate multiple sizes with commas or new lines.</small>
+                </label>
+              </div>
+
+              <div class="admin-form__actions">
+                <button class="pagination__button admin-button admin-button--ghost" id="adminClearButton" type="button">Clear</button>
+                <button class="pagination__button admin-button admin-button--primary" type="submit">Save Item</button>
+              </div>
+            </form>
+          </section>
+        </section>
+      </section>
+
+      <section class="admin-content-section" id="adminBrandsSection" hidden>
+        <section class="admin-workspace" id="adminBrandWorkspace">
+          <aside class="admin-panel admin-panel--list" id="adminBrandListPanel">
+            <div class="admin-panel__head admin-panel__head--listing">
+              <div>
+                <p class="eyebrow">Brands</p>
+                <h3 id="adminBrandHeading">Brands</h3>
+              </div>
+              <div class="admin-panel__actions">
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminImportBrandsButton" type="button" aria-label="Import brands from Excel" title="Import brands from Excel">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v10.17l3.59-3.58L17 11l-5 5-5-5 1.41-1.41L11 13.17V3h2Z"></path>
+                    <path d="M5 19h14v2H5z"></path>
+                  </svg>
+                </button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminExportBrandsButton" type="button" aria-label="Export brands to Excel" title="Export brands to Excel">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M11 21V10.83l-3.59 3.58L6 13l5-5 5 5-1.41 1.41L13 10.83V21h-2Z"></path>
+                    <path d="M5 3h14v2H5z"></path>
+                  </svg>
+                </button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminBrandNewButton" type="button">Create New</button>
+              </div>
+            </div>
+
+            <div class="admin-list-tools">
+              <div class="admin-list-tools__bar admin-list-tools__bar--brands">
+                <div class="admin-list-tools__meta">
+                  <p class="admin-list-tools__summary" id="adminBrandRange">Showing 0 brands</p>
+                </div>
+
+                <div class="admin-list-tools__controls admin-list-tools__controls--brands">
+                  <label class="admin-list-tools__field" for="adminBrandFilter">
+                    <span>Filter</span>
+                    <select id="adminBrandFilter">
+                      <option value="all">All brands</option>
+                      <option value="with-items">With items</option>
+                      <option value="no-items">No items</option>
+                    </select>
+                  </label>
+
+                  <label class="search-field admin-list-search" for="adminBrandSearch">
+                    <span>Search Brands</span>
+                    <input
+                      id="adminBrandSearch"
+                      type="search"
+                      placeholder="Search by brand name or note"
+                      autocomplete="off"
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-list-shell">
+              <div class="admin-list-table admin-list-table--brands" aria-label="Brand listing">
+                <div class="admin-list-table__head admin-list-table__head--brands" aria-hidden="true">
+                  <span>Brand</span>
+                  <span>Items</span>
+                  <span>Note</span>
+                  <span>Actions</span>
+                </div>
+                <div class="admin-list" id="adminBrandList"></div>
+              </div>
+              <p class="empty-state" id="adminBrandEmpty" hidden>No brands match that search.</p>
+            </div>
+          </aside>
+
+          <section class="admin-panel admin-panel--editor" id="adminBrandEditorPanel" hidden>
+            <div class="admin-panel__head admin-panel__head--form">
+              <div>
+                <!-- <p class="eyebrow">Editor</p> -->
+                <h3 id="adminBrandFormHeading">Edit Brand</h3>
+                <p class="admin-panel__copy">Manage brand records for use across the item catalog.</p>
+              </div>
+              <span class="stock-pill stock-pill--in" id="adminBrandModeBadge">Editing</span>
+            </div>
+
+            <p class="empty-state admin-status" id="adminBrandStatus" hidden></p>
+
+            <form id="adminBrandForm" class="admin-form">
+              <section class="admin-form__section">
+                <div class="admin-form__section-head">
+                  <div>
+                    <p class="eyebrow">Basics</p>
+                    <h4>Brand Profile</h4>
+                  </div>
+                </div>
+
+                <div class="admin-form__grid">
+                  <label class="admin-field">
+                    <span>Brand Name</span>
+                    <input name="name" type="text" placeholder="Angkora" required>
+                  </label>
+
+                  <label class="admin-field">
+                    <span>Linked Items</span>
+                    <input id="adminBrandLinkedItems" type="text" value="0 items" readonly>
+                  </label>
+
+                  <label class="admin-field admin-field--wide">
+                    <span>Note</span>
+                    <textarea name="note" rows="5" placeholder="Brand note, supplier detail, or internal remark"></textarea>
+                  </label>
+                </div>
+              </section>
+
+              <div class="admin-form__actions">
+                <button class="pagination__button admin-button admin-button--ghost" id="adminBrandClearButton" type="button">Back to Brands</button>
+                <button class="pagination__button admin-button admin-button--primary" type="submit">Save Brand</button>
+              </div>
+            </form>
+          </section>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <datalist id="adminBrandOptions"></datalist>
+  <input id="adminImportItemsInput" type="file" accept=".xlsx,.xls,.xlsb,.xlsm,.csv" hidden>
+  <input id="adminImportBrandsInput" type="file" accept=".xlsx,.xls,.xlsb,.xlsm,.csv" hidden>
+
+  <div class="admin-modal" id="adminQrModal" hidden>
+    <div class="admin-modal__backdrop" data-admin-close="qr"></div>
+    <section class="admin-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="adminQrModalTitle">
+      <div class="admin-modal__head">
+        <div>
+          <p class="eyebrow">User Catalog</p>
+          <h2 id="adminQrModalTitle">QR Code</h2>
+        </div>
+        <button class="admin-modal__close" id="adminCloseQrButton" type="button" aria-label="Close QR popup">X</button>
+      </div>
+
+      <div class="admin-modal__body admin-modal__body--qr">
+        <img
+          class="admin-modal__qr-image"
+          id="adminCatalogQrImage"
+          src=""
+          alt="QR code for the user catalog"
+          loading="lazy"
+        >
+        <p class="admin-modal__text" id="adminCatalogQrStatus">
+          Scan this QR code to open the customer catalog page.
+        </p>
+      </div>
+
+      <div class="admin-modal__actions">
+        <button class="pagination__button admin-button admin-button--ghost" id="adminCopyQrLinkButton" type="button">Copy Link</button>
+        <button class="pagination__button admin-button admin-button--ghost" id="adminSaveQrButton" type="button">Save QR</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="catalog-data.js"></script>
+  <script src="catalog-store.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="admin.js?v=20260313-3"></script>
+</body>
+</html>

@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260313">
 </head>
 <body>
   <svg class="catalog-symbols" aria-hidden="true" focusable="false">
@@ -137,12 +137,14 @@
                 <p class="eyebrow" id="detailCodeLabel">Code</p>
                 <p class="detail-panel__code" id="detailCode">-</p>
               </div>
-              <span class="stock-pill" id="detailStockPill">-</span>
             </div>
 
             <div class="detail-panel__band">
               <span class="detail-panel__brand" id="detailBrand">-</span>
-              <span class="detail-panel__volume" id="detailVolume">-</span>
+              <div class="detail-panel__band-meta">
+                <span class="detail-panel__volume" id="detailVolume">-</span>
+                <span class="stock-pill stock-pill--out" id="detailStockPill" hidden>Out of stock</span>
+              </div>
             </div>
 
             <div class="detail-art" id="detailArt"></div>
@@ -155,32 +157,27 @@
               <p class="detail-product-description" id="detailDescription" lang="km"></p>
             </div>
 
-            <div class="detail-facts">
-              <article class="detail-fact">
-                <span class="detail-fact__label" id="detailSeriesLabel">Series</span>
-                <strong id="detailSeries">-</strong>
-              </article>
-              <article class="detail-fact">
-                <span class="detail-fact__label" id="detailTypeLabel">Type</span>
-                <strong id="detailType">-</strong>
-              </article>
-              <article class="detail-fact">
-                <span class="detail-fact__label" id="detailStockLabel">Stock</span>
-                <strong id="detailStockCount">-</strong>
-              </article>
-            </div>
+            <section class="detail-overview" id="detailOverview"></section>
 
-            <div class="detail-chip-groups">
-              <section class="detail-chip-group">
-                <h3 class="detail-chip-group__title" id="detailColorsLabel">Colors</h3>
-                <div class="detail-chip-row" id="detailColors"></div>
-              </section>
+            <section class="detail-spec-sheet" id="detailSpecsSection" hidden>
+              <div class="detail-spec-sheet__head">
+                <h3 class="detail-spec-sheet__title" id="detailSpecsLabel">Item Details</h3>
+                <p class="detail-spec-sheet__copy" id="detailSpecsCopy">Prepared for quick review.</p>
+              </div>
+              <div class="detail-spec-listing" id="detailSpecs"></div>
+            </section>
 
-              <section class="detail-chip-group">
-                <h3 class="detail-chip-group__title" id="detailSizesLabel">Sizes</h3>
-                <div class="detail-chip-row" id="detailSizes"></div>
-              </section>
-            </div>
+            <section class="detail-feature-sheet" id="detailFeaturesSection" hidden>
+              <div class="detail-feature-sheet__head">
+                <h3 class="detail-feature-sheet__title" id="detailFeaturesLabel">Key Features</h3>
+              </div>
+              <ul class="detail-feature-list" id="detailFeatures"></ul>
+            </section>
+
+            <section class="detail-chip-group detail-chip-group--sizes" id="detailSizesSection" hidden>
+              <h3 class="detail-chip-group__title" id="detailSizesLabel">Sizes</h3>
+              <div class="detail-chip-row" id="detailSizes"></div>
+            </section>
 
             <div class="detail-price-list">
               <article class="detail-price-card">
@@ -222,6 +219,7 @@
   </div>
 
   <script src="catalog-data.js"></script>
-  <script src="detail.js"></script>
+  <script src="catalog-store.js"></script>
+  <script src="detail.js?v=20260313"></script>
 </body>
 </html>

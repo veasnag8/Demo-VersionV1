@@ -34,7 +34,8 @@ const STORAGE_KEYS = {
 };
 
 const RECORDS_PER_PAGE = 20;
-const products = Array.isArray(window.catalogProducts) ? window.catalogProducts : [];
+const products = (window.catalogStore?.getProducts() ?? (Array.isArray(window.catalogProducts) ? window.catalogProducts : []))
+  .filter((product) => product.showOnUserPage !== false);
 
 const translations = {
   en: {
@@ -63,6 +64,7 @@ const translations = {
     series: "Series",
     depot: "Depo",
     user: "User",
+    stockOut: "Out of stock",
     openDetails: "Open product details",
     pageOf(page, total) {
       return `Page ${page} of ${total}`;
@@ -97,6 +99,7 @@ const translations = {
     series: "ស៊េរី",
     depot: "ដេប៉ូ",
     user: "អ្នកប្រើ",
+    stockOut: "អស់ស្តុក",
     openDetails: "បើកព័ត៌មានលម្អិតផលិតផល",
     pageOf(page, total) {
       return `ទំព័រ ${page} នៃ ${total}`;
@@ -215,6 +218,81 @@ function getCardSeriesText(product, dictionary) {
   return `${dictionary.series}: ${product.series}`;
 }
 
+function buildCatalogStockMarkup(product, dictionary) {
+  if (Number(product.stock ?? 0) > 0) {
+    return "";
+  }
+
+  return `<span class="catalog-card__stock catalog-card__stock--out">${escapeHtml(dictionary.stockOut)}</span>`;
+}
+
+function buildCatalogArtworkMarkup(product) {
+  const imageUrl = String(product.image ?? "").trim();
+
+  return `
+    ${imageUrl
+      ? `<img class="catalog-card__art-image" data-artwork-image src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" hidden>`
+      : ""}
+    <svg class="catalog-card__art-icon" viewBox="0 0 220 220" aria-hidden="true"><use href="#icon-${escapeHtml(product.icon)}"></use></svg>
+  `;
+}
+
+function hydrateArtworkImages(root = document) {
+  const artworkImages = root.querySelectorAll("[data-artwork-image]");
+
+  for (const image of artworkImages) {
+    if (image.dataset.artworkBound === "true") {
+      continue;
+    }
+
+    image.dataset.artworkBound = "true";
+
+    const frame = image.closest(".catalog-card__art, .detail-art__frame");
+
+    if (!frame) {
+      continue;
+    }
+
+    const showImage = () => {
+      frame.classList.add("is-image-ready");
+      image.hidden = false;
+    };
+
+    const hideImage = () => {
+      frame.classList.remove("is-image-ready");
+      image.hidden = true;
+    };
+
+    if (image.complete) {
+      if (image.naturalWidth > 0) {
+        showImage();
+      } else {
+        hideImage();
+      }
+
+      continue;
+    }
+
+    image.addEventListener("load", showImage, { once: true });
+    image.addEventListener("error", hideImage, { once: true });
+  }
+}
+
+function relocateCatalogStockBadges(root = document) {
+  const cards = root.querySelectorAll(".catalog-card");
+
+  for (const card of cards) {
+    const stockBadge = card.querySelector(".catalog-card__stock");
+    const artFrame = card.querySelector(".catalog-card__art");
+
+    if (!stockBadge || !artFrame || stockBadge.parentElement === artFrame) {
+      continue;
+    }
+
+    artFrame.append(stockBadge);
+  }
+}
+
 function buildCatalogCardMarkup(product, dictionary) {
   const detailLabel = `${product.code} - ${dictionary.openDetails}`;
 
@@ -230,14 +308,15 @@ function buildCatalogCardMarkup(product, dictionary) {
       </div>
       <div class="catalog-card__band">
         <span class="catalog-card__brand">${escapeHtml(product.brand)}</span>
-        <span class="catalog-card__volume">${escapeHtml(product.volume)}</span>
       </div>
       <div class="catalog-card__body">
         <h3 lang="km">${escapeHtml(product.title)}</h3>
         <p lang="km">${escapeHtml(product.description)}</p>
       </div>
       <div class="catalog-card__art" style="--art-bg:${escapeHtml(product.artBg)}; --art-color:${escapeHtml(product.artColor)};">
-        <svg viewBox="0 0 220 220" aria-hidden="true"><use href="#icon-${escapeHtml(product.icon)}"></use></svg>
+        ${buildCatalogArtworkMarkup(product)}
+        <span class="catalog-card__volume">${escapeHtml(product.volume)}</span>
+        ${buildCatalogStockMarkup(product, dictionary)}
       </div>
       <div class="catalog-card__meta">
         <span>${escapeHtml(getCardSeriesText(product, dictionary))}</span>
@@ -274,6 +353,8 @@ function renderCatalog() {
   const endRecord = totalMatches === 0 ? 0 : startIndex + visibleProducts.length;
 
   catalogGrid.innerHTML = visibleProducts.map((product) => buildCatalogCardMarkup(product, dictionary)).join("");
+  relocateCatalogStockBadges(catalogGrid);
+  hydrateArtworkImages(catalogGrid);
   emptyStateMessage.hidden = totalMatches !== 0;
   totalRecords.textContent = String(products.length);
   matchingRecords.textContent = String(totalMatches);
@@ -315,8 +396,10 @@ function applyLanguage() {
   typeOptions.battery.textContent = dictionary.typeBattery;
   brandFilter.options[0].textContent = dictionary.allBrands;
   emptyStateMessage.textContent = dictionary.emptyState;
-  prevPageButton.textContent = dictionary.previous;
-  nextPageButton.textContent = dictionary.next;
+  prevPageButton.setAttribute("aria-label", dictionary.previous);
+  prevPageButton.setAttribute("title", dictionary.previous);
+  nextPageButton.setAttribute("aria-label", dictionary.next);
+  nextPageButton.setAttribute("title", dictionary.next);
   pagination.setAttribute("aria-label", dictionary.paginationLabel);
   syncLanguageButtons();
   renderCatalog();

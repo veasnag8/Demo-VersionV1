@@ -10,21 +10,22 @@ const detailMissing = document.querySelector("#detailMissing");
 const detailContent = document.querySelector("#detailContent");
 const detailCodeLabel = document.querySelector("#detailCodeLabel");
 const detailCode = document.querySelector("#detailCode");
-const detailStockPill = document.querySelector("#detailStockPill");
 const detailBrand = document.querySelector("#detailBrand");
 const detailVolume = document.querySelector("#detailVolume");
+const detailStockPill = document.querySelector("#detailStockPill");
 const detailArt = document.querySelector("#detailArt");
 const detailCopyEyebrow = document.querySelector("#detailCopyEyebrow");
 const detailTitle = document.querySelector("#detailTitle");
 const detailDescription = document.querySelector("#detailDescription");
-const detailSeriesLabel = document.querySelector("#detailSeriesLabel");
-const detailSeries = document.querySelector("#detailSeries");
-const detailTypeLabel = document.querySelector("#detailTypeLabel");
-const detailType = document.querySelector("#detailType");
-const detailStockLabel = document.querySelector("#detailStockLabel");
-const detailStockCount = document.querySelector("#detailStockCount");
-const detailColorsLabel = document.querySelector("#detailColorsLabel");
-const detailColors = document.querySelector("#detailColors");
+const detailOverview = document.querySelector("#detailOverview");
+const detailSpecsSection = document.querySelector("#detailSpecsSection");
+const detailSpecsLabel = document.querySelector("#detailSpecsLabel");
+const detailSpecsCopy = document.querySelector("#detailSpecsCopy");
+const detailSpecs = document.querySelector("#detailSpecs");
+const detailFeaturesSection = document.querySelector("#detailFeaturesSection");
+const detailFeaturesLabel = document.querySelector("#detailFeaturesLabel");
+const detailFeatures = document.querySelector("#detailFeatures");
+const detailSizesSection = document.querySelector("#detailSizesSection");
 const detailSizesLabel = document.querySelector("#detailSizesLabel");
 const detailSizes = document.querySelector("#detailSizes");
 const detailDepotLabel = document.querySelector("#detailDepotLabel");
@@ -44,8 +45,36 @@ const STORAGE_KEYS = {
   language: "agt-language",
 };
 
-const products = Array.isArray(window.catalogProducts) ? window.catalogProducts : [];
+const products = (window.catalogStore?.getProducts() ?? (Array.isArray(window.catalogProducts) ? window.catalogProducts : []))
+  .filter((product) => product.showOnUserPage !== false);
 let currentProduct = getProductFromLocation();
+
+const detailCopy = {
+  en: {
+    heroSubline: "Clean product detail prepared for quick reading and easy comparison",
+    footerText: "Product detail layout . Clean specifications, prices, and similar items",
+    specs: "More Specifications",
+    specsCopy: "Extra item details arranged in a cleaner reading order.",
+    featurePoints: "Key Features",
+    model: "Model",
+    productName: "Product Name",
+    brand: "Brand",
+    capacity: "Capacity",
+    sizes: "Sizes",
+  },
+  km: {
+    heroSubline: "ព័ត៌មានលម្អិតផលិតផល រៀបចំថ្មី ងាយមើល និងងាយប្រៀបធៀប",
+    footerText: "ទំព័រលម្អិតផលិតផល . លក្ខណៈបច្ចេកទេស តម្លៃ និងទំនិញស្រដៀង",
+    specs: "លក្ខណៈបន្ថែម",
+    specsCopy: "ព័ត៌មានបន្ថែមត្រូវបានរៀបចំឲ្យមើលបានស្រួលជាងមុន។",
+    featurePoints: "ចំណុចពិសេស",
+    model: "ម៉ូដែល",
+    productName: "ឈ្មោះផលិតផល",
+    brand: "ម៉ាក",
+    capacity: "ចំណុះ",
+    sizes: "ទំហំ",
+  },
+};
 
 const translations = {
   en: {
@@ -136,6 +165,10 @@ function getDictionary() {
   return translations[currentLanguage] ?? translations.km;
 }
 
+function getDetailCopy() {
+  return detailCopy[currentLanguage] ?? detailCopy.km;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -195,25 +228,43 @@ function getTypeText(product, dictionary) {
   return dictionary.typeSprayer;
 }
 
-function getStockState(stock, dictionary) {
-  if (stock <= 0) {
-    return {
-      text: dictionary.stockOut,
-      className: "stock-pill stock-pill--out",
-    };
+function getFallbackOverviewItems(product, dictionary, uiCopy) {
+  const items = [
+    { label: uiCopy.brand, value: product.brand },
+    { label: dictionary.type, value: getTypeText(product, dictionary) },
+    { label: uiCopy.capacity, value: product.volume },
+    { label: dictionary.series, value: product.series },
+  ].filter((item) => item.value);
+
+  if (items.length < 4) {
+    items.unshift({ label: uiCopy.model, value: product.code });
   }
 
-  if (stock <= 5) {
+  return items.slice(0, 4);
+}
+
+function splitSpecRows(product, dictionary, uiCopy) {
+  const customRows = Array.isArray(product.specRows) ? product.specRows.filter((row) => row?.label && row?.value) : [];
+
+  if (customRows.length > 0) {
     return {
-      text: dictionary.stockLow(stock),
-      className: "stock-pill stock-pill--low",
+      overviewItems: customRows.slice(0, 4),
+      specRows: customRows.slice(4),
     };
   }
 
   return {
-    text: dictionary.stockIn(stock),
-    className: "stock-pill stock-pill--in",
+    overviewItems: getFallbackOverviewItems(product, dictionary, uiCopy),
+    specRows: [],
   };
+}
+
+function getFeaturePoints(product) {
+  if (Array.isArray(product.featurePoints) && product.featurePoints.length > 0) {
+    return product.featurePoints;
+  }
+
+  return [];
 }
 
 function getCardSeriesText(product, dictionary) {
@@ -222,6 +273,94 @@ function getCardSeriesText(product, dictionary) {
   }
 
   return `${dictionary.series}: ${product.series}`;
+}
+
+function buildCatalogArtworkMarkup(product) {
+  const imageUrl = String(product.image ?? "").trim();
+
+  return `
+    ${imageUrl
+      ? `<img class="catalog-card__art-image" data-artwork-image src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" hidden>`
+      : ""}
+    <svg class="catalog-card__art-icon" viewBox="0 0 220 220" aria-hidden="true"><use href="#icon-${escapeHtml(product.icon)}"></use></svg>
+  `;
+}
+
+function buildCatalogStockMarkup(product, dictionary) {
+  if (Number(product.stock ?? 0) > 0) {
+    return "";
+  }
+
+  return `<span class="catalog-card__stock catalog-card__stock--out">${escapeHtml(dictionary.stockOut)}</span>`;
+}
+
+function buildDetailArtworkMarkup(product) {
+  const imageUrl = String(product.image ?? "").trim();
+
+  return `
+    <div class="detail-art__frame" style="--art-bg:${escapeHtml(product.artBg)}; --art-color:${escapeHtml(product.artColor)};">
+      ${imageUrl
+        ? `<img class="detail-art__image" data-artwork-image src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.title || product.code)}" loading="lazy" decoding="async" hidden>`
+        : ""}
+      <svg class="detail-art__icon" viewBox="0 0 220 220" aria-hidden="true"><use href="#icon-${escapeHtml(product.icon)}"></use></svg>
+    </div>
+  `;
+}
+
+function hydrateArtworkImages(root = document) {
+  const artworkImages = root.querySelectorAll("[data-artwork-image]");
+
+  for (const image of artworkImages) {
+    if (image.dataset.artworkBound === "true") {
+      continue;
+    }
+
+    image.dataset.artworkBound = "true";
+
+    const frame = image.closest(".catalog-card__art, .detail-art__frame");
+
+    if (!frame) {
+      continue;
+    }
+
+    const showImage = () => {
+      frame.classList.add("is-image-ready");
+      image.hidden = false;
+    };
+
+    const hideImage = () => {
+      frame.classList.remove("is-image-ready");
+      image.hidden = true;
+    };
+
+    if (image.complete) {
+      if (image.naturalWidth > 0) {
+        showImage();
+      } else {
+        hideImage();
+      }
+
+      continue;
+    }
+
+    image.addEventListener("load", showImage, { once: true });
+    image.addEventListener("error", hideImage, { once: true });
+  }
+}
+
+function relocateCatalogStockBadges(root = document) {
+  const cards = root.querySelectorAll(".catalog-card");
+
+  for (const card of cards) {
+    const stockBadge = card.querySelector(".catalog-card__stock");
+    const artFrame = card.querySelector(".catalog-card__art");
+
+    if (!stockBadge || !artFrame || stockBadge.parentElement === artFrame) {
+      continue;
+    }
+
+    artFrame.append(stockBadge);
+  }
 }
 
 function getVolumeSortValue(volume) {
@@ -264,14 +403,15 @@ function buildSimilarCardMarkup(product, dictionary) {
       </div>
       <div class="catalog-card__band">
         <span class="catalog-card__brand">${escapeHtml(product.brand)}</span>
-        <span class="catalog-card__volume">${escapeHtml(product.volume)}</span>
       </div>
       <div class="catalog-card__body">
         <h3 lang="km">${escapeHtml(product.title)}</h3>
         <p lang="km">${escapeHtml(product.description)}</p>
       </div>
       <div class="catalog-card__art" style="--art-bg:${escapeHtml(product.artBg)}; --art-color:${escapeHtml(product.artColor)};">
-        <svg viewBox="0 0 220 220" aria-hidden="true"><use href="#icon-${escapeHtml(product.icon)}"></use></svg>
+        ${buildCatalogArtworkMarkup(product)}
+        <span class="catalog-card__volume">${escapeHtml(product.volume)}</span>
+        ${buildCatalogStockMarkup(product, dictionary)}
       </div>
       <div class="catalog-card__meta">
         <span>${escapeHtml(getCardSeriesText(product, dictionary))}</span>
@@ -287,15 +427,6 @@ function buildSimilarCardMarkup(product, dictionary) {
         </div>
       </div>
     </a>
-  `;
-}
-
-function buildColorChipMarkup(color) {
-  return `
-    <span class="detail-chip detail-chip--color" lang="km">
-      <span class="detail-chip__swatch" style="background:${escapeHtml(color.hex)};"></span>
-      <span>${escapeHtml(color.label)}</span>
-    </span>
   `;
 }
 
@@ -322,6 +453,34 @@ function buildSizeVariantMarkup(variant, currentCode, duplicateCounts) {
       ${escapeHtml(label)}
     </a>
   `;
+}
+
+function buildOverviewItemMarkup(item) {
+  const labelLanguage = /[^\u0000-\u00ff]/.test(item.label) ? ' lang="km"' : "";
+  const valueLanguage = /[^\u0000-\u00ff]/.test(item.value) ? ' lang="km"' : "";
+
+  return `
+    <article class="detail-overview-card">
+      <span class="detail-overview-card__label"${labelLanguage}>${escapeHtml(item.label)}</span>
+      <strong class="detail-overview-card__value"${valueLanguage}>${escapeHtml(item.value)}</strong>
+    </article>
+  `;
+}
+
+function buildSpecRowMarkup(row) {
+  const labelLanguage = /[^\u0000-\u00ff]/.test(row.label) ? ' lang="km"' : "";
+  const valueLanguage = /[^\u0000-\u00ff]/.test(row.value) ? ' lang="km"' : "";
+
+  return `
+    <article class="detail-spec-item">
+      <span class="detail-spec-item__label"${labelLanguage}>${escapeHtml(row.label)}</span>
+      <p class="detail-spec-item__value"${valueLanguage}>${escapeHtml(row.value)}</p>
+    </article>
+  `;
+}
+
+function buildFeatureItemMarkup(point) {
+  return `<li class="detail-feature-list__item" lang="km">${escapeHtml(point)}</li>`;
 }
 
 function getSimilarProducts(product) {
@@ -352,6 +511,8 @@ function renderSimilarProducts(product, dictionary) {
 
   similarSection.hidden = similarProducts.length === 0;
   similarGrid.innerHTML = similarProducts.map((item) => buildSimilarCardMarkup(item, dictionary)).join("");
+  relocateCatalogStockBadges(similarGrid);
+  hydrateArtworkImages(similarGrid);
 }
 
 function renderMissingState(dictionary) {
@@ -376,9 +537,11 @@ function renderCurrentProduct() {
 
 function renderProduct(product) {
   const dictionary = getDictionary();
-  const stockState = getStockState(product.stock, dictionary);
+  const uiCopy = getDetailCopy();
   const sizeVariants = getSizeVariantProducts(product);
   const sizeDuplicateCounts = new Map();
+  const { overviewItems, specRows } = splitSpecRows(product, dictionary, uiCopy);
+  const featurePoints = getFeaturePoints(product);
 
   for (const variant of sizeVariants) {
     sizeDuplicateCounts.set(variant.volume, (sizeDuplicateCounts.get(variant.volume) ?? 0) + 1);
@@ -393,25 +556,33 @@ function renderProduct(product) {
   detailCode.textContent = product.code;
   detailBrand.textContent = product.brand;
   detailVolume.textContent = product.volume;
+  if (detailStockPill) {
+    detailStockPill.hidden = Number(product.stock ?? 0) > 0;
+    detailStockPill.textContent = dictionary.stockOut;
+  }
   detailTitle.textContent = product.title;
   detailDescription.textContent = product.description;
-  detailSeries.textContent = product.series;
-  detailType.textContent = getTypeText(product, dictionary);
-  detailStockCount.textContent = String(product.stock);
   detailDepotPrice.textContent = product.depoPrice;
   detailUserPrice.textContent = product.userPrice;
-  detailStockPill.className = stockState.className;
-  detailStockPill.textContent = stockState.text;
-  detailArt.innerHTML = `
-    <div class="detail-art__frame" style="--art-bg:${escapeHtml(product.artBg)}; --art-color:${escapeHtml(product.artColor)};">
-      <svg viewBox="0 0 220 220" aria-hidden="true"><use href="#icon-${escapeHtml(product.icon)}"></use></svg>
-    </div>
-  `;
-  detailColors.innerHTML = product.colors.map((color) => buildColorChipMarkup(color)).join("");
-  detailSizes.innerHTML =
+  detailArt.innerHTML = buildDetailArtworkMarkup(product);
+  hydrateArtworkImages(detailArt);
+  detailOverview.hidden = overviewItems.length === 0;
+  detailOverview.innerHTML = overviewItems.map((item) => buildOverviewItemMarkup(item)).join("");
+  detailSpecsSection.hidden = specRows.length === 0;
+  detailSpecs.innerHTML = specRows.map((row) => buildSpecRowMarkup(row)).join("");
+  detailFeaturesSection.hidden = featurePoints.length === 0;
+  detailFeatures.innerHTML = featurePoints.map((point) => buildFeatureItemMarkup(point)).join("");
+
+  const sizeMarkup =
     sizeVariants.length > 1
       ? sizeVariants.map((variant) => buildSizeVariantMarkup(variant, product.code, sizeDuplicateCounts)).join("")
-      : product.sizes.map((size) => buildSizeChipMarkup(size)).join("");
+      : product.sizes
+        .filter((size) => size && size !== product.volume)
+        .map((size) => buildSizeChipMarkup(size))
+        .join("");
+
+  detailSizes.innerHTML = sizeMarkup;
+  detailSizesSection.hidden = sizeMarkup === "";
   renderSimilarProducts(product, dictionary);
 }
 
@@ -425,13 +596,14 @@ function syncLanguageButtons() {
 
 function applyLanguage() {
   const dictionary = getDictionary();
+  const uiCopy = getDetailCopy();
 
   languageLabel.textContent = dictionary.languageLabel;
   languageEnglishButton.setAttribute("aria-label", dictionary.languageEnglish);
   languageEnglishButton.setAttribute("title", dictionary.languageEnglish);
   languageKhmerButton.setAttribute("aria-label", dictionary.languageKhmer);
   languageKhmerButton.setAttribute("title", dictionary.languageKhmer);
-  detailHeroSubline.textContent = dictionary.heroSubline;
+  detailHeroSubline.textContent = uiCopy.heroSubline;
   detailEyebrow.textContent = dictionary.detailEyebrow;
   detailHeading.textContent = dictionary.detailHeading;
   detailCopyEyebrow.textContent = dictionary.detailCopyEyebrow;
@@ -439,17 +611,16 @@ function applyLanguage() {
   detailBack.setAttribute("aria-label", dictionary.backLabel);
   heroLogoLink.setAttribute("aria-label", dictionary.backLabel);
   detailCodeLabel.textContent = dictionary.code;
-  detailSeriesLabel.textContent = dictionary.series;
-  detailTypeLabel.textContent = dictionary.type;
-  detailStockLabel.textContent = dictionary.stock;
-  detailColorsLabel.textContent = dictionary.colors;
-  detailSizesLabel.textContent = dictionary.sizes;
+  detailSpecsLabel.textContent = uiCopy.specs;
+  detailSpecsCopy.textContent = uiCopy.specsCopy;
+  detailFeaturesLabel.textContent = uiCopy.featurePoints;
+  detailSizesLabel.textContent = uiCopy.sizes;
   detailDepotLabel.textContent = dictionary.depot;
   detailUserLabel.textContent = dictionary.user;
   similarEyebrow.textContent = dictionary.similarEyebrow;
   similarTitle.textContent = dictionary.similarTitle;
   similarCopy.textContent = dictionary.similarCopy;
-  detailFooterText.textContent = dictionary.footerText;
+  detailFooterText.textContent = uiCopy.footerText;
   detailFooterPage.textContent = dictionary.footerPage;
   syncLanguageButtons();
   renderCurrentProduct();
