@@ -195,6 +195,14 @@ input {
   width: min(100%, 210px);
 }
 
+body.users-page .hero__logo-wrap {
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
 .hero__title-block {
   text-align: center;
 }

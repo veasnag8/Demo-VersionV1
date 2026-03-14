@@ -121,7 +121,7 @@ const translations = {
       return product ? `${product.code} | ព័ត៌មានលម្អិតផលិតផល` : "ព័ត៌មានលម្អិតផលិតផល | Angkor Garden Tools";
     },
     heroSubline: "ព័ត៌មានលម្អិតផលិតផល មានស្តុក ពណ៌ ទំហំ និងផលិតផលស្រដៀង",
-    detailEyebrow: "អង្គរឧបករណ៍កសិកម្ម",
+    detailEyebrow: "អង្គរហ្គាដិនធូក",
     detailHeading: "ព័ត៌មានលម្អិតផលិតផល",
     detailCopyEyebrow: "ទំនិញក្នុងតារាង",
     languageLabel: "ភាសា",

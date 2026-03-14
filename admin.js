@@ -87,19 +87,11 @@ const ITEM_EXPORT_COLUMNS = [
   { header: "Image URL", width: 36 },
   { header: "Volume", width: 14 },
   { header: "Series", width: 18 },
-  { header: "Stock", width: 12 },
-  { header: "Featured", width: 12 },
   { header: "Depot Price", width: 14 },
   { header: "User Price", width: 14 },
-  { header: "Art Background", width: 16 },
-  { header: "Art Color", width: 14 },
   { header: "Product Title", width: 34 },
   { header: "Description", width: 44 },
-  { header: "Specification Rows", width: 42 },
-  { header: "Feature Points", width: 34 },
   { header: "Sizes", width: 24 },
-  { header: "Tags", width: 28 },
-  { header: "Colors", width: 24 },
 ];
 const BRAND_EXPORT_COLUMNS = [
   { header: "Brand Name", width: 22 },
@@ -116,19 +108,11 @@ const ITEM_IMPORT_ALIASES = {
   image: ["image url", "image", "photo", "picture"],
   volume: ["volume", "capacity"],
   series: ["series"],
-  stock: ["stock", "stock qty", "stock quantity"],
-  featured: ["featured", "is featured"],
   depoPrice: ["depot price", "depo price"],
   userPrice: ["user price", "retail price"],
-  artBg: ["art background", "art bg", "background color"],
-  artColor: ["art color", "foreground color"],
   title: ["product title", "title"],
   description: ["description"],
-  specRows: ["specification rows", "spec rows", "specifications"],
-  featurePoints: ["feature points", "features"],
   sizes: ["sizes", "size"],
-  tags: ["tags"],
-  colors: ["colors"],
 };
 const BRAND_IMPORT_ALIASES = {
   name: ["brand name", "name", "brand"],
@@ -295,7 +279,7 @@ function syncBrandVisibility() {
 }
 
 function getCatalogShareUrl() {
-  return new URL("index.html#catalog", window.location.href).href;
+  return new URL("users.html#catalog", window.location.href).href;
 }
 
 function getCatalogQrUrl() {
@@ -1159,19 +1143,11 @@ function buildItemExportRow(product) {
     "Image URL": product.image,
     Volume: product.volume,
     Series: product.series,
-    Stock: product.stock,
-    Featured: Boolean(product.featured),
     "Depot Price": product.depoPrice,
     "User Price": product.userPrice,
-    "Art Background": product.artBg,
-    "Art Color": product.artColor,
     "Product Title": product.title,
     Description: product.description,
-    "Specification Rows": serializeSpecRows(product.specRows),
-    "Feature Points": (product.featurePoints ?? []).join("\n"),
     Sizes: (product.sizes ?? []).join("\n"),
-    Tags: (product.tags ?? []).join(", "),
-    Colors: serializeColors(product.colors),
   };
 }
 
@@ -1267,19 +1243,11 @@ function buildImportedProduct(row, existingProduct) {
     image: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.image, existingProduct.image).value,
     volume: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.volume, existingProduct.volume).value,
     series: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.series, existingProduct.series).value,
-    stock: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.stock, existingProduct.stock).value,
-    featured: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.featured, existingProduct.featured).value,
     depoPrice: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.depoPrice, existingProduct.depoPrice).value,
     userPrice: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.userPrice, existingProduct.userPrice).value,
-    artBg: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.artBg, existingProduct.artBg).value,
-    artColor: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.artColor, existingProduct.artColor).value,
     title: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.title, existingProduct.title).value,
     description: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.description, existingProduct.description).value,
-    specRows: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.specRows, existingProduct.specRows).value,
-    featurePoints: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.featurePoints, existingProduct.featurePoints).value,
     sizes: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.sizes, existingProduct.sizes).value,
-    tags: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.tags, existingProduct.tags).value,
-    colors: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.colors, existingProduct.colors).value,
   };
 }
 

@@ -1,7 +1,7 @@
 (function () {
   // Frontend-only access gate for the static admin page.
   // Replace these credentials with a backend auth flow for real security.
-  const LOGIN_FILE = "admin-login.html";
+  const LOGIN_FILE = "index.html";
   const DASHBOARD_FILE = "admin.html";
   const SESSION_KEY = "agt-admin-session";
   const SESSION_TTL_MS = 8 * 60 * 60 * 1000;

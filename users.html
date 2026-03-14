@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ព័ត៌មានលម្អិតផលិតផល | Angkor Garden Tools</title>
+  <title>តារាងតម្លៃផលិតផល | Angkor Garden Tools</title>
   <meta
     name="description"
-    content="Product detail page for Angkor Garden Tools with stock, colors, sizes, and similar items."
+    content="Angkor Garden Tools product detail layout with the same catalog data in a cleaner brochure-inspired format."
   >
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css?v=20260313">
+  <link rel="stylesheet" href="styles.css?v=20260313-3">
 </head>
-<body>
+<body class="users-page">
   <svg class="catalog-symbols" aria-hidden="true" focusable="false">
     <symbol id="icon-sprayer" viewBox="0 0 220 220">
       <rect x="54" y="36" width="112" height="118" rx="34" fill="currentColor"></rect>
@@ -69,17 +69,17 @@
   <div class="page-shell">
     <header class="hero">
       <div class="hero__top">
-        <a class="hero__logo-wrap" id="heroLogoLink" href="users.html#catalog" aria-label="Back to catalog">
-          <img class="hero__logo" src="logo.png" alt="Angkor Garden Tools logo">
+        <a class="hero__logo-wrap" href="#catalog" aria-label="Go to product detail">
+          <img class="hero__logo" src="logo-transparent.png" alt="Angkor Garden Tools logo">
         </a>
 
         <div class="hero__title-block">
           <p class="hero__khmer" lang="km">អង្គរហ្គាដិនធូក</p>
           <p class="hero__english">ANGKOR GARDEN TOOLS</p>
-          <p class="hero__subline" id="detailHeroSubline">Product detail with stock, colors, sizes, and similar items</p>
+          <p class="hero__subline">Product detail new version with the same catalog data</p>
         </div>
 
-        <div class="hero__contact">
+        <div class="hero__contact" id="contact">
           <p class="hero__address">
             <svg aria-hidden="true"><use href="#icon-location"></use></svg>
             <span>No775, Str38, Trea2 Village, Sangkat Steng Meanchey, Khan Meanchey, Phnom Penh</span>
@@ -87,10 +87,6 @@
           <a class="hero__contact-item" href="tel:+85570516333">
             <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
             <span>+855 (0) 70 516 333</span>
-          </a>
-          <a class="hero__contact-item" href="tel:078963636">
-            <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
-            <span>078 96 36 36</span>
           </a>
           <a class="hero__contact-item" href="tel:067963636">
             <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
@@ -102,18 +98,19 @@
           </a>
         </div>
       </div>
+
     </header>
 
     <main>
-      <section class="finder detail-page">
+      <section class="finder" id="catalog">
         <div class="section-heading">
           <div>
-            <p class="eyebrow" id="detailEyebrow">Product Details</p>
-            <h1 id="detailHeading">Product Details</h1>
+            <p class="eyebrow" id="catalogEyebrow">Angkor Garden Tools</p>
+            <h2 id="catalogTitle">តារាងតម្លៃផលិតផល</h2>
           </div>
           <div class="section-heading__actions">
             <div class="control-group">
-              <p class="control-group__label" id="languageLabel">Language</p>
+              <p class="control-group__label" id="languageLabel">ភាសា</p>
               <div class="toggle-row" role="group" aria-labelledby="languageLabel">
                 <button class="toggle-button toggle-button--compact" id="languageEnglish" data-language-option="en" type="button" aria-label="English" title="English">
                   <span class="toggle-button__abbr" aria-hidden="true">EN</span>
@@ -126,84 +123,70 @@
           </div>
         </div>
 
-        <a class="detail-back" id="detailBack" href="users.html#catalog">Back to catalog</a>
+        <div class="finder__controls">
+          <label class="search-field" for="searchInput">
+            <span id="searchLabel">ស្វែងរកផលិតផល</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="ស្វែងរកម៉ូដែល ម៉ាក ចំណុះ ឬស៊េរី"
+              autocomplete="off"
+            >
+          </label>
 
-        <p class="empty-state" id="detailMissing" hidden>Product not found.</p>
+          <div class="finder__filters">
+            <label class="select-field" for="typeFilter">
+              <span id="typeFilterLabel">ប្រភេទផលិតផល</span>
+              <select id="typeFilter">
+                <option value="all" id="typeOptionAll">ទាំងអស់</option>
+                <option value="featured" id="typeOptionFeatured">ពេញនិយម</option>
+                <option value="sprayer" id="typeOptionSprayer">ម៉ាស៊ីនបាញ់</option>
+                <option value="battery" id="typeOptionBattery">បាតឺរី</option>
+              </select>
+            </label>
 
-        <div class="detail-layout" id="detailContent">
-          <article class="detail-panel detail-panel--art">
-            <div class="detail-panel__head">
-              <div>
-                <p class="eyebrow" id="detailCodeLabel">Code</p>
-                <p class="detail-panel__code" id="detailCode">-</p>
-              </div>
-            </div>
-
-            <div class="detail-panel__band">
-              <span class="detail-panel__brand" id="detailBrand">-</span>
-              <div class="detail-panel__band-meta">
-                <span class="detail-panel__volume" id="detailVolume">-</span>
-                <span class="stock-pill stock-pill--out" id="detailStockPill" hidden>Out of stock</span>
-              </div>
-            </div>
-
-            <div class="detail-art" id="detailArt"></div>
-          </article>
-
-          <article class="detail-panel detail-panel--info">
-            <div class="detail-copy">
-              <p class="eyebrow" id="detailCopyEyebrow">Catalog item</p>
-              <h2 class="detail-product-title" id="detailTitle" lang="km"></h2>
-              <p class="detail-product-description" id="detailDescription" lang="km"></p>
-            </div>
-
-            <section class="detail-overview" id="detailOverview"></section>
-
-            <section class="detail-spec-sheet" id="detailSpecsSection" hidden>
-              <div class="detail-spec-sheet__head">
-                <h3 class="detail-spec-sheet__title" id="detailSpecsLabel">Item Details</h3>
-                <p class="detail-spec-sheet__copy" id="detailSpecsCopy">Prepared for quick review.</p>
-              </div>
-              <div class="detail-spec-listing" id="detailSpecs"></div>
-            </section>
-
-            <section class="detail-feature-sheet" id="detailFeaturesSection" hidden>
-              <div class="detail-feature-sheet__head">
-                <h3 class="detail-feature-sheet__title" id="detailFeaturesLabel">Key Features</h3>
-              </div>
-              <ul class="detail-feature-list" id="detailFeatures"></ul>
-            </section>
-
-            <section class="detail-chip-group detail-chip-group--sizes" id="detailSizesSection" hidden>
-              <h3 class="detail-chip-group__title" id="detailSizesLabel">Sizes</h3>
-              <div class="detail-chip-row" id="detailSizes"></div>
-            </section>
-
-            <div class="detail-price-list">
-              <article class="detail-price-card">
-                <span class="detail-price-card__label" id="detailDepotLabel">Depo</span>
-                <strong id="detailDepotPrice">-</strong>
-              </article>
-              <article class="detail-price-card">
-                <span class="detail-price-card__label" id="detailUserLabel">User</span>
-                <strong id="detailUserPrice">-</strong>
-              </article>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="finder detail-similar" id="similarSection">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow" id="similarEyebrow">Similar Items</p>
-            <h2 id="similarTitle">Similar Items</h2>
-            <p class="detail-subcopy" id="similarCopy">Browse other products from the same product group.</p>
+            <label class="select-field" for="brandFilter">
+              <span id="brandFilterLabel">ម៉ាក</span>
+              <select id="brandFilter">
+                <option value="all">ម៉ាកទាំងអស់</option>
+              </select>
+            </label>
           </div>
         </div>
 
-        <div class="similar-grid" id="similarGrid"></div>
+        <div class="catalog-toolbar" aria-live="polite">
+          <p class="catalog-toolbar__summary">
+            <span class="catalog-toolbar__stat">
+              <span id="totalRecordsLabel">ទំនិញសរុប</span>
+              <strong id="totalRecords">0</strong>
+            </span>
+            <span class="catalog-toolbar__stat">
+              <span id="matchingRecordsLabel">ត្រូវនឹង</span>
+              <strong id="matchingRecords">0</strong>
+            </span>
+          </p>
+          <p class="catalog-toolbar__page" id="pageStatus">ទំព័រ 1 នៃ 1</p>
+        </div>
+
+        <div class="catalog-grid"></div>
+
+        <p class="empty-state" id="emptyStateMessage" hidden>មិនមានផលិតផលត្រូវនឹងការស្វែងរកនេះទេ។</p>
+
+        <div class="pagination" aria-label="Catalog pagination">
+          <button class="pagination__button pagination__button--icon" id="prevPage" type="button" aria-label="Previous page" title="Previous page">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14.71 6.71 9.41 12l5.3 5.29-1.42 1.42L6.59 12l6.7-6.71z"></path>
+            </svg>
+          </button>
+          <p class="pagination__status" id="paginationStatus">បង្ហាញ 0-0 នៃ 0</p>
+          <button class="pagination__button pagination__button--icon" id="nextPage" type="button" aria-label="Next page" title="Next page">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9.29 6.71 1.42-1.42L17.41 12l-6.7 6.71-1.42-1.42L14.59 12z"></path>
+            </svg>
+          </button>
+        </div>
       </section>
+
     </main>
 
     <footer class="site-footer">
@@ -211,15 +194,15 @@
         <img src="logo.png" alt="" aria-hidden="true">
         <div>
           <p>ANGKOR GARDEN TOOLS</p>
-          <small id="detailFooterText">Product detail layout . Stock, colors, sizes, and similar items</small>
+          <small>Product detail layout . New version</small>
         </div>
       </div>
-      <p class="site-footer__page" id="detailFooterPage">Catalog detail page</p>
+      <p class="site-footer__page">Same catalog data . Updated header and board</p>
     </footer>
   </div>
 
   <script src="catalog-data.js"></script>
   <script src="catalog-store.js"></script>
-  <script src="detail.js?v=20260313"></script>
+  <script src="app.js?v=20260313-2"></script>
 </body>
 </html>

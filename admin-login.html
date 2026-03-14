@@ -2,85 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=index.html">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login | Angkor Garden Tools</title>
-  <meta
-    name="description"
-    content="Login page for the Angkor Garden Tools admin dashboard."
-  >
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="shortcut icon" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="admin.css">
-  <script src="admin-auth.js"></script>
+  <title>Redirecting...</title>
 </head>
-<body class="admin-login-page">
-  <main class="admin-login">
-    <section class="admin-login__panel">
-      <a class="admin-login__brand" href="index.html#catalog" aria-label="Open user catalog">
-        <span class="admin-login__brand-mark">
-          <img src="logo.png" alt="Angkor Garden Tools logo">
-        </span>
-        <span class="admin-login__brand-copy">
-          <strong>Angkor Garden Tools</strong>
-          <small>Admin sign in</small>
-        </span>
-      </a>
-
-      <div class="admin-login__intro">
-        <p class="eyebrow">Secure Access</p>
-        <h1>Sign in to the admin dashboard.</h1>
-        <p>
-          Use the admin account to manage product records, prices, stock, and Khmer catalog content.
-        </p>
-      </div>
-
-      <form class="admin-login__form" id="adminLoginForm">
-        <label class="admin-auth-field">
-          <span>Username</span>
-          <input id="adminLoginUsername" name="username" type="text" autocomplete="username" required>
-        </label>
-
-        <label class="admin-auth-field">
-          <span>Password</span>
-          <input id="adminLoginPassword" name="password" type="password" autocomplete="current-password" required>
-        </label>
-
-        <p class="admin-login__meta">Default username is <strong>admin</strong>. Change credentials in <code>admin-auth.js</code>.</p>
-        <p class="empty-state admin-login__status" id="adminLoginStatus" hidden></p>
-
-        <button class="pagination__button admin-button admin-button--primary" type="submit">Sign In</button>
-      </form>
-    </section>
-
-    <section class="admin-login__showcase">
-      <div class="admin-login__showcase-copy">
-        <p class="eyebrow">Admin Features</p>
-        <h2>Standard dashboard flow for catalog control.</h2>
-        <p>
-          Open a protected session, review product totals, search the record list, and update item data
-          from one editor workspace.
-        </p>
-      </div>
-
-      <div class="admin-login__cards">
-        <article class="admin-login__card">
-          <strong>Manage product data</strong>
-          <p>Create, edit, delete, and reset catalog products from the admin dashboard.</p>
-        </article>
-        <article class="admin-login__card">
-          <strong>Protected browser session</strong>
-          <p>Admin access now requires sign-in before the dashboard opens.</p>
-        </article>
-        <article class="admin-login__card">
-          <strong>Shared catalog store</strong>
-          <p>Changes still update the same browser-based product store used by the user views.</p>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <script src="admin-login.js"></script>
+<body>
+  <script>
+    window.location.replace("index.html");
+  </script>
 </body>
 </html>

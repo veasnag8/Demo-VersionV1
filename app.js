@@ -75,7 +75,7 @@ const translations = {
   },
   km: {
     pageTitle: "តារាងតម្លៃផលិតផល | Angkor Garden Tools",
-    catalogEyebrow: "អង្គរឧបករណ៍កសិកម្ម",
+    catalogEyebrow: "អង្គរហ្គាដិនធូក",
     catalogTitle: "តារាងតម្លៃផលិតផល",
     languageLabel: "ភាសា",
     languageEnglish: "English",

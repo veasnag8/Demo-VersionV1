@@ -3,210 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>តារាងតម្លៃផលិតផល | Angkor Garden Tools</title>
+  <title>Admin Login | Angkor Garden Tools</title>
   <meta
     name="description"
-    content="Angkor Garden Tools product detail layout with the same catalog data in a cleaner brochure-inspired format."
+    content="Login page for the Angkor Garden Tools admin dashboard."
   >
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css?v=20260313-3">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+  <script src="admin-auth.js"></script>
 </head>
-<body>
-  <svg class="catalog-symbols" aria-hidden="true" focusable="false">
-    <symbol id="icon-sprayer" viewBox="0 0 220 220">
-      <rect x="54" y="36" width="112" height="118" rx="34" fill="currentColor"></rect>
-      <rect x="88" y="22" width="44" height="24" rx="10" fill="#ff6f3d"></rect>
-      <rect x="73" y="70" width="74" height="20" rx="10" fill="#d5fbf0"></rect>
-      <rect x="79" y="152" width="62" height="18" rx="9" fill="#11443b"></rect>
-      <circle cx="84" cy="184" r="16" fill="#11443b"></circle>
-      <circle cx="136" cy="184" r="16" fill="#11443b"></circle>
-      <rect x="92" y="160" width="34" height="36" rx="10" fill="#ff6f3d"></rect>
-      <path d="M155 62c21 0 33 10 42 25" stroke="#11443b" stroke-width="10" stroke-linecap="round" fill="none"></path>
-      <path d="M194 86h16" stroke="#11443b" stroke-width="10" stroke-linecap="round"></path>
-    </symbol>
-    <symbol id="icon-mister" viewBox="0 0 220 220">
-      <ellipse cx="112" cy="56" rx="58" ry="30" fill="currentColor"></ellipse>
-      <rect x="68" y="56" width="88" height="88" rx="28" fill="currentColor"></rect>
-      <rect x="88" y="74" width="48" height="18" rx="9" fill="#d5fbf0"></rect>
-      <rect x="90" y="140" width="44" height="22" rx="10" fill="#ff6f3d"></rect>
-      <circle cx="112" cy="174" r="28" fill="#11443b"></circle>
-      <circle cx="112" cy="174" r="14" fill="#ff6f3d"></circle>
-    </symbol>
-    <symbol id="icon-battery" viewBox="0 0 220 220">
-      <rect x="48" y="44" width="124" height="136" rx="18" fill="currentColor"></rect>
-      <rect x="84" y="28" width="54" height="20" rx="8" fill="#11443b"></rect>
-      <rect x="64" y="62" width="92" height="18" rx="9" fill="#d5fbf0"></rect>
-      <rect x="64" y="98" width="92" height="56" rx="14" fill="#ff6f3d"></rect>
-      <rect x="182" y="70" width="18" height="82" rx="9" fill="#11443b"></rect>
-    </symbol>
-    <symbol id="icon-location" viewBox="0 0 24 24">
-      <path
-        d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.9"
-        stroke-linejoin="round"
-      ></path>
-      <circle cx="12" cy="10" r="2.8" fill="currentColor"></circle>
-    </symbol>
-    <symbol id="icon-phone" viewBox="0 0 24 24">
-      <path
-        d="M6.8 3.8h3.1l1.4 4.5-2.1 1.9a15.5 15.5 0 0 0 4.6 4.6l1.9-2.1 4.5 1.4v3.1c0 .8-.6 1.5-1.4 1.6a16.5 16.5 0 0 1-14.4-14.4c.1-.8.8-1.4 1.6-1.4Z"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.9"
-        stroke-linejoin="round"
-      ></path>
-    </symbol>
-    <symbol id="icon-mail" viewBox="0 0 24 24">
-      <rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"></rect>
-      <path d="m5 8 7 5 7-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
-    </symbol>
-  </svg>
+<body class="admin-login-page">
+  <main class="admin-login">
+    <section class="admin-login__panel">
+      <a class="admin-login__brand" href="users.html#catalog" aria-label="Open user catalog">
+        <span class="admin-login__brand-mark">
+          <img src="logo.png" alt="Angkor Garden Tools logo">
+        </span>
+        <span class="admin-login__brand-copy">
+          <strong>Angkor Garden Tools</strong>
+          <small>Admin sign in</small>
+        </span>
+      </a>
 
-  <div class="page-shell">
-    <header class="hero">
-      <div class="hero__top">
-        <a class="hero__logo-wrap" href="#catalog" aria-label="Go to product detail">
-          <img class="hero__logo" src="logo.png" alt="Angkor Garden Tools logo">
-        </a>
+      <form class="admin-login__form" id="adminLoginForm">
+        <label class="admin-auth-field">
+          <span>Username</span>
+          <input id="adminLoginUsername" name="username" type="text" autocomplete="username" required>
+        </label>
 
-        <div class="hero__title-block">
-          <p class="hero__khmer" lang="km">អង្គរឧបករណ៍កសិកម្ម</p>
-          <p class="hero__english">ANGKOR GARDEN TOOLS</p>
-          <p class="hero__subline">Product detail new version with the same catalog data</p>
-        </div>
+        <label class="admin-auth-field">
+          <span>Password</span>
+          <input id="adminLoginPassword" name="password" type="password" autocomplete="current-password" required>
+        </label>
 
-        <div class="hero__contact" id="contact">
-          <p class="hero__address">
-            <svg aria-hidden="true"><use href="#icon-location"></use></svg>
-            <span>No775, Str38, Trea2 Village, Sangkat Steng Meanchey, Khan Meanchey, Phnom Penh</span>
-          </p>
-          <a class="hero__contact-item" href="tel:+85570516333">
-            <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
-            <span>+855 (0) 70 516 333</span>
-          </a>
-          <a class="hero__contact-item" href="tel:078963636">
-            <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
-            <span>078 96 36 36</span>
-          </a>
-          <a class="hero__contact-item" href="tel:067963636">
-            <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
-            <span>067 96 36 36</span>
-          </a>
-          <a class="hero__contact-item" href="mailto:angkorgardentools@gmail.com">
-            <svg aria-hidden="true"><use href="#icon-mail"></use></svg>
-            <span>angkorgardentools@gmail.com</span>
-          </a>
-        </div>
+        <p class="admin-login__meta">Default username: <strong>admin</strong>.</p>
+        <p class="empty-state admin-login__status" id="adminLoginStatus" hidden></p>
+
+        <button class="pagination__button admin-button admin-button--primary" type="submit">Sign In</button>
+      </form>
+    </section>
+
+    <section class="admin-login__showcase">
+      <div class="admin-login__showcase-copy">
+        <p class="eyebrow">Admin Features</p>
+        <h2>Standard dashboard flow for catalog control.</h2>
+        <p>Sign in, search records, and update item data.</p>
       </div>
 
-    </header>
-
-    <main>
-      <section class="finder" id="catalog">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow" id="catalogEyebrow">Angkor Garden Tools</p>
-            <h2 id="catalogTitle">តារាងតម្លៃផលិតផល</h2>
-          </div>
-          <div class="section-heading__actions">
-            <div class="control-group">
-              <p class="control-group__label" id="languageLabel">ភាសា</p>
-              <div class="toggle-row" role="group" aria-labelledby="languageLabel">
-                <button class="toggle-button toggle-button--compact" id="languageEnglish" data-language-option="en" type="button" aria-label="English" title="English">
-                  <span class="toggle-button__abbr" aria-hidden="true">EN</span>
-                </button>
-                <button class="toggle-button toggle-button--compact is-active" id="languageKhmer" data-language-option="km" type="button" aria-label="Khmer" title="Khmer">
-                  <span class="toggle-button__abbr" aria-hidden="true">KH</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="finder__controls">
-          <label class="search-field" for="searchInput">
-            <span id="searchLabel">ស្វែងរកផលិតផល</span>
-            <input
-              id="searchInput"
-              type="search"
-              placeholder="ស្វែងរកម៉ូដែល ម៉ាក ចំណុះ ឬស៊េរី"
-              autocomplete="off"
-            >
-          </label>
-
-          <div class="finder__filters">
-            <label class="select-field" for="typeFilter">
-              <span id="typeFilterLabel">ប្រភេទផលិតផល</span>
-              <select id="typeFilter">
-                <option value="all" id="typeOptionAll">ទាំងអស់</option>
-                <option value="featured" id="typeOptionFeatured">ពេញនិយម</option>
-                <option value="sprayer" id="typeOptionSprayer">ម៉ាស៊ីនបាញ់</option>
-                <option value="battery" id="typeOptionBattery">បាតឺរី</option>
-              </select>
-            </label>
-
-            <label class="select-field" for="brandFilter">
-              <span id="brandFilterLabel">ម៉ាក</span>
-              <select id="brandFilter">
-                <option value="all">ម៉ាកទាំងអស់</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
-        <div class="catalog-toolbar" aria-live="polite">
-          <p class="catalog-toolbar__summary">
-            <span class="catalog-toolbar__stat">
-              <span id="totalRecordsLabel">ទំនិញសរុប</span>
-              <strong id="totalRecords">0</strong>
-            </span>
-            <span class="catalog-toolbar__stat">
-              <span id="matchingRecordsLabel">ត្រូវនឹង</span>
-              <strong id="matchingRecords">0</strong>
-            </span>
-          </p>
-          <p class="catalog-toolbar__page" id="pageStatus">ទំព័រ 1 នៃ 1</p>
-        </div>
-
-        <div class="catalog-grid"></div>
-
-        <p class="empty-state" id="emptyStateMessage" hidden>មិនមានផលិតផលត្រូវនឹងការស្វែងរកនេះទេ។</p>
-
-        <div class="pagination" aria-label="Catalog pagination">
-          <button class="pagination__button pagination__button--icon" id="prevPage" type="button" aria-label="Previous page" title="Previous page">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M14.71 6.71 9.41 12l5.3 5.29-1.42 1.42L6.59 12l6.7-6.71z"></path>
-            </svg>
-          </button>
-          <p class="pagination__status" id="paginationStatus">បង្ហាញ 0-0 នៃ 0</p>
-          <button class="pagination__button pagination__button--icon" id="nextPage" type="button" aria-label="Next page" title="Next page">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="m9.29 6.71 1.42-1.42L17.41 12l-6.7 6.71-1.42-1.42L14.59 12z"></path>
-            </svg>
-          </button>
-        </div>
-      </section>
-
-    </main>
-
-    <footer class="site-footer">
-      <div class="site-footer__brand">
-        <img src="logo.png" alt="" aria-hidden="true">
-        <div>
-          <p>ANGKOR GARDEN TOOLS</p>
-          <small>Product detail layout . New version</small>
-        </div>
+      <div class="admin-login__cards">
+        <article class="admin-login__card">
+          <strong>Manage product data</strong>
+          <p>Create, edit, or delete catalog items.</p>
+        </article>
+        <article class="admin-login__card">
+          <strong>Protected browser session</strong>
+          <p>Sign in before opening the dashboard.</p>
+        </article>
+        <article class="admin-login__card">
+          <strong>Shared catalog store</strong>
+          <p>Updates sync with the user catalog.</p>
+        </article>
       </div>
-      <p class="site-footer__page">Same catalog data . Updated header and board</p>
-    </footer>
-  </div>
+    </section>
+  </main>
 
-  <script src="catalog-data.js"></script>
-  <script src="catalog-store.js"></script>
-  <script src="app.js?v=20260313-2"></script>
+  <script src="admin-login.js"></script>
 </body>
 </html>
