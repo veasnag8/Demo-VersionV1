@@ -34,6 +34,12 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "KhmerRegular";
+  src: url("Fonts/Khmer-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
 :root {
   --brand: #24aa86;
   --brand-deep: #177761;
@@ -65,8 +71,8 @@
   --font-ui: "KhJrungThom", "Franklin Gothic Medium", sans-serif;
   --font-display: "Book Antiqua", "Palatino Linotype", serif;
   --font-kh-hero: "AngkorSovannNokorreach", "Leelawadee UI", sans-serif;
-  --font-kh-display: "Noto Sans Khmer", "Khmer OS Battambang", "Arial", sans-serif;
-  --font-kh-ui: "Noto Sans Khmer", "Khmer OS Battambang", "Arial", sans-serif;
+  --font-kh-display: "KhmerRegular", "Noto Sans Khmer", "Khmer OS Battambang", "Arial", sans-serif;
+  --font-kh-ui: "KhmerRegular", "Noto Sans Khmer", "Khmer OS Battambang", "Arial", sans-serif;
 }
 
 * {
@@ -123,6 +129,18 @@ body::before {
     linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0, rgba(255, 255, 255, 0.12) 1px, transparent 1px, transparent 64px),
     linear-gradient(rgba(255, 255, 255, 0.06) 0, rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 64px);
   opacity: 0.35;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 img {
@@ -195,7 +213,8 @@ input {
   width: min(100%, 210px);
 }
 
-body.users-page .hero__logo-wrap {
+body.users-page .hero__logo-wrap,
+body.detail-page-view .hero__logo-wrap {
   min-height: auto;
   padding: 0;
   border: 0;
@@ -316,9 +335,10 @@ main {
 
 .section-heading__actions {
   display: grid;
-  grid-template-columns: minmax(180px, 220px);
+  grid-template-columns: auto;
   gap: 12px;
   justify-self: end;
+  justify-items: end;
 }
 
 .control-group {
@@ -337,6 +357,45 @@ main {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.language-picker {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-end;
+}
+
+.language-picker__trigger {
+  box-shadow: 0 10px 20px rgba(16, 63, 54, 0.1);
+}
+
+.language-picker.is-open .language-picker__trigger {
+  border-color: rgba(36, 170, 134, 0.36);
+  box-shadow: 0 12px 24px rgba(36, 170, 134, 0.16);
+}
+
+.language-picker__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 8px;
+  min-width: 84px;
+  padding: 10px;
+  border: 1px solid rgba(16, 63, 54, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 32px rgba(16, 63, 54, 0.16);
+  backdrop-filter: blur(12px);
+}
+
+.language-picker__menu[hidden] {
+  display: none;
+}
+
+.language-picker__menu .toggle-button {
+  width: 100%;
 }
 
 .toggle-row {
@@ -778,6 +837,12 @@ html[lang="km"] #detailMissing {
   text-align: center;
 }
 
+.users-page .catalog-card__body h3[lang="km"],
+.users-page .catalog-card__body p[lang="km"] {
+  font-family: var(--font-kh-ui);
+  letter-spacing: 0;
+}
+
 .catalog-card__body h3 {
   font-size: 1.18rem;
   line-height: 1.16;
@@ -967,6 +1032,10 @@ html[lang="km"] #detailMissing {
   margin-top: 24px;
 }
 
+body.detail-page-view .detail-similar .catalog-card__art::before {
+  content: none;
+}
+
 .detail-back {
   display: inline-flex;
   align-items: center;
@@ -1075,14 +1144,7 @@ html[lang="km"] #detailMissing {
 }
 
 .detail-art__frame::before {
-  content: "";
-  position: absolute;
-  inset: 18px;
-  border-radius: 24px;
-  background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.56), transparent 54%),
-    url("logo.png") center/74% no-repeat;
-  opacity: 0.06;
+  content: none;
 }
 
 .detail-art__icon {
@@ -1543,6 +1605,12 @@ body[data-theme="dark"] .toggle-button {
   border-color: rgba(191, 255, 236, 0.14);
 }
 
+body[data-theme="dark"] .language-picker__menu {
+  border-color: rgba(191, 255, 236, 0.14);
+  background: rgba(18, 30, 35, 0.96);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.28);
+}
+
 body[data-theme="dark"] .toggle-button.is-active {
   color: #042019;
 }
@@ -1572,10 +1640,6 @@ body[data-theme="dark"] .detail-product-description,
 body[data-theme="dark"] .detail-subcopy,
 body[data-theme="dark"] .detail-fact__label {
   color: #c4d7d1;
-}
-
-body[data-theme="dark"] .detail-art__frame::before {
-  opacity: 0.08;
 }
 
 body[data-theme="dark"] .detail-chip {
@@ -1635,8 +1699,9 @@ body[data-theme="dark"] .stock-pill--out {
   }
 
   .section-heading__actions {
-    grid-template-columns: minmax(180px, 220px);
-    max-width: 220px;
+    grid-template-columns: auto;
+    max-width: none;
+    justify-items: end;
   }
 
   .catalog-grid {
@@ -2068,6 +2133,25 @@ body[data-theme="dark"] .stock-pill--out {
   }
 
   .catalog-card__body {
+    display: grid;
+    align-content: start;
+    min-height: 44px;
+    padding: 8px 10px 6px;
+  }
+
+  .catalog-card__body h3 {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.84rem;
+    line-height: 1.3;
+    text-align: center;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .catalog-card__body p {
     display: none;
   }
 

@@ -12,12 +12,26 @@ const adminTopbarText = document.querySelector("#adminTopbarText");
 const adminTopbarActions = document.querySelector(".admin-topbar__actions");
 const adminSectionButtons = [...document.querySelectorAll("[data-admin-section-option]")];
 const adminShortcutButtons = [...document.querySelectorAll("[data-admin-shortcut]")];
+const adminSidebarBrandSubline = document.querySelector(".admin-sidebar__brand-copy small");
+const adminSidebarSessionLabel = document.querySelector(".admin-sidebar__label");
+const adminSidebarSessionHint = document.querySelector(".admin-sidebar__hint");
+const adminQuickAccessLabel = document.querySelector(".admin-topbar__action-label");
+const adminCatalogLink = document.querySelector(".admin-topbar__catalog-link");
+const adminCatalogLinkTitle = adminCatalogLink?.querySelector("strong");
+const adminCatalogLinkHint = adminCatalogLink?.querySelector("small");
+const adminQrButtonLabel = document.querySelector(".admin-topbar__qr-button span");
+const adminOverviewEyebrow = document.querySelector(".admin-overview__intro .eyebrow");
+const adminOverviewTitle = document.querySelector(".admin-overview__intro h2");
+const adminStats = [...document.querySelectorAll(".admin-stat")];
+const adminDashboardCards = [...document.querySelectorAll(".admin-dashboard-card")];
 const adminTotalCount = document.querySelector("#adminTotalCount");
 const adminBrandCount = document.querySelector("#adminBrandCount");
 const adminTypeCount = document.querySelector("#adminTypeCount");
 const adminDashboardSection = document.querySelector("#adminDashboardSection");
 const adminItemsSection = document.querySelector("#adminItemsSection");
 const adminBrandsSection = document.querySelector("#adminBrandsSection");
+const adminTypesSection = document.querySelector("#adminTypesSection");
+const adminSettingsSection = document.querySelector("#adminSettingsSection");
 const adminControls = document.querySelector("#adminControls");
 const adminWorkspace = document.querySelector("#adminWorkspace");
 const adminListPanel = document.querySelector("#adminListPanel");
@@ -36,6 +50,13 @@ const adminFormHeading = document.querySelector("#adminFormHeading");
 const adminModeBadge = document.querySelector("#adminModeBadge");
 const adminStatus = document.querySelector("#adminStatus");
 const adminForm = document.querySelector("#adminForm");
+const adminImageInput = document.querySelector("#adminImageInput");
+const adminImageFileInput = document.querySelector("#adminImageFileInput");
+const adminImageUploadButton = document.querySelector("#adminImageUploadButton");
+const adminImageClearButton = document.querySelector("#adminImageClearButton");
+const adminImagePreview = document.querySelector("#adminImagePreview");
+const adminImagePreviewEmpty = document.querySelector("#adminImagePreviewEmpty");
+const adminImageUploadMeta = document.querySelector("#adminImageUploadMeta");
 const adminClearButton = document.querySelector("#adminClearButton");
 const adminBrandWorkspace = document.querySelector("#adminBrandWorkspace");
 const adminBrandListPanel = document.querySelector("#adminBrandListPanel");
@@ -59,10 +80,55 @@ const adminBrandClearButton = document.querySelector("#adminBrandClearButton");
 const adminBrandLinkedItems = document.querySelector("#adminBrandLinkedItems");
 const adminBrandOptions = document.querySelector("#adminBrandOptions");
 const adminBrandSelect = document.querySelector("#adminBrandSelect");
+const adminTypeSelect = document.querySelector("#adminTypeSelect");
+const adminTypeWorkspace = document.querySelector("#adminTypeWorkspace");
+const adminTypeListPanel = document.querySelector("#adminTypeListPanel");
+const adminTypeEditorPanel = document.querySelector("#adminTypeEditorPanel");
+const adminTypeHeading = document.querySelector("#adminTypeHeading");
+const adminTypeList = document.querySelector("#adminTypeList");
+const adminTypeEmpty = document.querySelector("#adminTypeEmpty");
+const adminTypeRange = document.querySelector("#adminTypeRange");
+const adminTypeSearch = document.querySelector("#adminTypeSearch");
+const adminTypeFilter = document.querySelector("#adminTypeFilter");
+const adminTypeFormHeading = document.querySelector("#adminTypeFormHeading");
+const adminTypeModeBadge = document.querySelector("#adminTypeModeBadge");
+const adminTypeStatus = document.querySelector("#adminTypeStatus");
+const adminTypeForm = document.querySelector("#adminTypeForm");
+const adminTypeNewButton = document.querySelector("#adminTypeNewButton");
+const adminImportTypesButton = document.querySelector("#adminImportTypesButton");
+const adminExportTypesButton = document.querySelector("#adminExportTypesButton");
+const adminImportTypesInput = document.querySelector("#adminImportTypesInput");
+const adminTypeClearButton = document.querySelector("#adminTypeClearButton");
+const adminTypeLinkedItems = document.querySelector("#adminTypeLinkedItems");
 const adminLogoutButton = document.querySelector("#adminLogoutButton");
+const adminSettingsLogoutButton = document.querySelector("#adminSettingsLogoutButton");
 const adminSidebarToggle = document.querySelector("#adminSidebarToggle");
 const adminSidebarRevealToggle = document.querySelector("#adminSidebarRevealToggle");
 const adminSessionUser = document.querySelector("#adminSessionUser");
+const adminLanguageButtons = [...document.querySelectorAll("[data-admin-language-option]")];
+const adminSettingsEyebrow = document.querySelector("#adminSettingsEyebrow");
+const adminSettingsTitle = document.querySelector("#adminSettingsTitle");
+const adminSettingsText = document.querySelector("#adminSettingsText");
+const adminSettingsLanguageEyebrow = document.querySelector("#adminSettingsLanguageEyebrow");
+const adminSettingsLanguageTitle = document.querySelector("#adminSettingsLanguageTitle");
+const adminSettingsLanguageCopy = document.querySelector("#adminSettingsLanguageCopy");
+const adminLanguageEnglishLabel = document.querySelector("#adminLanguageEnglishLabel");
+const adminLanguageEnglishHint = document.querySelector("#adminLanguageEnglishHint");
+const adminLanguageKhmerLabel = document.querySelector("#adminLanguageKhmerLabel");
+const adminLanguageKhmerHint = document.querySelector("#adminLanguageKhmerHint");
+const adminSettingsProfileEyebrow = document.querySelector("#adminSettingsProfileEyebrow");
+const adminSettingsProfileTitle = document.querySelector("#adminSettingsProfileTitle");
+const adminSettingsProfileCopy = document.querySelector("#adminSettingsProfileCopy");
+const adminSettingsUsernameLabel = document.querySelector("#adminSettingsUsernameLabel");
+const adminSettingsRoleLabel = document.querySelector("#adminSettingsRoleLabel");
+const adminSettingsIssuedLabel = document.querySelector("#adminSettingsIssuedLabel");
+const adminSettingsExpiresLabel = document.querySelector("#adminSettingsExpiresLabel");
+const adminSettingsStatusLabel = document.querySelector("#adminSettingsStatusLabel");
+const adminSettingsProfileUsername = document.querySelector("#adminSettingsProfileUsername");
+const adminSettingsProfileRole = document.querySelector("#adminSettingsProfileRole");
+const adminSettingsProfileIssuedAt = document.querySelector("#adminSettingsProfileIssuedAt");
+const adminSettingsProfileExpiresAt = document.querySelector("#adminSettingsProfileExpiresAt");
+const adminSettingsProfileStatus = document.querySelector("#adminSettingsProfileStatus");
 const adminOpenQrButton = document.querySelector("#adminOpenQrButton");
 const adminQrModal = document.querySelector("#adminQrModal");
 const adminCloseQrButton = document.querySelector("#adminCloseQrButton");
@@ -76,6 +142,7 @@ const DEFAULT_LIST_PAGE_SIZE = 30;
 const DEFAULT_QR_STATUS_TEXT = "Scan this QR code to open the customer catalog page.";
 const EXCEL_ITEMS_SHEET_NAME = "Items";
 const EXCEL_BRANDS_SHEET_NAME = "Brands";
+const EXCEL_TYPES_SHEET_NAME = "Item Types";
 const ITEM_EXPORT_COLUMNS = [
   { header: "Code", width: 14 },
   { header: "Brand", width: 18 },
@@ -84,7 +151,7 @@ const ITEM_EXPORT_COLUMNS = [
   { header: "Visible On User Page", width: 18 },
   { header: "Similar Group", width: 16 },
   { header: "Icon", width: 14 },
-  { header: "Image URL", width: 36 },
+  { header: "Image", width: 36 },
   { header: "Volume", width: 14 },
   { header: "Series", width: 18 },
   { header: "Depot Price", width: 14 },
@@ -95,6 +162,10 @@ const ITEM_EXPORT_COLUMNS = [
 ];
 const BRAND_EXPORT_COLUMNS = [
   { header: "Brand Name", width: 22 },
+  { header: "Note", width: 42 },
+];
+const TYPE_EXPORT_COLUMNS = [
+  { header: "Type Name", width: 22 },
   { header: "Note", width: 42 },
 ];
 const ITEM_IMPORT_ALIASES = {
@@ -118,48 +189,519 @@ const BRAND_IMPORT_ALIASES = {
   name: ["brand name", "name", "brand"],
   note: ["note", "notes"],
 };
-const SECTION_COPY = {
-  dashboard: {
-    eyebrow: "Admin Overview",
-    title: "Dashboard",
-    text: "",
+const TYPE_IMPORT_ALIASES = {
+  name: ["type name", "item type", "product type", "type", "name"],
+  note: ["note", "notes"],
+};
+const STORAGE_KEYS = {
+  language: "agt-admin-language",
+};
+const AVAILABLE_SECTIONS = new Set(["dashboard", "items", "types", "brands", "settings"]);
+const ADMIN_UI = {
+  en: {
+    locale: "en-US",
+    sidebarPanelCopy: "Admin Control Panel",
+    nav: {
+      dashboard: "Dashboard",
+      items: "Items",
+      types: "Item Types",
+      brands: "Brands",
+      settings: "Settings",
+    },
+    session: {
+      label: "Signed In",
+      hint: "Protected browser session",
+      logout: "Log Out",
+      signOut: "Sign Out",
+      role: "Administrator",
+      status: "Active",
+      showMenu: "Show menu",
+      hideMenu: "Hide menu",
+      showMenuAria: "Show admin menu",
+      hideMenuAria: "Hide admin menu",
+    },
+    quickAccess: {
+      label: "Quick Access",
+      openCatalog: "Open User Catalog",
+      openCatalogHint: "Open in a new tab",
+      qr: "QR",
+      qrAria: "Show catalog QR code",
+    },
+    sections: {
+      dashboard: {
+        eyebrow: "Admin Overview",
+        title: "Dashboard",
+        text: "",
+      },
+      items: {
+        eyebrow: "Catalog Control",
+        title: "Items",
+        text: "Search, update, and manage catalog item records from one standard admin workspace.",
+      },
+      types: {
+        eyebrow: "Type Control",
+        title: "Item Types",
+        text: "Manage product type records, keep filter choices consistent, and rename types used across the item catalog.",
+      },
+      brands: {
+        eyebrow: "Brand Control",
+        title: "Brands",
+        text: "Manage brand records, keep the catalog naming consistent, and prepare brands before assigning them to items.",
+      },
+      settings: {
+        eyebrow: "Preferences",
+        title: "Settings",
+        text: "Adjust interface language and review the current session profile.",
+      },
+    },
+    dashboard: {
+      eyebrow: "Overview",
+      title: "Catalog Summary",
+      stats: [
+        {
+          label: "Total Products",
+          copy: "All active records in the shared catalog store.",
+        },
+        {
+          label: "Total Brands",
+          copy: "Unique brands currently used across catalog records.",
+        },
+        {
+          label: "Total Types",
+          copy: "Unique product types available in the catalog.",
+        },
+      ],
+      cards: {
+        items: {
+          eyebrow: "Items",
+          title: "Open Item Management",
+          copy: "Browse the item list, create new records, and edit catalog details from one workspace.",
+          button: "Go to Items",
+        },
+        types: {
+          eyebrow: "Item Types",
+          title: "Open Type Management",
+          copy: "Manage product type records and keep catalog filtering consistent across the admin and user pages.",
+          button: "Go to Types",
+        },
+        brands: {
+          eyebrow: "Brands",
+          title: "Open Brand Management",
+          copy: "Maintain brand names, prepare new brand records, and keep item branding consistent.",
+          button: "Go to Brands",
+        },
+      },
+    },
+    settings: {
+      eyebrow: "Preferences",
+      title: "Settings",
+      text: "Choose the admin interface language and review the current session profile.",
+      languageEyebrow: "Interface",
+      languageTitle: "Language",
+      languageCopy: "Switch the admin shell between English and Khmer.",
+      englishLabel: "English",
+      englishHint: "Use English across the admin shell.",
+      khmerLabel: "Khmer",
+      khmerHint: "Use Khmer for navigation and settings labels.",
+      profileEyebrow: "Account",
+      profileTitle: "User Profile",
+      profileCopy: "Current signed-in details from this browser session.",
+      username: "Username",
+      role: "Role",
+      issuedAt: "Signed in at",
+      expiresAt: "Session expires",
+      status: "Session status",
+    },
   },
-  items: {
-    eyebrow: "Catalog Control",
-    title: "Items",
-    text: "Search, update, and manage catalog item records from one standard admin workspace.",
-  },
-  brands: {
-    eyebrow: "Brand Control",
-    title: "Brands",
-    text: "Manage brand records, keep the catalog naming consistent, and prepare brands before assigning them to items.",
+  km: {
+    locale: "km-KH",
+    sidebarPanelCopy: "ផ្ទាំងគ្រប់គ្រងអ្នកគ្រប់គ្រង",
+    nav: {
+      dashboard: "ផ្ទាំងដើម",
+      items: "ទំនិញ",
+      brands: "ម៉ាក",
+      settings: "ការកំណត់",
+    },
+    session: {
+      label: "បានចូលប្រើ",
+      hint: "សម័យការងារនេះត្រូវបានការពារ",
+      logout: "ចាកចេញ",
+      signOut: "ចាកចេញ",
+      role: "អ្នកគ្រប់គ្រង",
+      status: "កំពុងដំណើរការ",
+      showMenu: "បង្ហាញម៉ឺនុយ",
+      hideMenu: "លាក់ម៉ឺនុយ",
+      showMenuAria: "បង្ហាញម៉ឺនុយគ្រប់គ្រង",
+      hideMenuAria: "លាក់ម៉ឺនុយគ្រប់គ្រង",
+    },
+    quickAccess: {
+      label: "ចូលប្រើរហ័ស",
+      openCatalog: "បើកកាតាឡុកអ្នកប្រើ",
+      openCatalogHint: "បើកក្នុងផ្ទាំងថ្មី",
+      qr: "QR",
+      qrAria: "បង្ហាញ QR កាតាឡុក",
+    },
+    sections: {
+      dashboard: {
+        eyebrow: "ទិដ្ឋភាពទូទៅ",
+        title: "ផ្ទាំងដើម",
+        text: "",
+      },
+      items: {
+        eyebrow: "គ្រប់គ្រងកាតាឡុក",
+        title: "ទំនិញ",
+        text: "ស្វែងរក កែប្រែ និងគ្រប់គ្រងទិន្នន័យទំនិញពីកន្លែងតែមួយ។",
+      },
+      brands: {
+        eyebrow: "គ្រប់គ្រងម៉ាក",
+        title: "ម៉ាក",
+        text: "គ្រប់គ្រងកំណត់ត្រាម៉ាក និងរៀបចំឈ្មោះម៉ាកឱ្យស្របគ្នានៅក្នុងកាតាឡុក។",
+      },
+      settings: {
+        eyebrow: "ចំណង់ចំណូលចិត្ត",
+        title: "ការកំណត់",
+        text: "កែភាសាផ្ទាំងគ្រប់គ្រង និងពិនិត្យមើលប្រវត្តិរូបសម័យការងារបច្ចុប្បន្ន។",
+      },
+    },
+    dashboard: {
+      eyebrow: "ទិដ្ឋភាពទូទៅ",
+      title: "សង្ខេបកាតាឡុក",
+      stats: [
+        {
+          label: "ចំនួនទំនិញសរុប",
+          copy: "កំណត់ត្រាដែលកំពុងដំណើរការទាំងអស់នៅក្នុងឃ្លាំងទិន្នន័យរួម។",
+        },
+        {
+          label: "ចំនួនម៉ាកសរុប",
+          copy: "ម៉ាកតែមួយគត់ដែលកំពុងត្រូវបានប្រើនៅក្នុងកាតាឡុក។",
+        },
+        {
+          label: "ចំនួនប្រភេទសរុប",
+          copy: "ប្រភេទផលិតផលតែមួយគត់ដែលមាននៅក្នុងកាតាឡុក។",
+        },
+      ],
+      cards: {
+        items: {
+          eyebrow: "ទំនិញ",
+          title: "បើកការគ្រប់គ្រងទំនិញ",
+          copy: "មើលបញ្ជីទំនិញ បង្កើតកំណត់ត្រាថ្មី និងកែប្រែព័ត៌មានកាតាឡុកពីកន្លែងតែមួយ។",
+          button: "ទៅកាន់ទំនិញ",
+        },
+        brands: {
+          eyebrow: "ម៉ាក",
+          title: "បើកការគ្រប់គ្រងម៉ាក",
+          copy: "ថែទាំឈ្មោះម៉ាក រៀបចំកំណត់ត្រាម៉ាកថ្មី និងរក្សាភាពស្របគ្នារបស់ម៉ាកទំនិញ។",
+          button: "ទៅកាន់ម៉ាក",
+        },
+      },
+    },
+    settings: {
+      eyebrow: "ចំណង់ចំណូលចិត្ត",
+      title: "ការកំណត់",
+      text: "ជ្រើសភាសាផ្ទាំងគ្រប់គ្រង និងពិនិត្យមើលប្រវត្តិរូបសម័យការងារបច្ចុប្បន្ន។",
+      languageEyebrow: "ផ្ទាំងកម្មវិធី",
+      languageTitle: "ភាសា",
+      languageCopy: "ប្តូរភាសាផ្ទាំងគ្រប់គ្រងរវាងអង់គ្លេស និងខ្មែរ។",
+      englishLabel: "អង់គ្លេស",
+      englishHint: "ប្រើភាសាអង់គ្លេសសម្រាប់ផ្ទាំងគ្រប់គ្រង។",
+      khmerLabel: "ខ្មែរ",
+      khmerHint: "ប្រើភាសាខ្មែរសម្រាប់ម៉ឺនុយ និងការកំណត់។",
+      profileEyebrow: "គណនី",
+      profileTitle: "ប្រវត្តិរូបអ្នកប្រើ",
+      profileCopy: "ព័ត៌មាននៃការចូលប្រើបច្ចុប្បន្នពីសម័យកម្មវិធីនេះ។",
+      username: "ឈ្មោះអ្នកប្រើ",
+      role: "តួនាទី",
+      issuedAt: "ចូលប្រើនៅម៉ោង",
+      expiresAt: "សម័យផុតកំណត់",
+      status: "ស្ថានភាពសម័យ",
+    },
   },
 };
 
 let products = getSortedProducts();
 let brands = getSortedBrands();
+let types = getSortedTypes();
+let pendingLocalImageDataUrl = "";
+let pendingLocalImageName = "";
 let selectedCode = null;
 let selectedBrandName = null;
+let selectedTypeName = null;
 let statusTimeoutId = 0;
 let brandStatusTimeoutId = 0;
+let typeStatusTimeoutId = 0;
 let listPage = 1;
 let qrStatusTimeoutId = 0;
 let catalogQrCardPromise = null;
 let editorHidden = true;
 let brandEditorHidden = true;
+let typeEditorHidden = true;
+let currentAdminLanguage = readStoredPreference(STORAGE_KEYS.language, ["en", "km"], "en");
 let currentSection = "dashboard";
 let sidebarCollapsed = false;
 
+function readStoredPreference(key, allowedValues, fallbackValue) {
+  try {
+    const storedValue = window.localStorage.getItem(key);
+    return allowedValues.includes(storedValue) ? storedValue : fallbackValue;
+  } catch (error) {
+    return fallbackValue;
+  }
+}
+
+function saveStoredPreference(key, value) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch (error) {
+    // Ignore storage errors and keep the current in-memory preference.
+  }
+}
+
+function getAdminCopy() {
+  return ADMIN_UI[currentAdminLanguage] ?? ADMIN_UI.en;
+}
+
+function formatAdminDateTime(timestamp) {
+  if (!timestamp) {
+    return "-";
+  }
+
+  const date = new Date(Number(timestamp));
+
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat(getAdminCopy().locale, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+}
+
+function syncNavigationLabels() {
+  const copy = getAdminCopy();
+
+  if (adminSidebarBrandSubline) {
+    adminSidebarBrandSubline.textContent = copy.sidebarPanelCopy;
+  }
+
+  for (const button of adminSectionButtons) {
+    const label = button.querySelector(".admin-nav__copy strong");
+    const section = button.dataset.adminSectionOption;
+    const nextLabel = (section && copy.nav[section]) || (section && ADMIN_UI.en.nav[section]);
+
+    if (label && nextLabel) {
+      label.textContent = nextLabel;
+    }
+  }
+
+  if (adminSidebarSessionLabel) {
+    adminSidebarSessionLabel.textContent = copy.session.label;
+  }
+
+  if (adminSidebarSessionHint) {
+    adminSidebarSessionHint.textContent = copy.session.hint;
+  }
+
+  if (adminLogoutButton) {
+    adminLogoutButton.textContent = copy.session.logout;
+  }
+
+  if (adminQuickAccessLabel) {
+    adminQuickAccessLabel.textContent = copy.quickAccess.label;
+  }
+
+  if (adminCatalogLinkTitle) {
+    adminCatalogLinkTitle.textContent = copy.quickAccess.openCatalog;
+  }
+
+  if (adminCatalogLinkHint) {
+    adminCatalogLinkHint.textContent = copy.quickAccess.openCatalogHint;
+  }
+
+  if (adminQrButtonLabel) {
+    adminQrButtonLabel.textContent = copy.quickAccess.qr;
+  }
+
+  if (adminOpenQrButton) {
+    adminOpenQrButton.setAttribute("aria-label", copy.quickAccess.qrAria);
+    adminOpenQrButton.setAttribute("title", copy.quickAccess.qrAria);
+  }
+}
+
+function syncDashboardCopy() {
+  const copy = getAdminCopy().dashboard;
+
+  if (adminOverviewEyebrow) {
+    adminOverviewEyebrow.textContent = copy.eyebrow;
+  }
+
+  if (adminOverviewTitle) {
+    adminOverviewTitle.textContent = copy.title;
+  }
+
+  adminStats.forEach((card, index) => {
+    const label = card.querySelector(".admin-stat__label");
+    const note = card.querySelector("small");
+    const statCopy = copy.stats[index];
+
+    if (!statCopy) {
+      return;
+    }
+
+    if (label) {
+      label.textContent = statCopy.label;
+    }
+
+    if (note) {
+      note.textContent = statCopy.copy;
+    }
+  });
+
+  for (const shortcutButton of adminShortcutButtons) {
+    const card = shortcutButton.closest(".admin-dashboard-card");
+    const cardKey = shortcutButton.dataset.adminShortcut;
+    const cardCopy = copy.cards[cardKey] ?? ADMIN_UI.en.dashboard.cards[cardKey];
+
+    if (!card || !cardCopy) {
+      continue;
+    }
+
+    const eyebrow = card.querySelector(".eyebrow");
+    const title = card.querySelector("h3");
+    if (eyebrow) {
+      eyebrow.textContent = cardCopy.eyebrow;
+    }
+
+    if (title) {
+      title.textContent = cardCopy.title;
+    }
+
+    shortcutButton.textContent = cardCopy.button;
+  }
+}
+
+function syncSettingsCopy() {
+  const copy = getAdminCopy().settings;
+
+  if (adminSettingsEyebrow) {
+    adminSettingsEyebrow.textContent = copy.eyebrow;
+  }
+
+  if (adminSettingsTitle) {
+    adminSettingsTitle.textContent = copy.title;
+  }
+
+  if (adminSettingsText) {
+    adminSettingsText.textContent = copy.text;
+  }
+
+  if (adminSettingsLanguageEyebrow) {
+    adminSettingsLanguageEyebrow.textContent = copy.languageEyebrow;
+  }
+
+  if (adminSettingsLanguageTitle) {
+    adminSettingsLanguageTitle.textContent = copy.languageTitle;
+  }
+
+  if (adminSettingsLanguageCopy) {
+    adminSettingsLanguageCopy.textContent = copy.languageCopy;
+  }
+
+  if (adminLanguageEnglishLabel) {
+    adminLanguageEnglishLabel.textContent = copy.englishLabel;
+  }
+
+  if (adminLanguageEnglishHint) {
+    adminLanguageEnglishHint.textContent = copy.englishHint;
+  }
+
+  if (adminLanguageKhmerLabel) {
+    adminLanguageKhmerLabel.textContent = copy.khmerLabel;
+  }
+
+  if (adminLanguageKhmerHint) {
+    adminLanguageKhmerHint.textContent = copy.khmerHint;
+  }
+
+  if (adminSettingsProfileEyebrow) {
+    adminSettingsProfileEyebrow.textContent = copy.profileEyebrow;
+  }
+
+  if (adminSettingsProfileTitle) {
+    adminSettingsProfileTitle.textContent = copy.profileTitle;
+  }
+
+  if (adminSettingsProfileCopy) {
+    adminSettingsProfileCopy.textContent = copy.profileCopy;
+  }
+
+  if (adminSettingsUsernameLabel) {
+    adminSettingsUsernameLabel.textContent = copy.username;
+  }
+
+  if (adminSettingsRoleLabel) {
+    adminSettingsRoleLabel.textContent = copy.role;
+  }
+
+  if (adminSettingsIssuedLabel) {
+    adminSettingsIssuedLabel.textContent = copy.issuedAt;
+  }
+
+  if (adminSettingsExpiresLabel) {
+    adminSettingsExpiresLabel.textContent = copy.expiresAt;
+  }
+
+  if (adminSettingsStatusLabel) {
+    adminSettingsStatusLabel.textContent = copy.status;
+  }
+
+  if (adminSettingsLogoutButton) {
+    adminSettingsLogoutButton.textContent = getAdminCopy().session.signOut;
+  }
+}
+
+function syncAdminLanguageButtons() {
+  for (const button of adminLanguageButtons) {
+    const isActive = button.dataset.adminLanguageOption === currentAdminLanguage;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  }
+}
+
 function syncAuthSession() {
   const session = window.adminAuth?.getSession?.();
+  const copy = getAdminCopy();
+  const username = session?.username ?? copy.session.role;
 
   if (adminSessionUser) {
-    adminSessionUser.textContent = session?.username ?? "Administrator";
+    adminSessionUser.textContent = username;
+  }
+
+  if (adminSettingsProfileUsername) {
+    adminSettingsProfileUsername.textContent = username;
+  }
+
+  if (adminSettingsProfileRole) {
+    adminSettingsProfileRole.textContent = copy.session.role;
+  }
+
+  if (adminSettingsProfileIssuedAt) {
+    adminSettingsProfileIssuedAt.textContent = formatAdminDateTime(session?.issuedAt);
+  }
+
+  if (adminSettingsProfileExpiresAt) {
+    adminSettingsProfileExpiresAt.textContent = formatAdminDateTime(session?.expiresAt);
+  }
+
+  if (adminSettingsProfileStatus) {
+    adminSettingsProfileStatus.textContent = session ? copy.session.status : "-";
   }
 }
 
 function syncSectionCopy() {
-  const copy = SECTION_COPY[currentSection] ?? SECTION_COPY.dashboard;
+  const copy = getAdminCopy().sections[currentSection]
+    ?? ADMIN_UI.en.sections[currentSection]
+    ?? getAdminCopy().sections.dashboard;
 
   if (adminTopbarEyebrow) {
     adminTopbarEyebrow.textContent = copy.eyebrow;
@@ -175,6 +717,17 @@ function syncSectionCopy() {
   }
 }
 
+function applyAdminLanguage() {
+  document.documentElement.lang = currentAdminLanguage;
+  document.body.dataset.adminLanguage = currentAdminLanguage;
+  syncNavigationLabels();
+  syncDashboardCopy();
+  syncSettingsCopy();
+  syncAdminLanguageButtons();
+  syncAuthSession();
+  syncSectionCopy();
+}
+
 function syncSectionNavigation() {
   for (const button of adminSectionButtons) {
     const isActive = button.dataset.adminSectionOption === currentSection;
@@ -184,6 +737,8 @@ function syncSectionNavigation() {
 }
 
 function syncSidebarLayout() {
+  const copy = getAdminCopy();
+
   if (adminDashboardRoot) {
     adminDashboardRoot.classList.toggle("admin-dashboard--collapsed", sidebarCollapsed);
   }
@@ -198,13 +753,13 @@ function syncSidebarLayout() {
     button.setAttribute("aria-pressed", String(sidebarCollapsed));
     button.setAttribute(
       "aria-label",
-      sidebarCollapsed ? "Show admin menu" : "Hide admin menu",
+      sidebarCollapsed ? copy.session.showMenuAria : copy.session.hideMenuAria,
     );
 
     const label = button.querySelector(".admin-sidebar-toggle__label");
 
     if (label) {
-      label.textContent = sidebarCollapsed ? "Show menu" : "Hide menu";
+      label.textContent = sidebarCollapsed ? copy.session.showMenu : copy.session.hideMenu;
     }
   }
 }
@@ -228,6 +783,14 @@ function syncSectionVisibility() {
 
   if (adminBrandsSection) {
     adminBrandsSection.hidden = currentSection !== "brands";
+  }
+
+  if (adminTypesSection) {
+    adminTypesSection.hidden = currentSection !== "types";
+  }
+
+  if (adminSettingsSection) {
+    adminSettingsSection.hidden = currentSection !== "settings";
   }
 
   syncSectionNavigation();
@@ -278,6 +841,22 @@ function syncBrandVisibility() {
   }
 }
 
+function syncTypeVisibility() {
+  const showListingOnly = typeEditorHidden;
+  const showEditorOnly = !typeEditorHidden;
+
+  adminTypeWorkspace?.classList.toggle("is-editor-hidden", showListingOnly);
+  adminTypeWorkspace?.classList.toggle("is-list-hidden", showEditorOnly);
+
+  if (adminTypeListPanel) {
+    adminTypeListPanel.hidden = showEditorOnly;
+  }
+
+  if (adminTypeEditorPanel) {
+    adminTypeEditorPanel.hidden = typeEditorHidden;
+  }
+}
+
 function getCatalogShareUrl() {
   return new URL("users.html#catalog", window.location.href).href;
 }
@@ -318,6 +897,27 @@ function loadImageFromBlob(blob) {
     };
 
     image.src = objectUrl;
+  });
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result === "string" && reader.result) {
+        resolve(reader.result);
+        return;
+      }
+
+      reject(new Error(`Unable to read ${file.name}.`));
+    };
+
+    reader.onerror = () => {
+      reject(new Error(`Unable to read ${file.name}.`));
+    };
+
+    reader.readAsDataURL(file);
   });
 }
 
@@ -564,6 +1164,14 @@ function getSortedBrands() {
   return sortBrands(store.getBrands?.() ?? []);
 }
 
+function sortTypes(list) {
+  return [...list].sort((left, right) => left.name.localeCompare(right.name));
+}
+
+function getSortedTypes() {
+  return sortTypes(store.getTypes?.() ?? []);
+}
+
 function getSelectedProduct() {
   return products.find((product) => product.code === selectedCode) ?? null;
 }
@@ -572,8 +1180,16 @@ function getSelectedBrand() {
   return brands.find((brand) => brand.name.toLowerCase() === String(selectedBrandName ?? "").toLowerCase()) ?? null;
 }
 
+function getSelectedType() {
+  return types.find((type) => type.name.toLowerCase() === String(selectedTypeName ?? "").toLowerCase()) ?? null;
+}
+
 function getBrandLinkedItemCount(brandName) {
   return products.filter((product) => product.brand.toLowerCase() === String(brandName ?? "").toLowerCase()).length;
+}
+
+function getTypeLinkedItemCount(typeName) {
+  return products.filter((product) => product.filterType.toLowerCase() === String(typeName ?? "").toLowerCase()).length;
 }
 
 function ensureItemStatusFilter() {
@@ -617,6 +1233,31 @@ function getFilteredBrands() {
     }
 
     const linkedItemCount = getBrandLinkedItemCount(brand.name);
+
+    if (filterValue === "with-items") {
+      return linkedItemCount > 0;
+    }
+
+    if (filterValue === "no-items") {
+      return linkedItemCount === 0;
+    }
+
+    return true;
+  });
+}
+
+function getFilteredTypes() {
+  const query = adminTypeSearch?.value.trim().toLowerCase() ?? "";
+  const filterValue = adminTypeFilter?.value ?? "all";
+
+  return types.filter((type) => {
+    const matchesQuery = !query || type.searchText.includes(query);
+
+    if (!matchesQuery) {
+      return false;
+    }
+
+    const linkedItemCount = getTypeLinkedItemCount(type.name);
 
     if (filterValue === "with-items") {
       return linkedItemCount > 0;
@@ -743,7 +1384,7 @@ function buildListItemMarkup(product) {
       </span>
       <span class="admin-list-cell admin-list-cell--title" data-label="Title">
         <strong lang="km">${escapeHtml(product.title)}</strong>
-        <small>${escapeHtml(formatListValue(product.description))}</small>
+        <small lang="km">${escapeHtml(formatListValue(product.description))}</small>
       </span>
       <span class="admin-list-cell" data-label="Brand">${escapeHtml(formatListValue(product.brand))}</span>
       <span class="admin-list-cell" data-label="Type">${escapeHtml(formatTypeLabel(product.filterType))}</span>
@@ -765,15 +1406,11 @@ function buildListItemMarkup(product) {
 
 function updateStats() {
   const brandRecords = getSortedBrands();
-  const uniqueTypes = new Set(
-    products
-      .map((product) => String(product.filterType ?? "").trim().toLowerCase())
-      .filter(Boolean),
-  );
+  const typeRecords = getSortedTypes();
 
   adminTotalCount.textContent = String(products.length);
   adminBrandCount.textContent = String(brandRecords.length);
-  adminTypeCount.textContent = String(uniqueTypes.size);
+  adminTypeCount.textContent = String(typeRecords.length);
 }
 
 function renderList() {
@@ -842,6 +1479,31 @@ function renderBrandOptions() {
   }
 }
 
+function renderTypeOptions() {
+  if (!adminTypeSelect) {
+    return;
+  }
+
+  const currentValue = adminTypeSelect.value;
+  const nextTypes = types.length ? types : [{ name: "sprayer" }, { name: "battery" }];
+
+  adminTypeSelect.innerHTML = nextTypes
+    .map((type) => `<option value="${escapeHtml(type.name)}">${escapeHtml(formatTypeLabel(type.name))}</option>`)
+    .join("");
+
+  if (currentValue && nextTypes.some((type) => type.name === currentValue)) {
+    adminTypeSelect.value = currentValue;
+    return;
+  }
+
+  if (nextTypes.some((type) => type.name === "sprayer")) {
+    adminTypeSelect.value = "sprayer";
+    return;
+  }
+
+  adminTypeSelect.value = nextTypes[0]?.name ?? "";
+}
+
 function buildBrandListItemMarkup(brand) {
   const isActive = brand.name.toLowerCase() === String(selectedBrandName ?? "").toLowerCase();
   const linkedItemCount = getBrandLinkedItemCount(brand.name);
@@ -879,6 +1541,43 @@ function buildBrandListItemMarkup(brand) {
   `;
 }
 
+function buildTypeListItemMarkup(type) {
+  const isActive = type.name.toLowerCase() === String(selectedTypeName ?? "").toLowerCase();
+  const linkedItemCount = getTypeLinkedItemCount(type.name);
+  const itemLabel = linkedItemCount === 1 ? "1 item" : `${linkedItemCount} items`;
+
+  return `
+    <article class="admin-list-item admin-list-item--brand${isActive ? " is-active" : ""}">
+      <span class="admin-list-cell admin-list-cell--code" data-label="Type">
+        <button
+          class="admin-list-code-button"
+          type="button"
+          data-type-link
+          data-type-name="${escapeHtml(type.name)}"
+        >
+          <strong>${escapeHtml(formatTypeLabel(type.name))}</strong>
+          <small>${escapeHtml(itemLabel)}</small>
+        </button>
+      </span>
+      <span class="admin-list-cell" data-label="Items">${escapeHtml(itemLabel)}</span>
+      <span class="admin-list-cell admin-list-cell--title" data-label="Note">
+        <small>${escapeHtml(formatListValue(type.note, "No note"))}</small>
+      </span>
+      <span class="admin-list-cell admin-list-cell--actions" data-label="Actions">
+        <button
+          class="pagination__button admin-button admin-button--danger"
+          type="button"
+          data-type-delete
+          data-type-name="${escapeHtml(type.name)}"
+          ${linkedItemCount > 0 ? "disabled" : ""}
+        >
+          Delete
+        </button>
+      </span>
+    </article>
+  `;
+}
+
 function renderBrandList() {
   const filteredBrands = getFilteredBrands();
   const totalBrands = filteredBrands.length;
@@ -897,6 +1596,27 @@ function renderBrandList() {
 
   if (adminBrandEmpty) {
     adminBrandEmpty.hidden = totalBrands !== 0;
+  }
+}
+
+function renderTypeList() {
+  const filteredTypes = getFilteredTypes();
+  const totalTypes = filteredTypes.length;
+
+  if (adminTypeHeading) {
+    adminTypeHeading.textContent = `Item Types (${totalTypes})`;
+  }
+
+  if (adminTypeRange) {
+    adminTypeRange.textContent = totalTypes ? `Showing ${totalTypes} item types` : "Showing 0 item types";
+  }
+
+  if (adminTypeList) {
+    adminTypeList.innerHTML = filteredTypes.map((type) => buildTypeListItemMarkup(type)).join("");
+  }
+
+  if (adminTypeEmpty) {
+    adminTypeEmpty.hidden = totalTypes !== 0;
   }
 }
 
@@ -939,6 +1659,19 @@ function getBrandFormValue(name, fallbackValue = "") {
   return field && "value" in field ? field.value : fallbackValue;
 }
 
+function setTypeFormValue(name, value) {
+  const field = adminTypeForm?.elements.namedItem(name);
+
+  if (field && "value" in field) {
+    field.value = value;
+  }
+}
+
+function getTypeFormValue(name, fallbackValue = "") {
+  const field = adminTypeForm?.elements.namedItem(name);
+  return field && "value" in field ? field.value : fallbackValue;
+}
+
 function toEditablePriceValue(value) {
   const text = String(value ?? "").trim();
 
@@ -947,6 +1680,71 @@ function toEditablePriceValue(value) {
   }
 
   return text.replace(/[^0-9.]/g, "");
+}
+
+function isImageDataUrl(value) {
+  return /^data:image\//i.test(String(value ?? "").trim());
+}
+
+function clearPendingLocalImage() {
+  pendingLocalImageDataUrl = "";
+  pendingLocalImageName = "";
+
+  if (adminImageFileInput) {
+    adminImageFileInput.value = "";
+  }
+}
+
+function getActiveImageValue() {
+  return getFormValue("image") || pendingLocalImageDataUrl;
+}
+
+function syncItemImageFieldState() {
+  const directImageValue = getFormValue("image");
+  const previewSource = directImageValue || pendingLocalImageDataUrl;
+
+  if (adminImageUploadMeta) {
+    if (directImageValue) {
+      adminImageUploadMeta.textContent = "Using the image URL above. You can replace it with a local file at any time.";
+    } else if (pendingLocalImageDataUrl) {
+      adminImageUploadMeta.textContent = pendingLocalImageName
+        ? `${pendingLocalImageName} selected from this device.`
+        : "Using a saved local image from this browser.";
+    } else {
+      adminImageUploadMeta.textContent = "Paste an image URL or choose a local file from this device. Local images stay in this browser.";
+    }
+  }
+
+  if (!adminImagePreview || !adminImagePreviewEmpty) {
+    return;
+  }
+
+  if (!previewSource) {
+    adminImagePreview.hidden = true;
+    adminImagePreview.removeAttribute("src");
+    adminImagePreviewEmpty.hidden = false;
+    adminImagePreviewEmpty.textContent = "No image selected. The selected icon will be shown.";
+    return;
+  }
+
+  adminImagePreviewEmpty.hidden = true;
+  adminImagePreview.hidden = false;
+  adminImagePreview.src = previewSource;
+}
+
+function setItemImageValue(imageValue) {
+  const normalizedImageValue = String(imageValue ?? "").trim();
+
+  clearPendingLocalImage();
+
+  if (isImageDataUrl(normalizedImageValue)) {
+    pendingLocalImageDataUrl = normalizedImageValue;
+    setFormValue("image", "");
+  } else {
+    setFormValue("image", normalizedImageValue);
+  }
+
+  syncItemImageFieldState();
 }
 
 function fillForm(product) {
@@ -959,7 +1757,7 @@ function fillForm(product) {
   setFormChecked("showOnUserPage", nextProduct.showOnUserPage);
   setFormValue("similarKey", nextProduct.similarKey);
   setFormValue("icon", nextProduct.icon);
-  setFormValue("image", nextProduct.image);
+  setItemImageValue(nextProduct.image);
   setFormValue("volume", nextProduct.volume);
   setFormValue("series", nextProduct.series);
   setFormValue("stock", String(nextProduct.stock ?? 0));
@@ -1054,6 +1852,49 @@ function syncBrandEditorState() {
   }
 }
 
+function fillTypeForm(type) {
+  const nextType = type ?? store.getEmptyType();
+  const linkedItemCount = getTypeLinkedItemCount(nextType.name);
+  const itemLabel = linkedItemCount === 1 ? "1 item" : `${linkedItemCount} items`;
+
+  setTypeFormValue("name", nextType.name);
+  setTypeFormValue("note", nextType.note);
+
+  if (adminTypeLinkedItems) {
+    adminTypeLinkedItems.value = itemLabel;
+  }
+}
+
+function syncTypeEditorState() {
+  const selectedType = getSelectedType();
+
+  if (selectedType) {
+    fillTypeForm(selectedType);
+
+    if (adminTypeFormHeading) {
+      adminTypeFormHeading.textContent = `Edit ${formatTypeLabel(selectedType.name)}`;
+    }
+
+    if (adminTypeModeBadge) {
+      adminTypeModeBadge.textContent = "Editing";
+      adminTypeModeBadge.className = "stock-pill stock-pill--in";
+    }
+
+    return;
+  }
+
+  fillTypeForm(store.getEmptyType());
+
+  if (adminTypeFormHeading) {
+    adminTypeFormHeading.textContent = "Create Type";
+  }
+
+  if (adminTypeModeBadge) {
+    adminTypeModeBadge.textContent = "New Type";
+    adminTypeModeBadge.className = "stock-pill stock-pill--low";
+  }
+}
+
 function showStatus(message, type = "info") {
   window.clearTimeout(statusTimeoutId);
   adminStatus.hidden = false;
@@ -1077,6 +1918,21 @@ function showBrandStatus(message, type = "info") {
 
   brandStatusTimeoutId = window.setTimeout(() => {
     adminBrandStatus.hidden = true;
+  }, 2800);
+}
+
+function showTypeStatus(message, type = "info") {
+  if (!adminTypeStatus) {
+    return;
+  }
+
+  window.clearTimeout(typeStatusTimeoutId);
+  adminTypeStatus.hidden = false;
+  adminTypeStatus.textContent = message;
+  adminTypeStatus.classList.toggle("admin-status--error", type === "error");
+
+  typeStatusTimeoutId = window.setTimeout(() => {
+    adminTypeStatus.hidden = true;
   }, 2800);
 }
 
@@ -1140,7 +1996,7 @@ function buildItemExportRow(product) {
     "Visible On User Page": Boolean(product.showOnUserPage),
     "Similar Group": product.similarKey,
     Icon: product.icon,
-    "Image URL": product.image,
+    Image: product.image,
     Volume: product.volume,
     Series: product.series,
     "Depot Price": product.depoPrice,
@@ -1155,6 +2011,13 @@ function buildBrandExportRow(brand) {
   return {
     "Brand Name": brand.name,
     Note: brand.note,
+  };
+}
+
+function buildTypeExportRow(type) {
+  return {
+    "Type Name": type.name,
+    Note: type.note,
   };
 }
 
@@ -1259,6 +2122,14 @@ function buildImportedBrand(row, existingBrand) {
   };
 }
 
+function buildImportedType(row, existingType) {
+  return {
+    ...existingType,
+    name: getSpreadsheetValue(row, TYPE_IMPORT_ALIASES.name, existingType.name).value,
+    note: getSpreadsheetValue(row, TYPE_IMPORT_ALIASES.note, existingType.note).value,
+  };
+}
+
 function exportItemsToExcel() {
   if (!ensureExcelSupport()) {
     return;
@@ -1315,6 +2186,36 @@ function exportBrandsToExcel() {
   showImportExportNotice(
     "Brands exported",
     `Exported ${filteredBrands.length} ${pluralize(filteredBrands.length, "brand")} to Excel.`,
+    "success",
+  );
+}
+
+function exportTypesToExcel() {
+  if (!ensureExcelSupport()) {
+    return;
+  }
+
+  const filteredTypes = getFilteredTypes();
+
+  if (!filteredTypes.length) {
+    showImportExportNotice(
+      "No item types to export",
+      "There are no item types matching the current filters.",
+      "warning",
+    );
+    return;
+  }
+
+  const workbook = buildWorkbook(
+    filteredTypes.map((type) => buildTypeExportRow(type)),
+    TYPE_EXPORT_COLUMNS,
+    EXCEL_TYPES_SHEET_NAME,
+  );
+
+  window.XLSX.writeFile(workbook, `agt-item-types-${formatExcelDateToken()}.xlsx`);
+  showImportExportNotice(
+    "Item types exported",
+    `Exported ${filteredTypes.length} ${pluralize(filteredTypes.length, "item type")} to Excel.`,
     "success",
   );
 }
@@ -1425,9 +2326,63 @@ async function importBrandsFromExcel(file) {
   showImportExportNotice("Brands imported", summary, skippedCount ? "warning" : "success");
 }
 
+async function importTypesFromExcel(file) {
+  if (!ensureExcelSupport()) {
+    return;
+  }
+
+  const rows = await readWorkbookRows(file);
+  const nextTypesByName = new Map(types.map((type) => [type.name.toLowerCase(), type]));
+  let importedCount = 0;
+  let skippedCount = 0;
+  const issues = [];
+
+  rows.forEach((row, index) => {
+    const normalizedRow = normalizeSpreadsheetRow(row);
+
+    if (isSpreadsheetRowEmpty(normalizedRow)) {
+      return;
+    }
+
+    const nameValue = String(getSpreadsheetValue(normalizedRow, TYPE_IMPORT_ALIASES.name, "").value ?? "").trim();
+    const existingType = nameValue
+      ? nextTypesByName.get(nameValue.toLowerCase()) ?? store.getEmptyType()
+      : store.getEmptyType();
+    const normalizedType = store.normalizeType(buildImportedType(normalizedRow, existingType));
+
+    if (!normalizedType.name) {
+      skippedCount += 1;
+
+      if (issues.length < 3) {
+        issues.push(`Row ${index + 2}: type name is required.`);
+      }
+
+      return;
+    }
+
+    nextTypesByName.set(normalizedType.name.toLowerCase(), normalizedType);
+    importedCount += 1;
+  });
+
+  if (!importedCount) {
+    const detail = issues[0] ?? "The workbook did not contain any valid item type rows.";
+    throw new Error(detail);
+  }
+
+  store.saveTypes(sortTypes([...nextTypesByName.values()]));
+  refreshCurrentSection();
+
+  const summary = skippedCount
+    ? `Imported ${importedCount} ${pluralize(importedCount, "item type")} and skipped ${skippedCount} invalid ${pluralize(skippedCount, "row")}.`
+    : `Imported ${importedCount} ${pluralize(importedCount, "item type")} from Excel.`;
+
+  showImportExportNotice("Item types imported", summary, skippedCount ? "warning" : "success");
+}
+
 function refreshItemsView() {
   products = getSortedProducts();
   brands = getSortedBrands();
+  types = getSortedTypes();
 
   if (selectedCode && !products.some((product) => product.code === selectedCode)) {
     selectedCode = null;
@@ -1436,6 +2391,7 @@ function refreshItemsView() {
   setPageForCode(selectedCode);
   updateStats();
   renderBrandOptions();
+  renderTypeOptions();
   renderList();
   syncEditorState();
   syncEditorVisibility();
@@ -1445,13 +2401,16 @@ function refreshItemsView() {
 function refreshDashboardView() {
   products = getSortedProducts();
   brands = getSortedBrands();
+  types = getSortedTypes();
   updateStats();
   renderBrandOptions();
+  renderTypeOptions();
 }
 
 function refreshBrandsView() {
   products = getSortedProducts();
   brands = getSortedBrands();
+  types = getSortedTypes();
 
   if (selectedBrandName && !brands.some((brand) => brand.name.toLowerCase() === String(selectedBrandName).toLowerCase())) {
     selectedBrandName = null;
@@ -1459,9 +2418,32 @@ function refreshBrandsView() {
 
   updateStats();
   renderBrandOptions();
+  renderTypeOptions();
   renderBrandList();
   syncBrandEditorState();
   syncBrandVisibility();
+}
+
+function refreshTypesView() {
+  products = getSortedProducts();
+  brands = getSortedBrands();
+  types = getSortedTypes();
+
+  if (selectedTypeName && !types.some((type) => type.name.toLowerCase() === String(selectedTypeName).toLowerCase())) {
+    selectedTypeName = null;
+  }
+
+  updateStats();
+  renderBrandOptions();
+  renderTypeOptions();
+  renderTypeList();
+  syncTypeEditorState();
+  syncTypeVisibility();
+}
+
+function refreshSettingsView() {
+  syncAdminLanguageButtons();
+  syncAuthSession();
 }
 
 function refreshCurrentSection() {
@@ -1474,6 +2456,16 @@ function refreshCurrentSection() {
 
   if (currentSection === "brands") {
     refreshBrandsView();
+    return;
+  }
+
+  if (currentSection === "types") {
+    refreshTypesView();
+    return;
+  }
+
+  if (currentSection === "settings") {
+    refreshSettingsView();
     return;
   }
 
@@ -1491,7 +2483,7 @@ function readFormProduct() {
     showOnUserPage: getFormChecked("showOnUserPage", selectedProduct.showOnUserPage),
     similarKey: getFormValue("similarKey"),
     icon: getFormValue("icon"),
-    image: getFormValue("image"),
+    image: getActiveImageValue(),
     volume: getFormValue("volume"),
     series: getFormValue("series"),
     stock: getFormValue("stock", String(selectedProduct.stock ?? 0)),
@@ -1529,6 +2521,15 @@ function readBrandForm() {
   };
 }
 
+function readTypeForm() {
+  const selectedType = getSelectedType() ?? store.getEmptyType();
+
+  return {
+    name: getTypeFormValue("name", selectedType.name),
+    note: getTypeFormValue("note", selectedType.note),
+  };
+}
+
 function saveProduct(event) {
   event.preventDefault();
 
@@ -1557,7 +2558,16 @@ function saveProduct(event) {
     (product) => product.code.toLowerCase() !== String(previousCode ?? "").toLowerCase(),
   );
   nextProducts.push(normalizedProduct);
-  store.saveProducts(nextProducts);
+
+  try {
+    store.saveProducts(nextProducts);
+  } catch (error) {
+    const saveMessage = error instanceof DOMException && error.name === "QuotaExceededError"
+      ? "This image is too large for browser storage. Try a smaller file or use an image URL."
+      : "Unable to save this item right now.";
+    showStatus(saveMessage, "error");
+    return;
+  }
 
   selectedCode = normalizedProduct.code;
   refreshItemsView();
@@ -1644,6 +2654,86 @@ function saveBrand(event) {
   }
 }
 
+function saveType(event) {
+  event.preventDefault();
+
+  const rawType = readTypeForm();
+  const normalizedType = store.normalizeType(rawType);
+  const previousName = String(selectedTypeName ?? "").trim().toLowerCase();
+  const isNewType = !previousName;
+
+  if (!normalizedType.name) {
+    showTypeStatus("Type name is required.", "error");
+    return;
+  }
+
+  const duplicateType = types.find(
+    (type) =>
+      type.name.toLowerCase() === normalizedType.name.toLowerCase()
+      && type.name.toLowerCase() !== previousName,
+  );
+
+  if (duplicateType) {
+    showTypeStatus(`Type ${formatTypeLabel(normalizedType.name)} already exists.`, "error");
+    return;
+  }
+
+  if (previousName && previousName !== normalizedType.name.toLowerCase()) {
+    const renamedProducts = products.map((product) => {
+      if (product.filterType.toLowerCase() !== previousName) {
+        return product;
+      }
+
+      const nextProduct = {
+        ...product,
+        filterType: normalizedType.name,
+      };
+
+      if (String(product.similarKey ?? "").toLowerCase() === previousName) {
+        nextProduct.similarKey = normalizedType.name;
+      }
+
+      return nextProduct;
+    });
+
+    store.saveProducts(renamedProducts);
+    products = getSortedProducts();
+  }
+
+  const nextTypes = types
+    .filter((type) => type.name.toLowerCase() !== previousName)
+    .map((type) => ({ name: type.name, note: type.note }));
+
+  nextTypes.push(normalizedType);
+  store.saveTypes(nextTypes);
+
+  selectedTypeName = normalizedType.name;
+  typeEditorHidden = false;
+  refreshTypesView();
+  showTypeStatus(`Saved ${formatTypeLabel(normalizedType.name)}.`);
+
+  if (window.Swal?.fire) {
+    const swalOptions = {
+      title: "Item type saved",
+      text: `Item type "${formatTypeLabel(normalizedType.name)}" has been saved to your catalog.`,
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    };
+
+    if (isNewType) {
+      window.Swal.fire(swalOptions).then(() => {
+        selectedTypeName = null;
+        typeEditorHidden = true;
+        refreshTypesView();
+      });
+    } else {
+      window.Swal.fire(swalOptions);
+    }
+  }
+}
+
 async function deleteSelectedProduct() {
   const selectedProduct = getSelectedProduct();
 
@@ -1720,13 +2810,69 @@ async function deleteSelectedBrand() {
   showBrandStatus(`Deleted ${selectedBrand.name}.`);
 }
 
+async function deleteSelectedType() {
+  const selectedType = getSelectedType();
+
+  if (!selectedType) {
+    showTypeStatus("Select an item type first.", "error");
+    return;
+  }
+
+  const linkedItemCount = getTypeLinkedItemCount(selectedType.name);
+
+  if (linkedItemCount > 0) {
+    showTypeStatus("This item type is still used by items and cannot be deleted.", "error");
+    return;
+  }
+
+  if (window.Swal?.fire) {
+    const result = await window.Swal.fire({
+      title: "Delete item type?",
+      text: `Delete item type "${formatTypeLabel(selectedType.name)}" from the catalog?`,
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#e23e3e",
+      focusCancel: true,
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+  } else if (!window.confirm(`Delete ${selectedType.name}?`)) {
+    return;
+  }
+
+  const nextTypes = types
+    .filter((type) => type.name.toLowerCase() !== selectedType.name.toLowerCase())
+    .map((type) => ({ name: type.name, note: type.note }));
+
+  store.saveTypes(nextTypes);
+  selectedTypeName = null;
+  typeEditorHidden = true;
+  refreshTypesView();
+  showTypeStatus(`Deleted ${formatTypeLabel(selectedType.name)}.`);
+}
+
 function setSection(section) {
-  if (!SECTION_COPY[section] || currentSection === section) {
+  if (!AVAILABLE_SECTIONS.has(section) || currentSection === section) {
     return;
   }
 
   currentSection = section;
   refreshCurrentSection();
+}
+
+function setAdminLanguage(language) {
+  if (!ADMIN_UI[language] || currentAdminLanguage === language) {
+    return;
+  }
+
+  currentAdminLanguage = language;
+  saveStoredPreference(STORAGE_KEYS.language, language);
+  applyAdminLanguage();
+  refreshCurrentSection();
+  syncSidebarLayout();
 }
 
 function handleLogout() {
@@ -1821,6 +2967,62 @@ adminToggleListButton?.addEventListener("click", () => {
   editorHidden = true;
   refreshItemsView();
 });
+adminImageUploadButton?.addEventListener("click", () => {
+  adminImageFileInput?.click();
+});
+adminImageFileInput?.addEventListener("change", async (event) => {
+  const file = event.target.files?.[0];
+
+  event.target.value = "";
+
+  if (!file) {
+    return;
+  }
+
+  if (!String(file.type ?? "").toLowerCase().startsWith("image/")) {
+    showStatus("Please choose an image file.", "error");
+    return;
+  }
+
+  try {
+    pendingLocalImageDataUrl = await readFileAsDataUrl(file);
+    pendingLocalImageName = file.name;
+    setFormValue("image", "");
+    syncItemImageFieldState();
+    showStatus(`Selected ${file.name}.`);
+  } catch (error) {
+    showStatus(error instanceof Error ? error.message : "Unable to read this image file.", "error");
+  }
+});
+adminImageInput?.addEventListener("input", () => {
+  if (getFormValue("image")) {
+    clearPendingLocalImage();
+  }
+
+  syncItemImageFieldState();
+});
+adminImageClearButton?.addEventListener("click", () => {
+  clearPendingLocalImage();
+  setFormValue("image", "");
+  syncItemImageFieldState();
+  showStatus("Image cleared.");
+});
+adminImagePreview?.addEventListener("load", () => {
+  if (adminImagePreviewEmpty) {
+    adminImagePreviewEmpty.hidden = true;
+    adminImagePreviewEmpty.textContent = "No image selected. The selected icon will be shown.";
+  }
+
+  adminImagePreview.hidden = false;
+});
+adminImagePreview?.addEventListener("error", () => {
+  adminImagePreview.hidden = true;
+
+  if (adminImagePreviewEmpty) {
+    adminImagePreviewEmpty.hidden = false;
+    adminImagePreviewEmpty.textContent = "Unable to preview this image.";
+  }
+});
 adminForm.addEventListener("submit", saveProduct);
 adminListPageSize?.addEventListener("change", () => {
   setPageForCode(selectedCode);
@@ -1900,6 +3102,71 @@ adminBrandClearButton?.addEventListener("click", () => {
   refreshBrandsView();
 });
 adminBrandForm?.addEventListener("submit", saveBrand);
+adminTypeList?.addEventListener("click", (event) => {
+  const deleteButton = event.target.closest("[data-type-delete]");
+
+  if (deleteButton) {
+    const typeName = deleteButton.dataset.typeName;
+
+    if (!typeName) {
+      return;
+    }
+
+    selectedTypeName = typeName;
+    deleteSelectedType();
+    return;
+  }
+
+  const typeButton = event.target.closest("[data-type-link]");
+
+  if (!typeButton) {
+    return;
+  }
+
+  selectedTypeName = typeButton.dataset.typeName;
+  typeEditorHidden = false;
+  refreshTypesView();
+});
+adminTypeSearch?.addEventListener("input", () => {
+  renderTypeList();
+});
+adminTypeFilter?.addEventListener("change", () => {
+  renderTypeList();
+});
+adminImportTypesButton?.addEventListener("click", () => {
+  adminImportTypesInput?.click();
+});
+adminExportTypesButton?.addEventListener("click", exportTypesToExcel);
+adminImportTypesInput?.addEventListener("change", async (event) => {
+  const file = event.target.files?.[0];
+
+  event.target.value = "";
+
+  if (!file) {
+    return;
+  }
+
+  try {
+    await importTypesFromExcel(file);
+  } catch (error) {
+    showImportExportNotice(
+      "Item types import failed",
+      error instanceof Error ? error.message : "Unable to import item types from this workbook.",
+      "error",
+    );
+  }
+});
+adminTypeNewButton?.addEventListener("click", () => {
+  selectedTypeName = null;
+  typeEditorHidden = false;
+  refreshTypesView();
+});
+adminTypeClearButton?.addEventListener("click", () => {
+  selectedTypeName = null;
+  typeEditorHidden = true;
+  refreshTypesView();
+});
+adminTypeForm?.addEventListener("submit", saveType);
 for (const button of adminSectionButtons) {
   button.addEventListener("click", () => {
     setSection(button.dataset.adminSectionOption);
@@ -1910,7 +3177,13 @@ for (const button of adminShortcutButtons) {
     setSection(button.dataset.adminShortcut);
   });
 }
+for (const button of adminLanguageButtons) {
+  button.addEventListener("click", () => {
+    setAdminLanguage(button.dataset.adminLanguageOption);
+  });
+}
 adminLogoutButton?.addEventListener("click", handleLogout);
+adminSettingsLogoutButton?.addEventListener("click", handleLogout);
 for (const button of [adminSidebarToggle, adminSidebarRevealToggle]) {
   button?.addEventListener("click", () => {
     sidebarCollapsed = !sidebarCollapsed;
@@ -1932,6 +3205,7 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-syncAuthSession();
+applyAdminLanguage();
+syncItemImageFieldState();
 refreshCurrentSection();
 syncSidebarLayout();

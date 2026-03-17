@@ -14,8 +14,8 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css?v=20260313-3">
-  <link rel="stylesheet" href="admin.css?v=20260313-4">
+  <link rel="stylesheet" href="styles.css?v=20260317">
+  <link rel="stylesheet" href="admin.css?v=20260317-3">
   <script src="admin-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -58,13 +58,43 @@
           </span>
         </button>
         <button class="admin-nav__item" type="button" data-admin-section-option="items" aria-pressed="false">
+          <span class="admin-nav__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 4h12a2 2 0 0 1 2 2v3H4V6a2 2 0 0 1 2-2Zm-2 7h16v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Zm4 2v2h3v-2Zm5 0v2h3v-2Z"/>
+            </svg>
+          </span>
           <span class="admin-nav__copy">
             <strong>📦 Items</strong>
           </span>
         </button>
+        <button class="admin-nav__item" type="button" data-admin-section-option="types" aria-pressed="false">
+          <span class="admin-nav__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5Zm4.5.5v3h6V7Zm-2 6v4h10v-4Z"/>
+            </svg>
+          </span>
+          <span class="admin-nav__copy">
+            <strong>Item Types</strong>
+          </span>
+        </button>
         <button class="admin-nav__item" type="button" data-admin-section-option="brands" aria-pressed="false">
+          <span class="admin-nav__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="m11 4 8 8-7.5 7.5a2 2 0 0 1-2.83 0L4.5 15.33a2 2 0 0 1 0-2.83ZM8.5 9A1.5 1.5 0 1 0 8.5 6a1.5 1.5 0 0 0 0 3Z"/>
+            </svg>
+          </span>
           <span class="admin-nav__copy">
             <strong>🏷️ Brands</strong>
+          </span>
+        </button>
+        <button class="admin-nav__item" type="button" data-admin-section-option="settings" aria-pressed="false">
+          <span class="admin-nav__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M19.4 13a7.7 7.7 0 0 0 .1-1l2-1.5-2-3.5-2.4 1a8 8 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a8 8 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7.7 7.7 0 0 0 .1 1l-2 1.5 2 3.5 2.4-1a8 8 0 0 0 1.7 1l.4 2.5h4l.4-2.5a8 8 0 0 0 1.7-1l2.4 1 2-3.5ZM12 15.2A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4Z"/>
+            </svg>
+          </span>
+          <span class="admin-nav__copy">
+            <strong>Settings</strong>
           </span>
         </button>
       </nav>
@@ -162,16 +192,22 @@
               <div>
                 <p class="eyebrow">Items</p>
                 <h3>Open Item Management</h3>
-                <p>Browse the item list, create new records, and edit catalog details from one workspace.</p>
               </div>
               <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="items">Go to Items</button>
             </article>
 
             <article class="admin-dashboard-card">
               <div>
+                <p class="eyebrow">Item Types</p>
+                <h3>Open Type Management</h3>
+              </div>
+              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="types">Go to Types</button>
+            </article>
+
+            <article class="admin-dashboard-card">
+              <div>
                 <p class="eyebrow">Brands</p>
                 <h3>Open Brand Management</h3>
-                <p>Maintain brand names, prepare new brand records, and keep item branding consistent.</p>
               </div>
               <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="brands">Go to Brands</button>
             </article>
@@ -321,9 +357,8 @@
 
                 <label class="admin-field">
                   <span>Product Type</span>
-                  <select name="filterType">
+                  <select name="filterType" id="adminTypeSelect">
                     <option value="sprayer">Sprayer</option>
-                    <option value="battery">Battery</option>
                   </select>
                 </label>
 
@@ -380,20 +415,29 @@
                   </div>
                 </label>
 
-                <label class="admin-field admin-field--wide">
-                  <span>Image URL</span>
-                  <input name="image" type="text" placeholder="images/item.png or https://example.com/item.png">
-                  <small>Optional. If empty, the selected icon will be shown.</small>
-                </label>
+                <div class="admin-field admin-field--wide admin-field--image">
+                  <span>Image</span>
+                  <input id="adminImageInput" name="image" type="text" placeholder="images/item.png or https://example.com/item.png">
+                  <div class="admin-image-tools">
+                    <input id="adminImageFileInput" type="file" accept="image/*" hidden>
+                    <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminImageUploadButton" type="button">Choose Local Image</button>
+                    <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminImageClearButton" type="button">Remove Image</button>
+                  </div>
+                  <div class="admin-image-preview">
+                    <img class="admin-image-preview__image" id="adminImagePreview" alt="Selected product image preview" hidden>
+                    <p class="admin-image-preview__empty" id="adminImagePreviewEmpty">No image selected. The selected icon will be shown.</p>
+                  </div>
+                  <small id="adminImageUploadMeta">Paste an image URL or choose a local file from this device. Local images stay in this browser.</small>
+                </div>
 
                 <label class="admin-field admin-field--wide">
                   <span>Product Title</span>
-                  <input name="title" type="text" placeholder="Khmer product title" required>
+                  <input name="title" type="text" placeholder="Khmer product title" required lang="km">
                 </label>
 
                 <label class="admin-field admin-field--span-2">
                   <span>Description</span>
-                  <textarea name="description" rows="3" placeholder="Khmer product description"></textarea>
+                  <textarea name="description" rows="3" placeholder="Khmer product description" lang="km"></textarea>
                 </label>
 
                 <label class="admin-field">
@@ -521,12 +565,197 @@
           </section>
         </section>
       </section>
+      <section class="admin-content-section" id="adminTypesSection" hidden>
+        <section class="admin-workspace" id="adminTypeWorkspace">
+          <aside class="admin-panel admin-panel--list" id="adminTypeListPanel">
+            <div class="admin-panel__head admin-panel__head--listing">
+              <div>
+                <p class="eyebrow">Item Types</p>
+                <h3 id="adminTypeHeading">Item Types</h3>
+              </div>
+              <div class="admin-panel__actions">
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminImportTypesButton" type="button" aria-label="Import item types from Excel" title="Import item types from Excel">
+                  <img src="Icons/import_to_excel.png" alt="" aria-hidden="true">
+                </button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminExportTypesButton" type="button" aria-label="Export item types to Excel" title="Export item types to Excel">
+                  <img src="Icons/export_to_excel.png" alt="" aria-hidden="true">
+                </button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminTypeNewButton" type="button">Create New</button>
+              </div>
+            </div>
+
+            <div class="admin-list-tools">
+              <div class="admin-list-tools__bar admin-list-tools__bar--brands">
+                <div class="admin-list-tools__meta">
+                  <p class="admin-list-tools__summary" id="adminTypeRange">Showing 0 item types</p>
+                </div>
+
+                <div class="admin-list-tools__controls admin-list-tools__controls--brands">
+                  <label class="admin-list-tools__field" for="adminTypeFilter">
+                    <span>Filter</span>
+                    <select id="adminTypeFilter">
+                      <option value="all">All item types</option>
+                      <option value="with-items">With items</option>
+                      <option value="no-items">No items</option>
+                    </select>
+                  </label>
+
+                  <label class="search-field admin-list-search" for="adminTypeSearch">
+                    <span>Search Types</span>
+                    <input
+                      id="adminTypeSearch"
+                      type="search"
+                      placeholder="Search by type name or note"
+                      autocomplete="off"
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-list-shell">
+              <div class="admin-list-table admin-list-table--brands" aria-label="Item type listing">
+                <div class="admin-list-table__head admin-list-table__head--brands" aria-hidden="true">
+                  <span>Type</span>
+                  <span>Items</span>
+                  <span>Note</span>
+                  <span>Actions</span>
+                </div>
+                <div class="admin-list" id="adminTypeList"></div>
+              </div>
+              <p class="empty-state" id="adminTypeEmpty" hidden>No item types match that search.</p>
+            </div>
+          </aside>
+
+          <section class="admin-panel admin-panel--editor" id="adminTypeEditorPanel" hidden>
+            <div class="admin-panel__head admin-panel__head--form">
+              <div>
+                <h3 id="adminTypeFormHeading">Edit Item Type</h3>
+                <p class="admin-panel__copy">Manage item type records used by the product catalog and filters.</p>
+              </div>
+              <span class="stock-pill stock-pill--in" id="adminTypeModeBadge">Editing</span>
+            </div>
+
+            <p class="empty-state admin-status" id="adminTypeStatus" hidden></p>
+
+            <form id="adminTypeForm" class="admin-form">
+              <section class="admin-form__section">
+                <div class="admin-form__section-head">
+                  <div>
+                    <p class="eyebrow">Basics</p>
+                    <h4>Type Profile</h4>
+                  </div>
+                </div>
+
+                <div class="admin-form__grid">
+                  <label class="admin-field">
+                    <span>Type Name</span>
+                    <input name="name" type="text" placeholder="sprayer" required>
+                  </label>
+
+                  <label class="admin-field">
+                    <span>Linked Items</span>
+                    <input id="adminTypeLinkedItems" type="text" value="0 items" readonly>
+                  </label>
+
+                  <label class="admin-field admin-field--wide">
+                    <span>Note</span>
+                    <textarea name="note" rows="5" placeholder="Type note or internal remark"></textarea>
+                  </label>
+                </div>
+              </section>
+
+              <div class="admin-form__actions">
+                <button class="pagination__button admin-button admin-button--ghost" id="adminTypeClearButton" type="button">Back to Types</button>
+                <button class="pagination__button admin-button admin-button--primary" type="submit">Save Type</button>
+              </div>
+            </form>
+          </section>
+        </section>
+      </section>
+      <section class="admin-content-section" id="adminSettingsSection" hidden>
+        <section class="admin-settings">
+          <div class="admin-settings__intro">
+            <p class="eyebrow" id="adminSettingsEyebrow">Preferences</p>
+            <h2 id="adminSettingsTitle">Settings</h2>
+            <p class="admin-settings__text" id="adminSettingsText">Choose the admin interface language and review the current session profile.</p>
+          </div>
+
+          <div class="admin-settings__grid">
+            <article class="admin-panel admin-settings__card">
+              <div class="admin-settings__card-head">
+                <p class="eyebrow" id="adminSettingsLanguageEyebrow">Interface</p>
+                <h3 id="adminSettingsLanguageTitle">Language</h3>
+                <p id="adminSettingsLanguageCopy">Switch the admin shell between English and Khmer.</p>
+              </div>
+
+              <div class="admin-settings__language-list" role="group" aria-labelledby="adminSettingsLanguageTitle">
+                <button class="admin-settings__language-button" id="adminLanguageEnglishButton" data-admin-language-option="en" type="button" aria-pressed="true">
+                  <span class="admin-settings__language-copy">
+                    <strong id="adminLanguageEnglishLabel">English</strong>
+                    <small id="adminLanguageEnglishHint">Use English across the admin shell.</small>
+                  </span>
+                  <span class="admin-settings__language-tag">EN</span>
+                </button>
+
+                <button class="admin-settings__language-button" id="adminLanguageKhmerButton" data-admin-language-option="km" type="button" aria-pressed="false">
+                  <span class="admin-settings__language-copy">
+                    <strong id="adminLanguageKhmerLabel">Khmer</strong>
+                    <small id="adminLanguageKhmerHint">Use Khmer for navigation and settings labels.</small>
+                  </span>
+                  <span class="admin-settings__language-tag">KH</span>
+                </button>
+              </div>
+            </article>
+
+            <article class="admin-panel admin-settings__card">
+              <div class="admin-settings__card-head">
+                <p class="eyebrow" id="adminSettingsProfileEyebrow">Account</p>
+                <h3 id="adminSettingsProfileTitle">User Profile</h3>
+                <p id="adminSettingsProfileCopy">Current signed-in details from this browser session.</p>
+              </div>
+
+              <div class="admin-settings__profile-grid">
+                <article class="admin-settings__profile-item">
+                  <span class="admin-settings__profile-label" id="adminSettingsUsernameLabel">Username</span>
+                  <strong class="admin-settings__profile-value" id="adminSettingsProfileUsername">Administrator</strong>
+                </article>
+
+                <article class="admin-settings__profile-item">
+                  <span class="admin-settings__profile-label" id="adminSettingsRoleLabel">Role</span>
+                  <strong class="admin-settings__profile-value" id="adminSettingsProfileRole">Administrator</strong>
+                </article>
+
+                <article class="admin-settings__profile-item">
+                  <span class="admin-settings__profile-label" id="adminSettingsIssuedLabel">Signed in at</span>
+                  <strong class="admin-settings__profile-value" id="adminSettingsProfileIssuedAt">-</strong>
+                </article>
+
+                <article class="admin-settings__profile-item">
+                  <span class="admin-settings__profile-label" id="adminSettingsExpiresLabel">Session expires</span>
+                  <strong class="admin-settings__profile-value" id="adminSettingsProfileExpiresAt">-</strong>
+                </article>
+
+                <article class="admin-settings__profile-item admin-settings__profile-item--status">
+                  <span class="admin-settings__profile-label" id="adminSettingsStatusLabel">Session status</span>
+                  <strong class="admin-settings__profile-value" id="adminSettingsProfileStatus">Active</strong>
+                </article>
+              </div>
+
+              <div class="admin-settings__actions">
+                <button class="pagination__button admin-button admin-button--ghost" id="adminSettingsLogoutButton" type="button">Sign Out</button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
     </main>
   </div>
 
   <datalist id="adminBrandOptions"></datalist>
   <input id="adminImportItemsInput" type="file" accept=".xlsx,.xls,.xlsb,.xlsm,.csv" hidden>
   <input id="adminImportBrandsInput" type="file" accept=".xlsx,.xls,.xlsb,.xlsm,.csv" hidden>
+  <input id="adminImportTypesInput" type="file" accept=".xlsx,.xls,.xlsb,.xlsm,.csv" hidden>
 
   <div class="admin-modal" id="adminQrModal" hidden>
     <div class="admin-modal__backdrop" data-admin-close="qr"></div>
@@ -562,6 +791,6 @@
   <script src="catalog-data.js"></script>
   <script src="catalog-store.js"></script>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="admin.js?v=20260313-3"></script>
+  <script src="admin.js?v=20260317-3"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 const heroLogoLink = document.querySelector("#heroLogoLink");
 const languageLabel = document.querySelector("#languageLabel");
+const languageMenuRoot = document.querySelector("#languageMenuRoot");
+const languageMenuButton = document.querySelector("#languageMenuButton");
+const languageMenu = document.querySelector("#languageMenu");
 const languageEnglishButton = document.querySelector("#languageEnglish");
 const languageKhmerButton = document.querySelector("#languageKhmer");
 const detailHeroSubline = document.querySelector("#detailHeroSubline");
@@ -216,6 +219,15 @@ function buildDetailUrl(code) {
   return `detail.html?code=${encodeURIComponent(code)}`;
 }
 
+function humanizeTypeName(value) {
+  return String(value ?? "")
+    .trim()
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 function getTypeText(product, dictionary) {
   if (product.similarKey === "mister") {
     return dictionary.typeMister;
@@ -223,6 +235,10 @@ function getTypeText(product, dictionary) {
 
   if (product.filterType === "battery") {
     return dictionary.typeBattery;
+  }
+
+  if (product.filterType && product.filterType !== "sprayer") {
+    return humanizeTypeName(product.filterType);
   }
 
   return dictionary.typeSprayer;
@@ -591,7 +607,18 @@ function syncLanguageButtons() {
     const isActive = button.dataset.languageOption === currentLanguage;
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
+    button.setAttribute("aria-checked", String(isActive));
   }
+}
+
+function setLanguageMenuOpen(isOpen) {
+  if (!languageMenuRoot || !languageMenuButton || !languageMenu) {
+    return;
+  }
+
+  languageMenu.hidden = !isOpen;
+  languageMenuRoot.classList.toggle("is-open", isOpen);
+  languageMenuButton.setAttribute("aria-expanded", String(isOpen));
 }
 
 function applyLanguage() {
@@ -599,6 +626,8 @@ function applyLanguage() {
   const uiCopy = getDetailCopy();
 
   languageLabel.textContent = dictionary.languageLabel;
+  languageMenuButton?.setAttribute("aria-label", dictionary.languageLabel);
+  languageMenuButton?.setAttribute("title", dictionary.languageLabel);
   languageEnglishButton.setAttribute("aria-label", dictionary.languageEnglish);
   languageEnglishButton.setAttribute("title", dictionary.languageEnglish);
   languageKhmerButton.setAttribute("aria-label", dictionary.languageKhmer);
@@ -655,8 +684,28 @@ function setCurrentProduct(product, options = {}) {
 for (const button of languageButtons) {
   button.addEventListener("click", () => {
     setLanguage(button.dataset.languageOption);
+    setLanguageMenuOpen(false);
   });
 }
+
+languageMenuButton?.addEventListener("click", () => {
+  setLanguageMenuOpen(languageMenu?.hidden ?? true);
+});
+
+document.addEventListener("click", (event) => {
+  if (!languageMenuRoot?.contains(event.target)) {
+    setLanguageMenuOpen(false);
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || !languageMenuRoot?.classList.contains("is-open")) {
+    return;
+  }
+
+  setLanguageMenuOpen(false);
+  languageMenuButton?.focus();
+});
 
 document.addEventListener("click", (event) => {
   const link = event.target.closest('a[href^="detail.html?code="]');

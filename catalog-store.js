@@ -1,6 +1,7 @@
 (function () {
   const STORAGE_KEY = "agt-products";
   const BRAND_STORAGE_KEY = "agt-brands";
+  const TYPE_STORAGE_KEY = "agt-types";
   const defaultProducts = cloneProducts(Array.isArray(window.catalogProducts) ? window.catalogProducts : []);
 
   function cloneProducts(products) {
@@ -190,6 +191,13 @@
       .toLowerCase();
   }
 
+  function buildTypeSearchText(type) {
+    return [type.name, type.note]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+  }
+
   function normalizeProduct(input = {}) {
     const code = cleanString(input.code).toUpperCase();
     const brand = cleanString(input.brand);
@@ -252,6 +260,17 @@
       name,
       note,
       searchText: buildBrandSearchText({ name, note }),
+    };
+  }
+
+  function normalizeType(input = {}) {
+    const name = cleanString(input.name).toLowerCase();
+    const note = cleanString(input.note);
+
+    return {
+      name,
+      note,
+      searchText: buildTypeSearchText({ name, note }),
     };
   }
 
@@ -327,8 +346,34 @@
     }
   }
 
+  function getStoredTypes() {
+    try {
+      const storedValue = window.localStorage.getItem(TYPE_STORAGE_KEY);
+
+      if (!storedValue) {
+        return [];
+      }
+
+      const parsedValue = JSON.parse(storedValue);
+
+      if (!Array.isArray(parsedValue)) {
+        return [];
+      }
+
+      return parsedValue
+        .map((type) => normalizeType(type))
+        .filter((type) => type.name);
+    } catch (error) {
+      return [];
+    }
+  }
+
   function sortBrands(brands) {
     return [...brands].sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  function sortTypes(types) {
+    return [...types].sort((left, right) => left.name.localeCompare(right.name));
   }
 
   function getBrands() {
@@ -355,6 +400,30 @@
     return sortBrands([...brandsByKey.values()]);
   }
 
+  function getTypes() {
+    const typesByKey = new Map();
+
+    for (const product of getProducts()) {
+      const name = cleanString(product.filterType).toLowerCase();
+
+      if (!name) {
+        continue;
+      }
+
+      typesByKey.set(name, normalizeType({ name }));
+    }
+
+    for (const type of getStoredTypes()) {
+      if (!type.name) {
+        continue;
+      }
+
+      typesByKey.set(type.name.toLowerCase(), type);
+    }
+
+    return sortTypes([...typesByKey.values()]);
+  }
+
   function saveBrands(brands) {
     const normalizedBrands = sortBrands(
       brands
@@ -366,8 +435,26 @@
     return getBrands();
   }
 
+  function saveTypes(types) {
+    const normalizedTypes = sortTypes(
+      types
+        .map((type) => normalizeType(type))
+        .filter((type) => type.name),
+    );
+
+    window.localStorage.setItem(TYPE_STORAGE_KEY, JSON.stringify(normalizedTypes));
+    return getTypes();
+  }
+
   function getEmptyBrand() {
     return normalizeBrand({
+      name: "",
+      note: "",
+    });
+  }
+
+  function getEmptyType() {
+    return normalizeType({
       name: "",
       note: "",
     });
@@ -404,6 +491,7 @@
   window.catalogStore = {
     STORAGE_KEY,
     BRAND_STORAGE_KEY,
+    TYPE_STORAGE_KEY,
     getProducts,
     saveProducts,
     upsertProduct,
@@ -411,9 +499,13 @@
     resetProducts,
     getBrands,
     saveBrands,
+    getTypes,
+    saveTypes,
     normalizeProduct,
     normalizeBrand,
+    normalizeType,
     getEmptyProduct,
     getEmptyBrand,
+    getEmptyType,
   };
 })();

@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css?v=20260313-3">
+  <link rel="stylesheet" href="styles.css?v=20260317-3">
 </head>
 <body class="users-page">
   <svg class="catalog-symbols" aria-hidden="true" focusable="false">
@@ -64,6 +64,11 @@
       <rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"></rect>
       <path d="m5 8 7 5 7-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
     </symbol>
+    <symbol id="icon-language" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+      <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      <path d="M12 3c2.8 3.1 4.2 6.1 4.2 9S14.8 17.9 12 21c-2.8-3.1-4.2-6.1-4.2-9S9.2 6.1 12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+    </symbol>
   </svg>
 
   <div class="page-shell">
@@ -88,10 +93,6 @@
             <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
             <span>+855 (0) 70 516 333</span>
           </a>
-          <a class="hero__contact-item" href="tel:067963636">
-            <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
-            <span>067 96 36 36</span>
-          </a>
           <a class="hero__contact-item" href="mailto:angkorgardentools@gmail.com">
             <svg aria-hidden="true"><use href="#icon-mail"></use></svg>
             <span>angkorgardentools@gmail.com</span>
@@ -109,13 +110,25 @@
             <h2 id="catalogTitle">តារាងតម្លៃផលិតផល</h2>
           </div>
           <div class="section-heading__actions">
-            <div class="control-group">
-              <p class="control-group__label" id="languageLabel">ភាសា</p>
-              <div class="toggle-row" role="group" aria-labelledby="languageLabel">
-                <button class="toggle-button toggle-button--compact" id="languageEnglish" data-language-option="en" type="button" aria-label="English" title="English">
+            <div class="language-picker" id="languageMenuRoot">
+              <span class="sr-only" id="languageLabel">ភាសា</span>
+              <button
+                class="toggle-button toggle-button--icon language-picker__trigger"
+                id="languageMenuButton"
+                type="button"
+                aria-label="ភាសា"
+                title="ភាសា"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="languageMenu"
+              >
+                <svg class="toggle-button__icon" aria-hidden="true"><use href="#icon-language"></use></svg>
+              </button>
+              <div class="language-picker__menu" id="languageMenu" role="menu" aria-labelledby="languageLabel" hidden>
+                <button class="toggle-button toggle-button--compact" id="languageEnglish" data-language-option="en" type="button" role="menuitemradio" aria-checked="false" aria-label="English" title="English">
                   <span class="toggle-button__abbr" aria-hidden="true">EN</span>
                 </button>
-                <button class="toggle-button toggle-button--compact is-active" id="languageKhmer" data-language-option="km" type="button" aria-label="Khmer" title="Khmer">
+                <button class="toggle-button toggle-button--compact is-active" id="languageKhmer" data-language-option="km" type="button" role="menuitemradio" aria-checked="true" aria-label="Khmer" title="Khmer">
                   <span class="toggle-button__abbr" aria-hidden="true">KH</span>
                 </button>
               </div>
@@ -203,6 +216,6 @@
 
   <script src="catalog-data.js"></script>
   <script src="catalog-store.js"></script>
-  <script src="app.js?v=20260313-2"></script>
+  <script src="app.js?v=20260317-2"></script>
 </body>
 </html>

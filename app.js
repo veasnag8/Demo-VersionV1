@@ -14,6 +14,9 @@ const emptyStateMessage = document.querySelector("#emptyStateMessage");
 const catalogEyebrow = document.querySelector("#catalogEyebrow");
 const catalogTitle = document.querySelector("#catalogTitle");
 const languageLabel = document.querySelector("#languageLabel");
+const languageMenuRoot = document.querySelector("#languageMenuRoot");
+const languageMenuButton = document.querySelector("#languageMenuButton");
+const languageMenu = document.querySelector("#languageMenu");
 const languageEnglishButton = document.querySelector("#languageEnglish");
 const languageKhmerButton = document.querySelector("#languageKhmer");
 const searchLabel = document.querySelector("#searchLabel");
@@ -21,13 +24,6 @@ const typeFilterLabel = document.querySelector("#typeFilterLabel");
 const brandFilterLabel = document.querySelector("#brandFilterLabel");
 const pagination = document.querySelector(".pagination");
 const languageButtons = [...document.querySelectorAll("[data-language-option]")];
-
-const typeOptions = {
-  all: document.querySelector("#typeOptionAll"),
-  featured: document.querySelector("#typeOptionFeatured"),
-  sprayer: document.querySelector("#typeOptionSprayer"),
-  battery: document.querySelector("#typeOptionBattery"),
-};
 
 const STORAGE_KEYS = {
   language: "agt-language",
@@ -173,6 +169,81 @@ function buildBrandOptions() {
     brandFilter.value = selectedValue;
   } else {
     brandFilter.value = "all";
+  }
+}
+
+function getTypeRecords() {
+  const visibleTypeNames = [...new Set(products.map((product) => product.filterType).filter(Boolean))].sort((left, right) =>
+    left.localeCompare(right),
+  );
+  const storedTypes = Array.isArray(window.catalogStore?.getTypes?.())
+    ? window.catalogStore.getTypes().filter((type) => type?.name && visibleTypeNames.includes(type.name))
+    : [];
+  const storedNames = new Set(storedTypes.map((type) => type.name));
+  const derivedTypes = visibleTypeNames
+    .filter((name) => !storedNames.has(name))
+    .map((name) => ({ name }));
+
+  return [...storedTypes, ...derivedTypes];
+}
+
+function humanizeTypeName(value) {
+  return String(value ?? "")
+    .trim()
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function getTypeOptionText(typeName, dictionary) {
+  const normalizedType = String(typeName ?? "").trim().toLowerCase();
+
+  if (!normalizedType) {
+    return "";
+  }
+
+  if (normalizedType === "sprayer") {
+    return dictionary.typeSprayer;
+  }
+
+  if (normalizedType === "battery") {
+    return dictionary.typeBattery;
+  }
+
+  return humanizeTypeName(normalizedType);
+}
+
+function buildTypeOptions() {
+  const dictionary = getDictionary();
+  const selectedValue = typeFilter.value;
+  const typeRecords = getTypeRecords();
+
+  typeFilter.innerHTML = "";
+
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.id = "typeOptionAll";
+  allOption.textContent = dictionary.typeAll;
+  typeFilter.append(allOption);
+
+  const featuredOption = document.createElement("option");
+  featuredOption.value = "featured";
+  featuredOption.id = "typeOptionFeatured";
+  featuredOption.textContent = dictionary.typeFeatured;
+  typeFilter.append(featuredOption);
+
+  for (const type of typeRecords) {
+    const option = document.createElement("option");
+    option.value = type.name;
+    option.textContent = getTypeOptionText(type.name, dictionary);
+    typeFilter.append(option);
+  }
+
+  if ([...typeFilter.options].some((option) => option.value === selectedValue)) {
+    typeFilter.value = selectedValue;
+  } else {
+    typeFilter.value = "all";
   }
 }
 
@@ -369,7 +440,18 @@ function syncLanguageButtons() {
     const isActive = button.dataset.languageOption === currentLanguage;
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
+    button.setAttribute("aria-checked", String(isActive));
   }
+}
+
+function setLanguageMenuOpen(isOpen) {
+  if (!languageMenuRoot || !languageMenuButton || !languageMenu) {
+    return;
+  }
+
+  languageMenu.hidden = !isOpen;
+  languageMenuRoot.classList.toggle("is-open", isOpen);
+  languageMenuButton.setAttribute("aria-expanded", String(isOpen));
 }
 
 function applyLanguage() {
@@ -380,6 +462,8 @@ function applyLanguage() {
   catalogEyebrow.textContent = dictionary.catalogEyebrow;
   catalogTitle.textContent = dictionary.catalogTitle;
   languageLabel.textContent = dictionary.languageLabel;
+  languageMenuButton?.setAttribute("aria-label", dictionary.languageLabel);
+  languageMenuButton?.setAttribute("title", dictionary.languageLabel);
   languageEnglishButton.setAttribute("aria-label", dictionary.languageEnglish);
   languageEnglishButton.setAttribute("title", dictionary.languageEnglish);
   languageKhmerButton.setAttribute("aria-label", dictionary.languageKhmer);
@@ -390,10 +474,7 @@ function applyLanguage() {
   brandFilterLabel.textContent = dictionary.brandLabel;
   totalRecordsLabel.textContent = dictionary.totalRecordsLabel;
   matchingRecordsLabel.textContent = dictionary.matchingLabel;
-  typeOptions.all.textContent = dictionary.typeAll;
-  typeOptions.featured.textContent = dictionary.typeFeatured;
-  typeOptions.sprayer.textContent = dictionary.typeSprayer;
-  typeOptions.battery.textContent = dictionary.typeBattery;
+  buildTypeOptions();
   brandFilter.options[0].textContent = dictionary.allBrands;
   emptyStateMessage.textContent = dictionary.emptyState;
   prevPageButton.setAttribute("aria-label", dictionary.previous);
@@ -423,8 +504,28 @@ function resetAndRender() {
 for (const button of languageButtons) {
   button.addEventListener("click", () => {
     setLanguage(button.dataset.languageOption);
+    setLanguageMenuOpen(false);
   });
 }
+
+languageMenuButton?.addEventListener("click", () => {
+  setLanguageMenuOpen(languageMenu?.hidden ?? true);
+});
+
+document.addEventListener("click", (event) => {
+  if (!languageMenuRoot?.contains(event.target)) {
+    setLanguageMenuOpen(false);
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || !languageMenuRoot?.classList.contains("is-open")) {
+    return;
+  }
+
+  setLanguageMenuOpen(false);
+  languageMenuButton?.focus();
+});
 
 searchInput.addEventListener("input", resetAndRender);
 typeFilter.addEventListener("change", resetAndRender);
@@ -451,4 +552,5 @@ nextPageButton.addEventListener("click", () => {
 });
 
 buildBrandOptions();
+buildTypeOptions();
 applyLanguage();
