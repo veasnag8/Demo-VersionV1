@@ -43,7 +43,7 @@ const translations = {
     languageKhmer: "Khmer",
     searchLabel: "Search catalog",
     searchPlaceholder: "Search model, brand, capacity, or series",
-    typeLabel: "Product Type",
+    typeLabel: "Items Type",
     brandLabel: "Brand",
     typeAll: "All Items",
     typeFeatured: "Featured",

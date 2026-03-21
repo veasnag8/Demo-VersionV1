@@ -146,7 +146,7 @@ const EXCEL_TYPES_SHEET_NAME = "Item Types";
 const ITEM_EXPORT_COLUMNS = [
   { header: "Code", width: 14 },
   { header: "Brand", width: 18 },
-  { header: "Product Type", width: 16 },
+  { header: "Items Type", width: 16 },
   { header: "Status", width: 12 },
   { header: "Visible On User Page", width: 18 },
   { header: "Similar Group", width: 16 },
@@ -171,7 +171,7 @@ const TYPE_EXPORT_COLUMNS = [
 const ITEM_IMPORT_ALIASES = {
   code: ["code", "item code"],
   brand: ["brand", "brand name"],
-  filterType: ["product type", "type", "filter type"],
+  filterType: ["items type", "type", "filter type"],
   status: ["status", "item status"],
   showOnUserPage: ["visible on user page", "show on user page", "user visible", "visible", "published"],
   similarKey: ["similar group", "similar key"],
@@ -190,7 +190,7 @@ const BRAND_IMPORT_ALIASES = {
   note: ["note", "notes"],
 };
 const TYPE_IMPORT_ALIASES = {
-  name: ["type name", "item type", "product type", "type", "name"],
+  name: ["type name", "item type", "items type", "type", "name"],
   note: ["note", "notes"],
 };
 const STORAGE_KEYS = {
@@ -241,7 +241,7 @@ const ADMIN_UI = {
       types: {
         eyebrow: "Type Control",
         title: "Item Types",
-        text: "Manage product type records, keep filter choices consistent, and rename types used across the item catalog.",
+        text: "Manage items type records, keep filter choices consistent, and rename types used across the item catalog.",
       },
       brands: {
         eyebrow: "Brand Control",
@@ -259,7 +259,7 @@ const ADMIN_UI = {
       title: "Catalog Summary",
       stats: [
         {
-          label: "Total Products",
+          label: "Total Items",
           copy: "All active records in the shared catalog store.",
         },
         {
@@ -268,7 +268,7 @@ const ADMIN_UI = {
         },
         {
           label: "Total Types",
-          copy: "Unique product types available in the catalog.",
+          copy: "Unique items types available in the catalog.",
         },
       ],
       cards: {
@@ -281,7 +281,7 @@ const ADMIN_UI = {
         types: {
           eyebrow: "Item Types",
           title: "Open Type Management",
-          copy: "Manage product type records and keep catalog filtering consistent across the admin and user pages.",
+          copy: "Manage items type records and keep catalog filtering consistent across the admin and user pages.",
           button: "Go to Types",
         },
         brands: {
@@ -503,7 +503,8 @@ function syncNavigationLabels() {
   }
 
   if (adminLogoutButton) {
-    adminLogoutButton.textContent = copy.session.logout;
+    adminLogoutButton.setAttribute("aria-label", copy.session.logout);
+    adminLogoutButton.setAttribute("title", copy.session.logout);
   }
 
   if (adminQuickAccessLabel) {
@@ -656,7 +657,8 @@ function syncSettingsCopy() {
   }
 
   if (adminSettingsLogoutButton) {
-    adminSettingsLogoutButton.textContent = getAdminCopy().session.signOut;
+    adminSettingsLogoutButton.setAttribute("aria-label", getAdminCopy().session.signOut);
+    adminSettingsLogoutButton.setAttribute("title", getAdminCopy().session.signOut);
   }
 }
 
@@ -972,47 +974,46 @@ async function buildCatalogQrCard() {
   canvas.height = cardHeight;
 
   const backgroundGradient = context.createLinearGradient(0, 0, cardWidth, cardHeight);
-  backgroundGradient.addColorStop(0, "#edf1ea");
-  backgroundGradient.addColorStop(1, "#e1e6de");
+  backgroundGradient.addColorStop(0, "#f9faf9");
+  backgroundGradient.addColorStop(1, "#f2f4f3");
   context.fillStyle = backgroundGradient;
   context.fillRect(0, 0, cardWidth, cardHeight);
 
+  // Single clean card body
   context.save();
-  context.shadowColor = "rgba(16, 63, 54, 0.12)";
-  context.shadowBlur = 30;
-  context.shadowOffsetY = 18;
-  fillRoundedRect(context, 86, 40, 908, 1200, 54, "#f7f3ea");
+  context.shadowColor = "rgba(16, 63, 54, 0.1)";
+  context.shadowBlur = 40;
+  context.shadowOffsetY = 16;
+  fillRoundedRect(context, 60, 60, 960, 1160, 48, "#ffffff");
   context.restore();
 
-  strokeRoundedRect(context, 86, 40, 908, 1200, 54, "rgba(16, 63, 54, 0.08)", 4);
-  strokeRoundedRect(context, 110, 64, 860, 1152, 38, "rgba(95, 211, 205, 0.22)", 2);
-
-  const headerGradient = context.createLinearGradient(156, 112, 924, 280);
+  // Header Gradient
+  const headerGradient = context.createLinearGradient(120, 120, 960, 260);
   headerGradient.addColorStop(0, "#103f36");
   headerGradient.addColorStop(1, "#185648");
-  fillRoundedRect(context, 156, 112, 768, 162, 34, headerGradient);
+  fillRoundedRect(context, 120, 120, 840, 160, 32, headerGradient);
 
-  fillRoundedRect(context, 184, 140, 132, 106, 26, "#071713");
-  context.drawImage(logoImage, 196, 152, 108, 82);
+  // Logo background
+  fillRoundedRect(context, 150, 146, 120, 108, 24, "#071713");
+  context.drawImage(logoImage, 158, 156, 104, 88);
 
-  context.fillStyle = "#f6fffb";
-  context.font = "700 38px 'Segoe UI', sans-serif";
-  context.fillText("ANGKOR GARDEN TOOLS", 350, 176);
+  // Header Text
+  context.fillStyle = "#ffffff";
+  context.font = "800 42px 'Segoe UI', sans-serif";
+  context.fillText("ANGKOR GARDEN TOOLS", 310, 186);
 
-  context.fillStyle = "rgba(232, 255, 248, 0.76)";
-  context.font = "600 22px 'Segoe UI', sans-serif";
-  context.fillText("Customer product catalog", 350, 214);
+  context.fillStyle = "rgba(232, 255, 248, 0.85)";
+  context.font = "600 24px 'Segoe UI', sans-serif";
+  context.fillText("Customer product catalog", 310, 226);
 
-  fillRoundedRect(context, 156, 356, 768, 862, 40, "#ffffff");
-  strokeRoundedRect(context, 156, 356, 768, 862, 40, "rgba(16, 63, 54, 0.08)", 4);
+  // Clean, large QR Code without excessive borders
+  const qrSize = 640;
+  const qrX = 220; // Math.round((1080 - 640) / 2)
+  const qrY = 400;
 
-  fillRoundedRect(context, 226, 430, 628, 628, 32, "#d8ebe3");
-  strokeRoundedRect(context, 226, 430, 628, 628, 32, "rgba(95, 211, 205, 0.2)", 4);
-  fillRoundedRect(context, 278, 482, 524, 524, 26, "#ffffff");
+  // Single subtle boundary
+  strokeRoundedRect(context, qrX - 24, qrY - 24, qrSize + 48, qrSize + 48, 32, "rgba(36, 170, 134, 0.15)", 2);
 
-  const qrSize = 468;
-  const qrX = 306;
-  const qrY = 510;
   context.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
 
   const dataUrl = canvas.toDataURL("image/png");
@@ -1991,7 +1992,7 @@ function buildItemExportRow(product) {
   return {
     Code: product.code,
     Brand: product.brand,
-    "Product Type": product.filterType,
+    "Items Type": product.filterType,
     Status: formatTypeLabel(product.status),
     "Visible On User Page": Boolean(product.showOnUserPage),
     "Similar Group": product.similarKey,

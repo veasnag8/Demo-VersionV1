@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catalog Admin | Angkor Garden Tools</title>
-  <meta
-    name="description"
-    content="Admin dashboard for managing Angkor Garden Tools catalog products."
-  >
+  <meta name="description" content="Admin dashboard for managing Angkor Garden Tools catalog products.">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -19,6 +17,7 @@
   <script src="admin-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body class="admin-page">
   <div class="admin-dashboard">
     <aside class="admin-sidebar">
@@ -31,26 +30,22 @@
           <small>Admin Control Panel</small>
         </span>
       </a>
-      <button
-        class="admin-sidebar-toggle"
-        id="adminSidebarToggle"
-        type="button"
-        aria-label="Hide admin menu"
-        aria-pressed="false"
-      >
+      <button class="admin-sidebar-toggle" id="adminSidebarToggle" type="button" aria-label="Hide admin menu"
+        aria-pressed="false">
         <span class="admin-sidebar-toggle__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
-            <path d="M7 5h2v14H7zm4 0h2v14h-2zm4 0h2v14h-2z"/>
+            <path d="M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
           </svg>
         </span>
         <span class="admin-sidebar-toggle__label">Hide menu</span>
       </button>
 
       <nav class="admin-sidebar__nav" aria-label="Admin navigation">
-        <button class="admin-nav__item is-active" type="button" data-admin-section-option="dashboard" aria-pressed="true">
+        <button class="admin-nav__item is-active" type="button" data-admin-section-option="dashboard"
+          aria-pressed="true">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path d="M4 13h7V3H4zm9 8h7V3h-7zm-9 0h7v-6H4z"/>
+              <path d="M4 13h7V3H4zm9 8h7V3h-7zm-9 0h7v-6H4z" />
             </svg>
           </span>
           <span class="admin-nav__copy">
@@ -60,7 +55,8 @@
         <button class="admin-nav__item" type="button" data-admin-section-option="items" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path d="M6 4h12a2 2 0 0 1 2 2v3H4V6a2 2 0 0 1 2-2Zm-2 7h16v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Zm4 2v2h3v-2Zm5 0v2h3v-2Z"/>
+              <path
+                d="M6 4h12a2 2 0 0 1 2 2v3H4V6a2 2 0 0 1 2-2Zm-2 7h16v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Zm4 2v2h3v-2Zm5 0v2h3v-2Z" />
             </svg>
           </span>
           <span class="admin-nav__copy">
@@ -70,7 +66,8 @@
         <button class="admin-nav__item" type="button" data-admin-section-option="types" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5Zm4.5.5v3h6V7Zm-2 6v4h10v-4Z"/>
+              <path
+                d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5Zm4.5.5v3h6V7Zm-2 6v4h10v-4Z" />
             </svg>
           </span>
           <span class="admin-nav__copy">
@@ -80,7 +77,8 @@
         <button class="admin-nav__item" type="button" data-admin-section-option="brands" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path d="m11 4 8 8-7.5 7.5a2 2 0 0 1-2.83 0L4.5 15.33a2 2 0 0 1 0-2.83ZM8.5 9A1.5 1.5 0 1 0 8.5 6a1.5 1.5 0 0 0 0 3Z"/>
+              <path
+                d="m11 4 8 8-7.5 7.5a2 2 0 0 1-2.83 0L4.5 15.33a2 2 0 0 1 0-2.83ZM8.5 9A1.5 1.5 0 1 0 8.5 6a1.5 1.5 0 0 0 0 3Z" />
             </svg>
           </span>
           <span class="admin-nav__copy">
@@ -90,7 +88,8 @@
         <button class="admin-nav__item" type="button" data-admin-section-option="settings" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path d="M19.4 13a7.7 7.7 0 0 0 .1-1l2-1.5-2-3.5-2.4 1a8 8 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a8 8 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7.7 7.7 0 0 0 .1 1l-2 1.5 2 3.5 2.4-1a8 8 0 0 0 1.7 1l.4 2.5h4l.4-2.5a8 8 0 0 0 1.7-1l2.4 1 2-3.5ZM12 15.2A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4Z"/>
+              <path
+                d="M19.4 13a7.7 7.7 0 0 0 .1-1l2-1.5-2-3.5-2.4 1a8 8 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a8 8 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7.7 7.7 0 0 0 .1 1l-2 1.5 2 3.5 2.4-1a8 8 0 0 0 1.7 1l.4 2.5h4l.4-2.5a8 8 0 0 0 1.7-1l2.4 1 2-3.5ZM12 15.2A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4Z" />
             </svg>
           </span>
           <span class="admin-nav__copy">
@@ -100,25 +99,31 @@
       </nav>
 
       <div class="admin-sidebar__session">
-        <p class="admin-sidebar__label">Signed In</p>
-        <strong id="adminSessionUser">Administrator</strong>
-        <p class="admin-sidebar__hint">Protected browser session</p>
-        <button class="pagination__button admin-button admin-button--ghost" id="adminLogoutButton" type="button">Log Out</button>
+        <div class="admin-sidebar__avatar">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <path
+              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+          </svg>
+        </div>
+        <div class="admin-sidebar__user-info">
+          <strong id="adminSessionUser">Administrator</strong>
+          <span>Admin Panel</span>
+        </div>
+        <button class="admin-sidebar__logout" id="adminLogoutButton" type="button" aria-label="Log Out" title="Log Out">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <path
+              d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+          </svg>
+        </button>
       </div>
     </aside>
 
     <main class="admin-main">
-      <button
-        class="admin-sidebar-toggle admin-sidebar-toggle--reveal"
-        id="adminSidebarRevealToggle"
-        type="button"
-        aria-label="Show admin menu"
-        aria-pressed="true"
-        hidden
-      >
+      <button class="admin-sidebar-toggle admin-sidebar-toggle--reveal" id="adminSidebarRevealToggle" type="button"
+        aria-label="Show admin menu" aria-pressed="true" hidden>
         <span class="admin-sidebar-toggle__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
-            <path d="M7 5h2v14H7zm4 0h2v14h-2zm4 0h2v14h-2z"/>
+            <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
           </svg>
         </span>
         <span class="admin-sidebar-toggle__label">Show menu</span>
@@ -141,19 +146,15 @@
                   <small>Open in a new tab</small>
                 </span>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M14 5h5v5h-2V8.41l-6.29 6.3-1.42-1.42L15.59 7H14zm-9 2h6v2H7v8h8v-4h2v6H5z"/>
+                  <path d="M14 5h5v5h-2V8.41l-6.29 6.3-1.42-1.42L15.59 7H14zm-9 2h6v2H7v8h8v-4h2v6H5z" />
                 </svg>
               </a>
 
-              <button
-                class="admin-topbar__qr-button"
-                id="adminOpenQrButton"
-                type="button"
-                aria-label="Show catalog QR code"
-                title="Show catalog QR code"
-              >
+              <button class="admin-topbar__qr-button" id="adminOpenQrButton" type="button"
+                aria-label="Show catalog QR code" title="Show catalog QR code">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M3 3h7v7H3zm2 2v3h3V5zm9-2h7v7h-7zm2 2v3h3V5zM3 14h7v7H3zm2 2v3h3v-3zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h4v4h-2v-2h-2zm-4 4h2v3h-2zm3 1h2v2h-2zm3 0h2v2h-2z"/>
+                  <path
+                    d="M3 3h7v7H3zm2 2v3h3V5zm9-2h7v7h-7zm2 2v3h3V5zM3 14h7v7H3zm2 2v3h3v-3zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h4v4h-2v-2h-2zm-4 4h2v3h-2zm3 1h2v2h-2zm3 0h2v2h-2z" />
                 </svg>
                 <span>QR</span>
               </button>
@@ -171,7 +172,7 @@
 
           <div class="admin-stats">
             <article class="admin-stat">
-              <span class="admin-stat__label">Total Products</span>
+              <span class="admin-stat__label">Total Items</span>
               <strong id="adminTotalCount">0</strong>
               <small>All active records in the shared catalog store.</small>
             </article>
@@ -183,7 +184,7 @@
             <article class="admin-stat">
               <span class="admin-stat__label">Total Types</span>
               <strong id="adminTypeCount">0</strong>
-              <small>Unique product types available in the catalog.</small>
+              <small>Unique items types available in the catalog.</small>
             </article>
           </div>
 
@@ -193,7 +194,8 @@
                 <p class="eyebrow">Items</p>
                 <h3>Open Item Management</h3>
               </div>
-              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="items">Go to Items</button>
+              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button"
+                data-admin-shortcut="items">Go to Items</button>
             </article>
 
             <article class="admin-dashboard-card">
@@ -201,7 +203,8 @@
                 <p class="eyebrow">Item Types</p>
                 <h3>Open Type Management</h3>
               </div>
-              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="types">Go to Types</button>
+              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button"
+                data-admin-shortcut="types">Go to Types</button>
             </article>
 
             <article class="admin-dashboard-card">
@@ -209,7 +212,8 @@
                 <p class="eyebrow">Brands</p>
                 <h3>Open Brand Management</h3>
               </div>
-              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button" data-admin-shortcut="brands">Go to Brands</button>
+              <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button"
+                data-admin-shortcut="brands">Go to Brands</button>
             </article>
           </div>
         </section>
@@ -224,13 +228,20 @@
                 <h3 id="adminListHeading">Items</h3>
               </div>
               <div class="admin-panel__actions">
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminImportItemsButton" type="button" aria-label="Import items from Excel" title="Import items from Excel">
+                <button
+                  class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
+                  id="adminImportItemsButton" type="button" aria-label="Import items from Excel"
+                  title="Import items from Excel">
                   <img src="Icons/import_to_excel.png" alt="" aria-hidden="true">
                 </button>
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminExportItemsButton" type="button" aria-label="Export items to Excel" title="Export items to Excel">
+                <button
+                  class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
+                  id="adminExportItemsButton" type="button" aria-label="Export items to Excel"
+                  title="Export items to Excel">
                   <img src="Icons/export_to_excel.png" alt="" aria-hidden="true">
                 </button>
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminNewButton" type="button">New Item</button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                  id="adminNewButton" type="button">New Item</button>
               </div>
             </div>
 
@@ -239,13 +250,15 @@
                 <div class="admin-list-tools__meta">
                   <p class="admin-list-tools__summary" id="adminListRange">Showing 0 records</p>
                   <div class="admin-list-tools__pager" aria-label="Record pagination">
-                    <button class="pagination__button pagination__button--icon admin-list-tools__button" id="adminPrevPageButton" type="button" aria-label="Previous page" title="Previous page">
+                    <button class="pagination__button pagination__button--icon admin-list-tools__button"
+                      id="adminPrevPageButton" type="button" aria-label="Previous page" title="Previous page">
                       <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M14.71 6.71 9.41 12l5.3 5.29-1.42 1.42L6.59 12l6.7-6.71z"></path>
                       </svg>
                     </button>
                     <span class="admin-list-tools__page" id="adminPageStatus">Page 1 of 1</span>
-                    <button class="pagination__button pagination__button--icon admin-list-tools__button" id="adminNextPageButton" type="button" aria-label="Next page" title="Next page">
+                    <button class="pagination__button pagination__button--icon admin-list-tools__button"
+                      id="adminNextPageButton" type="button" aria-label="Next page" title="Next page">
                       <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="m9.29 6.71 1.42-1.42L17.41 12l-6.7 6.71-1.42-1.42L14.59 12z"></path>
                       </svg>
@@ -280,12 +293,8 @@
 
                   <label class="search-field admin-list-search" for="adminSearch">
                     <span>Search Items</span>
-                    <input
-                      id="adminSearch"
-                      type="search"
-                      placeholder="Search by code, brand, title, or series"
-                      autocomplete="off"
-                    >
+                    <input id="adminSearch" type="search" placeholder="Search by code, brand, title, or series"
+                      autocomplete="off">
                   </label>
                 </div>
               </div>
@@ -316,10 +325,11 @@
                   <h3 id="adminFormHeading">Edit Item</h3>
                 </div>
                 <div class="admin-panel__actions admin-panel__actions--form">
-                  <button class="admin-toolbar-action admin-toolbar-action--compact admin-toolbar-action--back" id="adminToggleListButton" type="button" hidden>
+                  <button class="admin-toolbar-action admin-toolbar-action--compact admin-toolbar-action--back"
+                    id="adminToggleListButton" type="button" hidden>
                     <span class="admin-toolbar-action__icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24">
-                        <path d="M10.41 7.41 9 6l-6 6 6 6 1.41-1.41L6.83 13H21v-2H6.83z"/>
+                        <path d="M10.41 7.41 9 6l-6 6 6 6 1.41-1.41L6.83 13H21v-2H6.83z" />
                       </svg>
                     </span>
                     <span class="admin-toolbar-action__copy">
@@ -356,7 +366,7 @@
                 </div>
 
                 <label class="admin-field">
-                  <span>Product Type</span>
+                  <span>Items Type</span>
                   <select name="filterType" id="adminTypeSelect">
                     <option value="sprayer">Sprayer</option>
                   </select>
@@ -417,17 +427,23 @@
 
                 <div class="admin-field admin-field--wide admin-field--image">
                   <span>Image</span>
-                  <input id="adminImageInput" name="image" type="text" placeholder="images/item.png or https://example.com/item.png">
+                  <input id="adminImageInput" name="image" type="text"
+                    placeholder="images/item.png or https://example.com/item.png">
                   <div class="admin-image-tools">
                     <input id="adminImageFileInput" type="file" accept="image/*" hidden>
-                    <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminImageUploadButton" type="button">Choose Local Image</button>
-                    <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminImageClearButton" type="button">Remove Image</button>
+                    <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                      id="adminImageUploadButton" type="button">Choose Local Image</button>
+                    <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                      id="adminImageClearButton" type="button">Remove Image</button>
                   </div>
                   <div class="admin-image-preview">
-                    <img class="admin-image-preview__image" id="adminImagePreview" alt="Selected product image preview" hidden>
-                    <p class="admin-image-preview__empty" id="adminImagePreviewEmpty">No image selected. The selected icon will be shown.</p>
+                    <img class="admin-image-preview__image" id="adminImagePreview" alt="Selected product image preview"
+                      hidden>
+                    <p class="admin-image-preview__empty" id="adminImagePreviewEmpty">No image selected. The selected
+                      icon will be shown.</p>
                   </div>
-                  <small id="adminImageUploadMeta">Paste an image URL or choose a local file from this device. Local images stay in this browser.</small>
+                  <small id="adminImageUploadMeta">Paste an image URL or choose a local file from this device. Local
+                    images stay in this browser.</small>
                 </div>
 
                 <label class="admin-field admin-field--wide">
@@ -448,7 +464,8 @@
               </div>
 
               <div class="admin-form__actions">
-                <button class="pagination__button admin-button admin-button--ghost" id="adminClearButton" type="button">Clear</button>
+                <button class="pagination__button admin-button admin-button--ghost" id="adminClearButton"
+                  type="button">Clear</button>
                 <button class="pagination__button admin-button admin-button--primary" type="submit">Save Item</button>
               </div>
             </form>
@@ -465,13 +482,20 @@
                 <h3 id="adminBrandHeading">Brands</h3>
               </div>
               <div class="admin-panel__actions">
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminImportBrandsButton" type="button" aria-label="Import brands from Excel" title="Import brands from Excel">
+                <button
+                  class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
+                  id="adminImportBrandsButton" type="button" aria-label="Import brands from Excel"
+                  title="Import brands from Excel">
                   <img src="Icons/import_to_excel.png" alt="" aria-hidden="true">
                 </button>
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminExportBrandsButton" type="button" aria-label="Export brands to Excel" title="Export brands to Excel">
+                <button
+                  class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
+                  id="adminExportBrandsButton" type="button" aria-label="Export brands to Excel"
+                  title="Export brands to Excel">
                   <img src="Icons/export_to_excel.png" alt="" aria-hidden="true">
                 </button>
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminBrandNewButton" type="button">Create New</button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                  id="adminBrandNewButton" type="button">Create New</button>
               </div>
             </div>
 
@@ -493,12 +517,8 @@
 
                   <label class="search-field admin-list-search" for="adminBrandSearch">
                     <span>Search Brands</span>
-                    <input
-                      id="adminBrandSearch"
-                      type="search"
-                      placeholder="Search by brand name or note"
-                      autocomplete="off"
-                    >
+                    <input id="adminBrandSearch" type="search" placeholder="Search by brand name or note"
+                      autocomplete="off">
                   </label>
                 </div>
               </div>
@@ -552,13 +572,15 @@
 
                   <label class="admin-field admin-field--wide">
                     <span>Note</span>
-                    <textarea name="note" rows="5" placeholder="Brand note, supplier detail, or internal remark"></textarea>
+                    <textarea name="note" rows="5"
+                      placeholder="Brand note, supplier detail, or internal remark"></textarea>
                   </label>
                 </div>
               </section>
 
               <div class="admin-form__actions">
-                <button class="pagination__button admin-button admin-button--ghost" id="adminBrandClearButton" type="button">Back to Brands</button>
+                <button class="pagination__button admin-button admin-button--ghost" id="adminBrandClearButton"
+                  type="button">Back to Brands</button>
                 <button class="pagination__button admin-button admin-button--primary" type="submit">Save Brand</button>
               </div>
             </form>
@@ -574,13 +596,20 @@
                 <h3 id="adminTypeHeading">Item Types</h3>
               </div>
               <div class="admin-panel__actions">
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminImportTypesButton" type="button" aria-label="Import item types from Excel" title="Import item types from Excel">
+                <button
+                  class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
+                  id="adminImportTypesButton" type="button" aria-label="Import item types from Excel"
+                  title="Import item types from Excel">
                   <img src="Icons/import_to_excel.png" alt="" aria-hidden="true">
                 </button>
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon" id="adminExportTypesButton" type="button" aria-label="Export item types to Excel" title="Export item types to Excel">
+                <button
+                  class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
+                  id="adminExportTypesButton" type="button" aria-label="Export item types to Excel"
+                  title="Export item types to Excel">
                   <img src="Icons/export_to_excel.png" alt="" aria-hidden="true">
                 </button>
-                <button class="pagination__button admin-button admin-button--ghost admin-button--compact" id="adminTypeNewButton" type="button">Create New</button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                  id="adminTypeNewButton" type="button">Create New</button>
               </div>
             </div>
 
@@ -602,12 +631,8 @@
 
                   <label class="search-field admin-list-search" for="adminTypeSearch">
                     <span>Search Types</span>
-                    <input
-                      id="adminTypeSearch"
-                      type="search"
-                      placeholder="Search by type name or note"
-                      autocomplete="off"
-                    >
+                    <input id="adminTypeSearch" type="search" placeholder="Search by type name or note"
+                      autocomplete="off">
                   </label>
                 </div>
               </div>
@@ -666,7 +691,8 @@
               </section>
 
               <div class="admin-form__actions">
-                <button class="pagination__button admin-button admin-button--ghost" id="adminTypeClearButton" type="button">Back to Types</button>
+                <button class="pagination__button admin-button admin-button--ghost" id="adminTypeClearButton"
+                  type="button">Back to Types</button>
                 <button class="pagination__button admin-button admin-button--primary" type="submit">Save Type</button>
               </div>
             </form>
@@ -678,7 +704,8 @@
           <div class="admin-settings__intro">
             <p class="eyebrow" id="adminSettingsEyebrow">Preferences</p>
             <h2 id="adminSettingsTitle">Settings</h2>
-            <p class="admin-settings__text" id="adminSettingsText">Choose the admin interface language and review the current session profile.</p>
+            <p class="admin-settings__text" id="adminSettingsText">Choose the admin interface language and review the
+              current session profile.</p>
           </div>
 
           <div class="admin-settings__grid">
@@ -690,7 +717,8 @@
               </div>
 
               <div class="admin-settings__language-list" role="group" aria-labelledby="adminSettingsLanguageTitle">
-                <button class="admin-settings__language-button" id="adminLanguageEnglishButton" data-admin-language-option="en" type="button" aria-pressed="true">
+                <button class="admin-settings__language-button" id="adminLanguageEnglishButton"
+                  data-admin-language-option="en" type="button" aria-pressed="true">
                   <span class="admin-settings__language-copy">
                     <strong id="adminLanguageEnglishLabel">English</strong>
                     <small id="adminLanguageEnglishHint">Use English across the admin shell.</small>
@@ -698,7 +726,8 @@
                   <span class="admin-settings__language-tag">EN</span>
                 </button>
 
-                <button class="admin-settings__language-button" id="adminLanguageKhmerButton" data-admin-language-option="km" type="button" aria-pressed="false">
+                <button class="admin-settings__language-button" id="adminLanguageKhmerButton"
+                  data-admin-language-option="km" type="button" aria-pressed="false">
                   <span class="admin-settings__language-copy">
                     <strong id="adminLanguageKhmerLabel">Khmer</strong>
                     <small id="adminLanguageKhmerHint">Use Khmer for navigation and settings labels.</small>
@@ -743,7 +772,13 @@
               </div>
 
               <div class="admin-settings__actions">
-                <button class="pagination__button admin-button admin-button--ghost" id="adminSettingsLogoutButton" type="button">Sign Out</button>
+                <button class="pagination__button admin-button admin-button--ghost admin-button--icon"
+                  id="adminSettingsLogoutButton" type="button" aria-label="Sign Out" title="Sign Out">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" style="width: 20px; height: 20px;">
+                    <path
+                      d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                  </svg>
+                </button>
               </div>
             </article>
           </div>
@@ -762,28 +797,35 @@
     <section class="admin-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="adminQrModalTitle">
       <div class="admin-modal__head">
         <div>
-          <p class="eyebrow">User Catalog</p>
-          <h2 id="adminQrModalTitle">QR Code</h2>
+          <h2 id="adminQrModalTitle" style="margin-top: 8px;">QR Code</h2>
         </div>
         <button class="admin-modal__close" id="adminCloseQrButton" type="button" aria-label="Close QR popup">X</button>
       </div>
 
       <div class="admin-modal__body admin-modal__body--qr">
-        <img
-          class="admin-modal__qr-image"
-          id="adminCatalogQrImage"
-          src=""
-          alt="QR code for the user catalog"
-          loading="lazy"
-        >
+        <img class="admin-modal__qr-image" id="adminCatalogQrImage" src="" alt="QR code for the user catalog"
+          loading="lazy">
         <p class="admin-modal__text" id="adminCatalogQrStatus">
           Scan this QR code to open the customer catalog page.
         </p>
       </div>
 
       <div class="admin-modal__actions">
-        <button class="pagination__button admin-button admin-button--ghost" id="adminCopyQrLinkButton" type="button">Copy Link</button>
-        <button class="pagination__button admin-button admin-button--ghost" id="adminSaveQrButton" type="button">Save QR</button>
+        <button class="pagination__button admin-button admin-button--ghost" id="adminCopyQrLinkButton" type="button">
+          <svg viewBox="0 0 24 24" width="18" height="18"
+            style="margin-right:8px; vertical-align:middle; fill:currentColor;">
+            <path
+              d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+          </svg>
+          Copy Link
+        </button>
+        <button class="pagination__button admin-button admin-button--primary" id="adminSaveQrButton" type="button">
+          <svg viewBox="0 0 24 24" width="18" height="18"
+            style="margin-right:8px; vertical-align:middle; fill:currentColor;">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+          </svg>
+          Save QR
+        </button>
       </div>
     </section>
   </div>
@@ -793,4 +835,5 @@
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="admin.js?v=20260317-3"></script>
 </body>
+
 </html>
