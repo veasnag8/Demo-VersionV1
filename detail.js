@@ -60,8 +60,8 @@ const detailCopy = {
     specsCopy: "Extra item details arranged in a cleaner reading order.",
     featurePoints: "Key Features",
     model: "Model",
-    productName: "Product Name",
-    brand: "Brand",
+    productName: "Product Name",  
+    brand: "Item Brand",
     capacity: "Capacity",
     sizes: "Sizes",
   },
@@ -73,7 +73,7 @@ const detailCopy = {
     featurePoints: "ចំណុចពិសេស",
     model: "ម៉ូដែល",
     productName: "ឈ្មោះផលិតផល",
-    brand: "ម៉ាក",
+    brand: "ម៉ាកទំនិញ",
     capacity: "ចំណុះ",
     sizes: "ទំហំ",
   },
@@ -283,12 +283,21 @@ function getFeaturePoints(product) {
   return [];
 }
 
-function getCardSeriesText(product, dictionary) {
-  if (currentLanguage === "km") {
-    return product.series;
+function buildCardColorsMarkup(product) {
+  const colors = product.colors ?? [];
+
+  if (colors.length === 0) {
+    return "<span></span>";
   }
 
-  return `${dictionary.series}: ${product.series}`;
+  const dots = colors
+    .map(
+      (color) =>
+        `<span class="catalog-card__color-dot" style="background-color: ${escapeHtml(color.hex)};" title="${escapeHtml(color.label)}"></span>`,
+    )
+    .join("");
+
+  return `<div class="catalog-card__colors">${dots}</div>`;
 }
 
 function buildCatalogArtworkMarkup(product) {
@@ -430,7 +439,7 @@ function buildSimilarCardMarkup(product, dictionary) {
         ${buildCatalogStockMarkup(product, dictionary)}
       </div>
       <div class="catalog-card__meta">
-        <span>${escapeHtml(getCardSeriesText(product, dictionary))}</span>
+        ${buildCardColorsMarkup(product)}
         <div class="catalog-card__price-stack">
           <div class="catalog-card__price-row">
             <small>${escapeHtml(dictionary.depot)}</small>

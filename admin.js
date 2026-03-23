@@ -141,12 +141,12 @@ const store = window.catalogStore;
 const DEFAULT_LIST_PAGE_SIZE = 30;
 const DEFAULT_QR_STATUS_TEXT = "Scan this QR code to open the customer catalog page.";
 const EXCEL_ITEMS_SHEET_NAME = "Items";
-const EXCEL_BRANDS_SHEET_NAME = "Brands";
-const EXCEL_TYPES_SHEET_NAME = "Item Types";
+const EXCEL_BRANDS_SHEET_NAME = "Item Brands";
+const EXCEL_TYPES_SHEET_NAME = "Item Groups";
 const ITEM_EXPORT_COLUMNS = [
   { header: "Code", width: 14 },
-  { header: "Brand", width: 18 },
-  { header: "Items Type", width: 16 },
+  { header: "Item Brand", width: 18 },
+  { header: "Item Group", width: 16 },
   { header: "Status", width: 12 },
   { header: "Visible On User Page", width: 18 },
   { header: "Similar Group", width: 16 },
@@ -165,13 +165,13 @@ const BRAND_EXPORT_COLUMNS = [
   { header: "Note", width: 42 },
 ];
 const TYPE_EXPORT_COLUMNS = [
-  { header: "Type Name", width: 22 },
+  { header: "Name", width: 22 },
   { header: "Note", width: 42 },
 ];
 const ITEM_IMPORT_ALIASES = {
   code: ["code", "item code"],
-  brand: ["brand", "brand name"],
-  filterType: ["items type", "type", "filter type"],
+  brand: ["item brand", "brand", "brand name"],
+  filterType: ["item group", "items type", "type", "filter type"],
   status: ["status", "item status"],
   showOnUserPage: ["visible on user page", "show on user page", "user visible", "visible", "published"],
   similarKey: ["similar group", "similar key"],
@@ -190,7 +190,7 @@ const BRAND_IMPORT_ALIASES = {
   note: ["note", "notes"],
 };
 const TYPE_IMPORT_ALIASES = {
-  name: ["type name", "item type", "items type", "type", "name"],
+  name: ["=name", "item group", "item type", "items type", "type", "name"],
   note: ["note", "notes"],
 };
 const STORAGE_KEYS = {
@@ -204,8 +204,8 @@ const ADMIN_UI = {
     nav: {
       dashboard: "Dashboard",
       items: "Items",
-      types: "Item Types",
-      brands: "Brands",
+      types: "Item Group",
+      brands: "Item Brands",
       settings: "Settings",
     },
     session: {
@@ -239,14 +239,14 @@ const ADMIN_UI = {
         text: "Search, update, and manage catalog item records from one standard admin workspace.",
       },
       types: {
-        eyebrow: "Type Control",
-        title: "Item Types",
-        text: "Manage items type records, keep filter choices consistent, and rename types used across the item catalog.",
+        eyebrow: "Group Control",
+        title: "Item Group",
+        text: "Manage item group records, keep filter choices consistent, and rename groups used across the item catalog.",
       },
       brands: {
-        eyebrow: "Brand Control",
-        title: "Brands",
-        text: "Manage brand records, keep the catalog naming consistent, and prepare brands before assigning them to items.",
+        eyebrow: "Item Brand Control",
+        title: "Item Brands",
+        text: "Manage item brand records, keep the catalog naming consistent, and prepare item brands before assigning them to items.",
       },
       settings: {
         eyebrow: "Preferences",
@@ -263,12 +263,12 @@ const ADMIN_UI = {
           copy: "All active records in the shared catalog store.",
         },
         {
-          label: "Total Brands",
-          copy: "Unique brands currently used across catalog records.",
+          label: "Total Item Brands",
+          copy: "Unique item brands currently used across catalog records.",
         },
         {
-          label: "Total Types",
-          copy: "Unique items types available in the catalog.",
+          label: "Total Item Groups",
+          copy: "Unique item groups available in the catalog.",
         },
       ],
       cards: {
@@ -279,16 +279,16 @@ const ADMIN_UI = {
           button: "Go to Items",
         },
         types: {
-          eyebrow: "Item Types",
-          title: "Open Type Management",
-          copy: "Manage items type records and keep catalog filtering consistent across the admin and user pages.",
-          button: "Go to Types",
+          eyebrow: "Item Group",
+          title: "Open Group Management",
+          copy: "Manage item group records and keep catalog filtering consistent across the admin and user pages.",
+          button: "Go to Item Groups",
         },
         brands: {
-          eyebrow: "Brands",
+          eyebrow: "Item Brands",
           title: "Open Brand Management",
-          copy: "Maintain brand names, prepare new brand records, and keep item branding consistent.",
-          button: "Go to Brands",
+          copy: "Maintain item brand names, prepare new brand records, and keep item branding consistent.",
+          button: "Go to Item Brands",
         },
       },
     },
@@ -319,7 +319,8 @@ const ADMIN_UI = {
     nav: {
       dashboard: "ផ្ទាំងដើម",
       items: "ទំនិញ",
-      brands: "ម៉ាក",
+      types: "ក្រុមទំនិញ",
+      brands: "ម៉ាកទំនិញ",
       settings: "ការកំណត់",
     },
     session: {
@@ -352,10 +353,10 @@ const ADMIN_UI = {
         title: "ទំនិញ",
         text: "ស្វែងរក កែប្រែ និងគ្រប់គ្រងទិន្នន័យទំនិញពីកន្លែងតែមួយ។",
       },
-      brands: {
-        eyebrow: "គ្រប់គ្រងម៉ាក",
-        title: "ម៉ាក",
-        text: "គ្រប់គ្រងកំណត់ត្រាម៉ាក និងរៀបចំឈ្មោះម៉ាកឱ្យស្របគ្នានៅក្នុងកាតាឡុក។",
+      types: {
+        eyebrow: "គ្រប់គ្រងក្រុមទំនិញ",
+        title: "ក្រុមទំនិញ",
+        text: "គ្រប់គ្រងកំណត់ត្រាក្រុមទំនិញ និងរៀបចំឈ្មោះក្រុមឱ្យស្របគ្នានៅក្នុងកាតាឡុក។",
       },
       settings: {
         eyebrow: "ចំណង់ចំណូលចិត្ត",
@@ -372,12 +373,12 @@ const ADMIN_UI = {
           copy: "កំណត់ត្រាដែលកំពុងដំណើរការទាំងអស់នៅក្នុងឃ្លាំងទិន្នន័យរួម។",
         },
         {
-          label: "ចំនួនម៉ាកសរុប",
-          copy: "ម៉ាកតែមួយគត់ដែលកំពុងត្រូវបានប្រើនៅក្នុងកាតាឡុក។",
+          label: "ចំនួនម៉ាកទំនិញសរុប",
+          copy: "ម៉ាកទំនិញតែមួយគត់ដែលកំពុងត្រូវបានប្រើនៅក្នុងកាតាឡុក។",
         },
         {
-          label: "ចំនួនប្រភេទសរុប",
-          copy: "ប្រភេទផលិតផលតែមួយគត់ដែលមាននៅក្នុងកាតាឡុក។",
+          label: "ចំនួនក្រុមទំនិញសរុប",
+          copy: "ក្រុមទំនិញតែមួយគត់ដែលមាននៅក្នុងកាតាឡុក។",
         },
       ],
       cards: {
@@ -387,11 +388,11 @@ const ADMIN_UI = {
           copy: "មើលបញ្ជីទំនិញ បង្កើតកំណត់ត្រាថ្មី និងកែប្រែព័ត៌មានកាតាឡុកពីកន្លែងតែមួយ។",
           button: "ទៅកាន់ទំនិញ",
         },
-        brands: {
-          eyebrow: "ម៉ាក",
-          title: "បើកការគ្រប់គ្រងម៉ាក",
-          copy: "ថែទាំឈ្មោះម៉ាក រៀបចំកំណត់ត្រាម៉ាកថ្មី និងរក្សាភាពស្របគ្នារបស់ម៉ាកទំនិញ។",
-          button: "ទៅកាន់ម៉ាក",
+        types: {
+          eyebrow: "ក្រុមទំនិញ",
+          title: "បើកការគ្រប់គ្រងក្រុមទំនិញ",
+          copy: "គ្រប់គ្រងកំណត់ត្រាក្រុមទំនិញ រៀបចំឈ្មោះក្រុមទំនិញថ្មី និងរក្សាភាពស្របគ្នារបស់ក្រុមទំនិញ។",
+          button: "ទៅកាន់ក្រុមទំនិញ",
         },
       },
     },
@@ -437,7 +438,7 @@ let brandEditorHidden = true;
 let typeEditorHidden = true;
 let currentAdminLanguage = readStoredPreference(STORAGE_KEYS.language, ["en", "km"], "en");
 let currentSection = "dashboard";
-let sidebarCollapsed = false;
+let sidebarCollapsed = window.matchMedia("(max-width: 1024px)").matches;
 
 function readStoredPreference(key, allowedValues, fallbackValue) {
   try {
@@ -1057,7 +1058,7 @@ function showCatalogQrStatus(message, type = "info") {
   qrStatusTimeoutId = window.setTimeout(() => {
     adminCatalogQrStatus.textContent = DEFAULT_QR_STATUS_TEXT;
     adminCatalogQrStatus.classList.remove("admin-modal__text--error");
-  }, 3200);
+  }, 1500);
 }
 
 async function syncCatalogQrState() {
@@ -1605,11 +1606,11 @@ function renderTypeList() {
   const totalTypes = filteredTypes.length;
 
   if (adminTypeHeading) {
-    adminTypeHeading.textContent = `Item Types (${totalTypes})`;
+    adminTypeHeading.textContent = `Item Group (${totalTypes})`;
   }
 
   if (adminTypeRange) {
-    adminTypeRange.textContent = totalTypes ? `Showing ${totalTypes} item types` : "Showing 0 item types";
+    adminTypeRange.textContent = totalTypes ? `Showing ${totalTypes} item groups` : "Showing 0 item groups";
   }
 
   if (adminTypeList) {
@@ -1904,7 +1905,7 @@ function showStatus(message, type = "info") {
 
   statusTimeoutId = window.setTimeout(() => {
     adminStatus.hidden = true;
-  }, 2800);
+  }, 1500);
 }
 
 function showBrandStatus(message, type = "info") {
@@ -1919,7 +1920,7 @@ function showBrandStatus(message, type = "info") {
 
   brandStatusTimeoutId = window.setTimeout(() => {
     adminBrandStatus.hidden = true;
-  }, 2800);
+  }, 1500);
 }
 
 function showTypeStatus(message, type = "info") {
@@ -1934,7 +1935,7 @@ function showTypeStatus(message, type = "info") {
 
   typeStatusTimeoutId = window.setTimeout(() => {
     adminTypeStatus.hidden = true;
-  }, 2800);
+  }, 1500);
 }
 
 function showImportExportNotice(title, text, type = "success") {
@@ -1946,7 +1947,7 @@ function showImportExportNotice(title, text, type = "success") {
       text,
       icon: type,
       showConfirmButton: !isSuccess,
-      timer: isSuccess ? 1800 : undefined,
+      timer: isSuccess ? 800 : undefined,
       timerProgressBar: isSuccess,
     });
     return;
@@ -2017,7 +2018,7 @@ function buildBrandExportRow(brand) {
 
 function buildTypeExportRow(type) {
   return {
-    "Type Name": type.name,
+    "Name": type.name,
     Note: type.note,
   };
 }
@@ -2200,8 +2201,8 @@ function exportTypesToExcel() {
 
   if (!filteredTypes.length) {
     showImportExportNotice(
-      "No item types to export",
-      "There are no item types matching the current filters.",
+      "No item groups to export",
+      "There are no item groups matching the current filters.",
       "warning",
     );
     return;
@@ -2215,8 +2216,8 @@ function exportTypesToExcel() {
 
   window.XLSX.writeFile(workbook, `agt-item-types-${formatExcelDateToken()}.xlsx`);
   showImportExportNotice(
-    "Item types exported",
-    `Exported ${filteredTypes.length} ${pluralize(filteredTypes.length, "item type")} to Excel.`,
+    "Item groups exported",
+    `Exported ${filteredTypes.length} ${pluralize(filteredTypes.length, "item group")} to Excel.`,
     "success",
   );
 }
@@ -2355,7 +2356,7 @@ async function importTypesFromExcel(file) {
       skippedCount += 1;
 
       if (issues.length < 3) {
-        issues.push(`Row ${index + 2}: type name is required.`);
+        issues.push(`Row ${index + 2}: name is required.`);
       }
 
       return;
@@ -2366,7 +2367,7 @@ async function importTypesFromExcel(file) {
   });
 
   if (!importedCount) {
-    const detail = issues[0] ?? "The workbook did not contain any valid item type rows.";
+    const detail = issues[0] ?? "The workbook did not contain any valid item group rows.";
     throw new Error(detail);
   }
 
@@ -2374,10 +2375,10 @@ async function importTypesFromExcel(file) {
   refreshCurrentSection();
 
   const summary = skippedCount
-    ? `Imported ${importedCount} ${pluralize(importedCount, "item type")} and skipped ${skippedCount} invalid ${pluralize(skippedCount, "row")}.`
-    : `Imported ${importedCount} ${pluralize(importedCount, "item type")} from Excel.`;
+    ? `Imported ${importedCount} ${pluralize(importedCount, "item group")} and skipped ${skippedCount} invalid ${pluralize(skippedCount, "row")}.`
+    : `Imported ${importedCount} ${pluralize(importedCount, "item group")} from Excel.`;
 
-  showImportExportNotice("Item types imported", summary, skippedCount ? "warning" : "success");
+  showImportExportNotice("Item groups imported", summary, skippedCount ? "warning" : "success");
 }
 
 function refreshItemsView() {
@@ -2580,7 +2581,7 @@ function saveProduct(event) {
       text: `Item "${normalizedProduct.code}" has been saved to your catalog.`,
       icon: "success",
       showConfirmButton: false,
-      timer: 1500,
+      timer: 800,
       timerProgressBar: true,
     });
   }
@@ -2639,7 +2640,7 @@ function saveBrand(event) {
       text: `Brand "${normalizedBrand.name}" has been saved to your catalog.`,
       icon: "success",
       showConfirmButton: false,
-      timer: 1500,
+      timer: 800,
       timerProgressBar: true,
     };
 
@@ -2664,7 +2665,7 @@ function saveType(event) {
   const isNewType = !previousName;
 
   if (!normalizedType.name) {
-    showTypeStatus("Type name is required.", "error");
+    showTypeStatus("name is required.", "error");
     return;
   }
 
@@ -2715,11 +2716,11 @@ function saveType(event) {
 
   if (window.Swal?.fire) {
     const swalOptions = {
-      title: "Item type saved",
-      text: `Item type "${formatTypeLabel(normalizedType.name)}" has been saved to your catalog.`,
+      title: "Item group saved",
+      text: `Item group "${formatTypeLabel(normalizedType.name)}" has been saved to your catalog.`,
       icon: "success",
       showConfirmButton: false,
-      timer: 1500,
+      timer: 800,
       timerProgressBar: true,
     };
 
@@ -2815,21 +2816,21 @@ async function deleteSelectedType() {
   const selectedType = getSelectedType();
 
   if (!selectedType) {
-    showTypeStatus("Select an item type first.", "error");
+    showTypeStatus("Select an item group first.", "error");
     return;
   }
 
   const linkedItemCount = getTypeLinkedItemCount(selectedType.name);
 
   if (linkedItemCount > 0) {
-    showTypeStatus("This item type is still used by items and cannot be deleted.", "error");
+    showTypeStatus("This item group is still used by items and cannot be deleted.", "error");
     return;
   }
 
   if (window.Swal?.fire) {
     const result = await window.Swal.fire({
-      title: "Delete item type?",
-      text: `Delete item type "${formatTypeLabel(selectedType.name)}" from the catalog?`,
+      title: "Delete item group?",
+      text: `Delete item group "${formatTypeLabel(selectedType.name)}" from the catalog?`,
       showCancelButton: true,
       confirmButtonText: "Delete",
       cancelButtonText: "Cancel",
@@ -3151,8 +3152,8 @@ adminImportTypesInput?.addEventListener("change", async (event) => {
     await importTypesFromExcel(file);
   } catch (error) {
     showImportExportNotice(
-      "Item types import failed",
-      error instanceof Error ? error.message : "Unable to import item types from this workbook.",
+      "Item groups import failed",
+      error instanceof Error ? error.message : "Unable to import item groups from this workbook.",
       "error",
     );
   }

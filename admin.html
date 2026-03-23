@@ -55,8 +55,8 @@
         <button class="admin-nav__item" type="button" data-admin-section-option="items" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path
-                d="M6 4h12a2 2 0 0 1 2 2v3H4V6a2 2 0 0 1 2-2Zm-2 7h16v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Zm4 2v2h3v-2Zm5 0v2h3v-2Z" />
+              <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+              <path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 0 0 6.622 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.163 3.75A.75.75 0 0 1 10 12h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
             </svg>
           </span>
           <span class="admin-nav__copy">
@@ -66,23 +66,21 @@
         <button class="admin-nav__item" type="button" data-admin-section-option="types" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path
-                d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5Zm4.5.5v3h6V7Zm-2 6v4h10v-4Z" />
+              <path d="M3 4.5C3 3.67 3.67 3 4.5 3h5.36c.4 0 .78.16 1.06.44l2.58 2.58c.28.28.66.44 1.06.44H19.5c.83 0 1.5.67 1.5 1.5v10.5c0 .83-.67 1.5-1.5 1.5H4.5c-.83 0-1.5-.67-1.5-1.5V4.5Z" />
             </svg>
           </span>
           <span class="admin-nav__copy">
-            <strong>Item Types</strong>
+            <strong>Item Group</strong>
           </span>
         </button>
         <button class="admin-nav__item" type="button" data-admin-section-option="brands" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <path
-                d="m11 4 8 8-7.5 7.5a2 2 0 0 1-2.83 0L4.5 15.33a2 2 0 0 1 0-2.83ZM8.5 9A1.5 1.5 0 1 0 8.5 6a1.5 1.5 0 0 0 0 3Z" />
+              <path fill-rule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 0 0 5.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 0 0-2.122-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd" />
             </svg>
           </span>
           <span class="admin-nav__copy">
-            <strong>🏷️ Brands</strong>
+            <strong>🏷️ Item Brands</strong>
           </span>
         </button>
         <button class="admin-nav__item" type="button" data-admin-section-option="settings" aria-pressed="false">
@@ -177,14 +175,14 @@
               <small>All active records in the shared catalog store.</small>
             </article>
             <article class="admin-stat">
-              <span class="admin-stat__label">Total Brands</span>
+              <span class="admin-stat__label">Total Item Brands</span>
               <strong id="adminBrandCount">0</strong>
-              <small>Unique brands currently used across catalog records.</small>
+              <small>Unique item brands currently used across catalog records.</small>
             </article>
             <article class="admin-stat">
-              <span class="admin-stat__label">Total Types</span>
+              <span class="admin-stat__label">Total Item Groups</span>
               <strong id="adminTypeCount">0</strong>
-              <small>Unique items types available in the catalog.</small>
+              <small>Unique items groups available in the catalog.</small>
             </article>
           </div>
 
@@ -200,20 +198,20 @@
 
             <article class="admin-dashboard-card">
               <div>
-                <p class="eyebrow">Item Types</p>
+                <p class="eyebrow">Item Group</p>
                 <h3>Open Type Management</h3>
               </div>
               <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button"
-                data-admin-shortcut="types">Go to Types</button>
+                data-admin-shortcut="types">Go to Item Groups</button>
             </article>
 
             <article class="admin-dashboard-card">
               <div>
-                <p class="eyebrow">Brands</p>
+                <p class="eyebrow">Item Brands</p>
                 <h3>Open Brand Management</h3>
               </div>
               <button class="pagination__button admin-button admin-button--ghost admin-button--compact" type="button"
-                data-admin-shortcut="brands">Go to Brands</button>
+                data-admin-shortcut="brands">Go to Item Brands</button>
             </article>
           </div>
         </section>
@@ -276,9 +274,9 @@
                   </label>
 
                   <label class="admin-list-tools__field" for="adminListBrandFilter">
-                    <span>Filter Brand</span>
+                    <span>Filter Item Brand</span>
                     <select id="adminListBrandFilter">
-                      <option value="all">All brands</option>
+                      <option value="all">All item brands</option>
                     </select>
                   </label>
 
@@ -293,7 +291,7 @@
 
                   <label class="search-field admin-list-search" for="adminSearch">
                     <span>Search Items</span>
-                    <input id="adminSearch" type="search" placeholder="Search by code, brand, title, or series"
+                    <input id="adminSearch" type="search" placeholder="Search by code, item brand, title, or series"
                       autocomplete="off">
                   </label>
                 </div>
@@ -303,10 +301,10 @@
             <div class="admin-list-shell">
               <div class="admin-list-table" aria-label="Items list">
                 <div class="admin-list-table__head" aria-hidden="true">
-                  <span>Code</span>
+                  <span>Item Code</span>
                   <span>Title</span>
-                  <span>Brand</span>
-                  <span>Type</span>
+                  <span>Item Brand</span>
+                  <span>Group</span>
                   <span>Status</span>
                   <span>Series</span>
                   <span>Actions</span>
@@ -346,14 +344,14 @@
             <form id="adminForm" class="admin-form admin-form--compact">
               <div class="admin-form__grid admin-form__grid--editor">
                 <label class="admin-field">
-                  <span>Code</span>
+                  <span>Item Code</span>
                   <input name="code" type="text" required>
                 </label>
 
                 <label class="admin-field">
-                  <span>Brand</span>
+                  <span>Item Brand</span>
                   <select name="brand" id="adminBrandSelect" required>
-                    <option value="">Select brand</option>
+                    <option value="">Select item brand</option>
                   </select>
                 </label>
 
@@ -366,9 +364,9 @@
                 </div>
 
                 <label class="admin-field">
-                  <span>Items Type</span>
-                  <select name="filterType" id="adminTypeSelect">
-                    <option value="sprayer">Sprayer</option>
+                  <span>Item Group</span>
+                  <select name="filterType" id="adminTypeSelect" required>
+                    <option value="">Select item group</option>
                   </select>
                 </label>
 
@@ -478,20 +476,20 @@
           <aside class="admin-panel admin-panel--list" id="adminBrandListPanel">
             <div class="admin-panel__head admin-panel__head--listing">
               <div>
-                <p class="eyebrow">Brands</p>
-                <h3 id="adminBrandHeading">Brands</h3>
+                <p class="eyebrow">Item Brands</p>
+                <h3 id="adminBrandHeading">Item Brands</h3>
               </div>
               <div class="admin-panel__actions">
                 <button
                   class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
-                  id="adminImportBrandsButton" type="button" aria-label="Import brands from Excel"
-                  title="Import brands from Excel">
+                  id="adminImportBrandsButton" type="button" aria-label="Import item brands from Excel"
+                  title="Import item brands from Excel">
                   <img src="Icons/import_to_excel.png" alt="" aria-hidden="true">
                 </button>
                 <button
                   class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
-                  id="adminExportBrandsButton" type="button" aria-label="Export brands to Excel"
-                  title="Export brands to Excel">
+                  id="adminExportBrandsButton" type="button" aria-label="Export item brands to Excel"
+                  title="Export item brands to Excel">
                   <img src="Icons/export_to_excel.png" alt="" aria-hidden="true">
                 </button>
                 <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
@@ -502,22 +500,22 @@
             <div class="admin-list-tools">
               <div class="admin-list-tools__bar admin-list-tools__bar--brands">
                 <div class="admin-list-tools__meta">
-                  <p class="admin-list-tools__summary" id="adminBrandRange">Showing 0 brands</p>
+                  <p class="admin-list-tools__summary" id="adminBrandRange">Showing 0 item brands</p>
                 </div>
 
                 <div class="admin-list-tools__controls admin-list-tools__controls--brands">
                   <label class="admin-list-tools__field" for="adminBrandFilter">
                     <span>Filter</span>
                     <select id="adminBrandFilter">
-                      <option value="all">All brands</option>
+                      <option value="all">All item brands</option>
                       <option value="with-items">With items</option>
                       <option value="no-items">No items</option>
                     </select>
                   </label>
 
                   <label class="search-field admin-list-search" for="adminBrandSearch">
-                    <span>Search Brands</span>
-                    <input id="adminBrandSearch" type="search" placeholder="Search by brand name or note"
+                    <span>Search Item Brands</span>
+                    <input id="adminBrandSearch" type="search" placeholder="Search by item brand name or note"
                       autocomplete="off">
                   </label>
                 </div>
@@ -527,7 +525,7 @@
             <div class="admin-list-shell">
               <div class="admin-list-table admin-list-table--brands" aria-label="Brand listing">
                 <div class="admin-list-table__head admin-list-table__head--brands" aria-hidden="true">
-                  <span>Brand</span>
+                  <span>Item Brand</span>
                   <span>Items</span>
                   <span>Note</span>
                   <span>Actions</span>
@@ -542,8 +540,8 @@
             <div class="admin-panel__head admin-panel__head--form">
               <div>
                 <!-- <p class="eyebrow">Editor</p> -->
-                <h3 id="adminBrandFormHeading">Edit Brand</h3>
-                <p class="admin-panel__copy">Manage brand records for use across the item catalog.</p>
+                <h3 id="adminBrandFormHeading">Edit Item Brand</h3>
+                <p class="admin-panel__copy">Manage item brand records for use across the item catalog.</p>
               </div>
               <span class="stock-pill stock-pill--in" id="adminBrandModeBadge">Editing</span>
             </div>
@@ -555,13 +553,13 @@
                 <div class="admin-form__section-head">
                   <div>
                     <p class="eyebrow">Basics</p>
-                    <h4>Brand Profile</h4>
+                    <h4>Item Brand Profile</h4>
                   </div>
                 </div>
 
                 <div class="admin-form__grid">
                   <label class="admin-field">
-                    <span>Brand Name</span>
+                    <span>Item Brand Name</span>
                     <input name="name" type="text" placeholder="Angkora" required>
                   </label>
 
@@ -580,8 +578,8 @@
 
               <div class="admin-form__actions">
                 <button class="pagination__button admin-button admin-button--ghost" id="adminBrandClearButton"
-                  type="button">Back to Brands</button>
-                <button class="pagination__button admin-button admin-button--primary" type="submit">Save Brand</button>
+                  type="button">Back to Item Brands</button>
+                <button class="pagination__button admin-button admin-button--primary" type="submit">Save Item Brand</button>
               </div>
             </form>
           </section>
@@ -592,20 +590,20 @@
           <aside class="admin-panel admin-panel--list" id="adminTypeListPanel">
             <div class="admin-panel__head admin-panel__head--listing">
               <div>
-                <p class="eyebrow">Item Types</p>
-                <h3 id="adminTypeHeading">Item Types</h3>
+                <p class="eyebrow">Item Group</p>
+                <h3 id="adminTypeHeading">Item Group</h3>
               </div>
               <div class="admin-panel__actions">
                 <button
                   class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
-                  id="adminImportTypesButton" type="button" aria-label="Import item types from Excel"
-                  title="Import item types from Excel">
+                  id="adminImportTypesButton" type="button" aria-label="Import item groups from Excel"
+                  title="Import item groups from Excel">
                   <img src="Icons/import_to_excel.png" alt="" aria-hidden="true">
                 </button>
                 <button
                   class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
-                  id="adminExportTypesButton" type="button" aria-label="Export item types to Excel"
-                  title="Export item types to Excel">
+                  id="adminExportTypesButton" type="button" aria-label="Export item groups to Excel"
+                  title="Export item groups to Excel">
                   <img src="Icons/export_to_excel.png" alt="" aria-hidden="true">
                 </button>
                 <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
@@ -616,22 +614,22 @@
             <div class="admin-list-tools">
               <div class="admin-list-tools__bar admin-list-tools__bar--brands">
                 <div class="admin-list-tools__meta">
-                  <p class="admin-list-tools__summary" id="adminTypeRange">Showing 0 item types</p>
+                  <p class="admin-list-tools__summary" id="adminTypeRange">Showing 0 item groups</p>
                 </div>
 
                 <div class="admin-list-tools__controls admin-list-tools__controls--brands">
                   <label class="admin-list-tools__field" for="adminTypeFilter">
                     <span>Filter</span>
                     <select id="adminTypeFilter">
-                      <option value="all">All item types</option>
+                      <option value="all">All item groups</option>
                       <option value="with-items">With items</option>
                       <option value="no-items">No items</option>
                     </select>
                   </label>
 
                   <label class="search-field admin-list-search" for="adminTypeSearch">
-                    <span>Search Types</span>
-                    <input id="adminTypeSearch" type="search" placeholder="Search by type name or note"
+                    <span>Search Groups</span>
+                    <input id="adminTypeSearch" type="search" placeholder="Search by group name or note"
                       autocomplete="off">
                   </label>
                 </div>
@@ -639,24 +637,24 @@
             </div>
 
             <div class="admin-list-shell">
-              <div class="admin-list-table admin-list-table--brands" aria-label="Item type listing">
+              <div class="admin-list-table admin-list-table--brands" aria-label="Item group listing">
                 <div class="admin-list-table__head admin-list-table__head--brands" aria-hidden="true">
-                  <span>Type</span>
+                  <span>Group</span>
                   <span>Items</span>
                   <span>Note</span>
                   <span>Actions</span>
                 </div>
                 <div class="admin-list" id="adminTypeList"></div>
               </div>
-              <p class="empty-state" id="adminTypeEmpty" hidden>No item types match that search.</p>
+              <p class="empty-state" id="adminTypeEmpty" hidden>No item groups match that search.</p>
             </div>
           </aside>
 
           <section class="admin-panel admin-panel--editor" id="adminTypeEditorPanel" hidden>
             <div class="admin-panel__head admin-panel__head--form">
               <div>
-                <h3 id="adminTypeFormHeading">Edit Item Type</h3>
-                <p class="admin-panel__copy">Manage item type records used by the product catalog and filters.</p>
+                <h3 id="adminTypeFormHeading">Edit Item Group</h3>
+                <p class="admin-panel__copy">Manage item group records used by the product catalog and filters.</p>
               </div>
               <span class="stock-pill stock-pill--in" id="adminTypeModeBadge">Editing</span>
             </div>
@@ -668,13 +666,13 @@
                 <div class="admin-form__section-head">
                   <div>
                     <p class="eyebrow">Basics</p>
-                    <h4>Type Profile</h4>
+                    <h4>Item Group Profile</h4>
                   </div>
                 </div>
 
                 <div class="admin-form__grid">
                   <label class="admin-field">
-                    <span>Type Name</span>
+                    <span>Name</span>
                     <input name="name" type="text" placeholder="sprayer" required>
                   </label>
 
@@ -692,8 +690,8 @@
 
               <div class="admin-form__actions">
                 <button class="pagination__button admin-button admin-button--ghost" id="adminTypeClearButton"
-                  type="button">Back to Types</button>
-                <button class="pagination__button admin-button admin-button--primary" type="submit">Save Type</button>
+                  type="button">Back to Item Groups</button>
+                <button class="pagination__button admin-button admin-button--primary" type="submit">Save Item Group</button>
               </div>
             </form>
           </section>

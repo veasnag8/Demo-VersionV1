@@ -923,6 +923,22 @@ html[lang="km"] #detailMissing {
   font-weight: 700;
 }
 
+.catalog-card__colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.catalog-card__meta span.catalog-card__color-dot {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
 .catalog-card__price-stack {
   display: grid;
   gap: 8px;

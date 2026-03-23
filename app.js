@@ -42,14 +42,14 @@ const translations = {
     languageEnglish: "English",
     languageKhmer: "Khmer",
     searchLabel: "Search catalog",
-    searchPlaceholder: "Search model, brand, capacity, or series",
-    typeLabel: "Items Type",
-    brandLabel: "Brand",
+    searchPlaceholder: "Search model, item brand, capacity, or series",
+    typeLabel: "Item Group",
+    brandLabel: "Item Brand",
     typeAll: "All Items",
     typeFeatured: "Featured",
     typeSprayer: "Sprayers",
     typeBattery: "Battery Units",
-    allBrands: "All Brands",
+    allBrands: "All Item Brands",
     totalRecordsLabel: "Total records",
     matchingLabel: "Matching",
     previous: "Previous",
@@ -77,14 +77,14 @@ const translations = {
     languageEnglish: "English",
     languageKhmer: "ខ្មែរ",
     searchLabel: "ស្វែងរកផលិតផល",
-    searchPlaceholder: "ស្វែងរកម៉ូដែល ម៉ាក ចំណុះ ឬស៊េរី",
-    typeLabel: "ប្រភេទផលិតផល",
-    brandLabel: "ម៉ាក",
+    searchPlaceholder: "ស្វែងរកម៉ូដែល ម៉ាកទំនិញ ចំណុះ ឬស៊េរី",
+    typeLabel: "ក្រុមទំនិញ",
+    brandLabel: "ម៉ាកទំនិញ",
     typeAll: "ទាំងអស់",
     typeFeatured: "ពេញនិយម",
     typeSprayer: "ម៉ាស៊ីនបាញ់",
     typeBattery: "បាតឺរី",
-    allBrands: "ម៉ាកទាំងអស់",
+    allBrands: "ម៉ាកទំនិញទាំងអស់",
     totalRecordsLabel: "ទំនិញសរុប",
     matchingLabel: "ត្រូវនឹង",
     previous: "មុន",
@@ -281,12 +281,21 @@ function getFilteredProducts() {
   return products.filter((product) => matchesType(product) && matchesBrand(product) && matchesSearch(product));
 }
 
-function getCardSeriesText(product, dictionary) {
-  if (currentLanguage === "km") {
-    return product.series;
+function buildCardColorsMarkup(product) {
+  const colors = product.colors ?? [];
+
+  if (colors.length === 0) {
+    return "<span></span>";
   }
 
-  return `${dictionary.series}: ${product.series}`;
+  const dots = colors
+    .map(
+      (color) =>
+        `<span class="catalog-card__color-dot" style="background-color: ${escapeHtml(color.hex)};" title="${escapeHtml(color.label)}"></span>`,
+    )
+    .join("");
+
+  return `<div class="catalog-card__colors">${dots}</div>`;
 }
 
 function buildCatalogStockMarkup(product, dictionary) {
@@ -390,7 +399,7 @@ function buildCatalogCardMarkup(product, dictionary) {
         ${buildCatalogStockMarkup(product, dictionary)}
       </div>
       <div class="catalog-card__meta">
-        <span>${escapeHtml(getCardSeriesText(product, dictionary))}</span>
+        ${buildCardColorsMarkup(product)}
         <div class="catalog-card__price-stack">
           <div class="catalog-card__price-row">
             <small>${escapeHtml(dictionary.depot)}</small>

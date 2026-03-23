@@ -34,7 +34,7 @@
   padding: 20px 16px;
   border-right: 1px solid rgba(16, 63, 54, 0.08);
   background:
-    linear-gradient(180deg, rgba(8, 30, 25, 0.98), rgba(13, 45, 38, 0.98));
+    linear-gradient(180deg, rgba(8, 30, 25, 1), rgba(13, 45, 38, 1));
   color: #effff8;
 }
 
@@ -47,7 +47,9 @@
 }
 
 .admin-sidebar__brand {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 12px;
   padding: 14px;
   border: 1px solid rgba(95, 211, 205, 0.16);
@@ -116,6 +118,8 @@
   grid-template-columns: auto minmax(0, 1fr);
   gap: 10px;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 13px 14px;
   border: 1px solid transparent;
   border-radius: 18px;
@@ -129,9 +133,8 @@
 
 .admin-nav__item:hover,
 .admin-nav__item:focus-visible {
-  transform: translateY(-2px);
-  border-color: rgba(95, 211, 205, 0.18);
-  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(95, 211, 205, 0.22);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .admin-nav__item.is-active {
@@ -268,32 +271,57 @@
   justify-content: center;
   align-self: start;
   justify-self: start;
-  width: 34px;
-  height: 34px;
+  
+  /* Slim Vertical Shell */
+  width: 10px;
+  height: 64px;
   padding: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(16, 63, 54, 0.1);
-  background: rgba(255, 255, 255, 0.96);
+  border-radius: 6px;
+  
+  /* Liquid Glass Finish */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.15));
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  
+  /* High-Contrast Glass Border */
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 0 4px rgba(255, 255, 255, 0.2);
+    
   color: #10342d;
   cursor: pointer;
   font: inherit;
-  box-shadow: 0 8px 18px rgba(16, 63, 54, 0.12);
-  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+  z-index: 20;
   grid-row: 1;
+}
+
+/* Invisible wide hit-area for easier clicking */
+.admin-sidebar-toggle::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -20px;
+  right: -20px;
 }
 
 .admin-sidebar .admin-sidebar-toggle {
   position: absolute;
-  top: 24px;
-  right: -17px;
-  z-index: 5;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -5px; /* Center-aligned on the line */
 }
 
 .admin-sidebar-toggle:hover,
 .admin-sidebar-toggle:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 24px rgba(16, 63, 54, 0.12);
-  background: #ffffff;
+  width: 14px;
+  right: -7px !important;
+  background: var(--brand); /* Turns into brand green handle */
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 25px rgba(36, 170, 134, 0.45);
+  color: #ffffff;
 }
 
 .admin-sidebar-toggle__icon {
@@ -302,31 +330,36 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  border-radius: inherit;
-  background: transparent;
 }
 
 .admin-sidebar-toggle__icon svg {
-  width: 14px;
-  height: 14px;
-  fill: #10342d;
+  width: 10px; /* Smaller icon for slim bar */
+  height: 10px;
+  fill: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.admin-sidebar-toggle:hover .admin-sidebar-toggle__icon svg {
+  transform: scale(1.3);
 }
 
 .admin-sidebar-toggle__label {
   display: none;
 }
 
-.admin-dashboard--collapsed .admin-sidebar-toggle__label {
-  content: "Show menu";
-}
-
 .admin-sidebar-toggle--reveal {
   position: fixed;
-  top: 24px;
+  top: 50%;
+  transform: translateY(-50%);
   left: 0;
   right: auto;
-  border-radius: 50%;
   z-index: 30;
+  border-radius: 0 6px 6px 0;
+}
+
+.admin-sidebar-toggle--reveal:hover {
+  transform: translateY(-50%) scaleX(1.1);
+  padding-left: 4px;
 }
 
 .admin-sidebar-toggle[hidden] {
@@ -2202,8 +2235,9 @@
     width: min(252px, calc(100vw - 48px));
     height: 100dvh;
     display: grid !important;
+    grid-template-rows: auto 1fr auto;
     gap: 14px;
-    padding: 16px 14px;
+    padding: max(16px, env(safe-area-inset-top)) 14px max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
     transform: translateX(0);
     transition: transform 180ms ease, box-shadow 180ms ease;
     box-shadow: 18px 0 40px rgba(5, 18, 16, 0.24);
