@@ -11,9 +11,9 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css?v=20260317-3">
+  <link rel="stylesheet" href="styles.css?v=20260324-5">
 </head>
-<body class="users-page">
+<body class="users-page" data-catalog-view="user">
   <svg class="catalog-symbols" aria-hidden="true" focusable="false">
     <symbol id="icon-sprayer" viewBox="0 0 220 220">
       <rect x="54" y="36" width="112" height="118" rx="34" fill="currentColor"></rect>
@@ -64,6 +64,15 @@
       <rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"></rect>
       <path d="m5 8 7 5 7-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
     </symbol>
+    <symbol id="icon-telegram" viewBox="0 0 24 24">
+      <path d="M21 4 3.8 10.6c-.8.3-.8 1.4.1 1.7l4.4 1.4 1.7 5c.3.8 1.4.9 1.8.1L21 4Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"></path>
+      <path d="m8.4 13.4 9.5-7.3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="icon-link" viewBox="0 0 24 24">
+      <path d="M10.6 13.4 8.5 15.5a3.25 3.25 0 1 1-4.6-4.6L6 8.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"></path>
+      <path d="m13.4 10.6 2.1-2.1a3.25 3.25 0 1 1 4.6 4.6L18 15.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"></path>
+      <path d="m8.5 15.5 7-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"></path>
+    </symbol>
     <symbol id="icon-language" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
       <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
@@ -81,7 +90,7 @@
         <div class="hero__title-block">
           <p class="hero__khmer" lang="km">អង្គរហ្គាដិនធូក</p>
           <p class="hero__english">ANGKOR GARDEN TOOLS</p>
-          <p class="hero__subline">Product detail new version with the same catalog data</p>
+          <p class="hero__subline" id="heroSubline">Product detail new version with the same catalog data</p>
         </div>
 
         <div class="hero__contact" id="contact">
@@ -207,15 +216,15 @@
         <img src="logo.png" alt="" aria-hidden="true">
         <div>
           <p>ANGKOR GARDEN TOOLS</p>
-          <small>Product detail layout . New version</small>
+          <small id="siteFooterText">Product detail layout . New version</small>
         </div>
       </div>
-      <p class="site-footer__page">Same catalog data . Updated header and board</p>
+      <p class="site-footer__page" id="siteFooterPage">Same catalog data . Updated header and board</p>
     </footer>
   </div>
 
   <script src="catalog-data.js"></script>
-  <script src="catalog-store.js"></script>
-  <script src="app.js?v=20260317-2"></script>
+  <script src="catalog-store.js?v=20260324-2"></script>
+  <script src="app.js?v=20260324-4"></script>
 </body>
 </html>

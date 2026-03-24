@@ -13,6 +13,7 @@ const nextPageButton = document.querySelector("#nextPage");
 const emptyStateMessage = document.querySelector("#emptyStateMessage");
 const catalogEyebrow = document.querySelector("#catalogEyebrow");
 const catalogTitle = document.querySelector("#catalogTitle");
+const heroSubline = document.querySelector("#heroSubline");
 const languageLabel = document.querySelector("#languageLabel");
 const languageMenuRoot = document.querySelector("#languageMenuRoot");
 const languageMenuButton = document.querySelector("#languageMenuButton");
@@ -23,7 +24,11 @@ const searchLabel = document.querySelector("#searchLabel");
 const typeFilterLabel = document.querySelector("#typeFilterLabel");
 const brandFilterLabel = document.querySelector("#brandFilterLabel");
 const pagination = document.querySelector(".pagination");
+const heroContact = document.querySelector(".hero__contact");
+const siteFooterText = document.querySelector("#siteFooterText");
+const siteFooterPage = document.querySelector("#siteFooterPage");
 const languageButtons = [...document.querySelectorAll("[data-language-option]")];
+const catalogView = document.body.dataset.catalogView === "depo" ? "depo" : "user";
 
 const STORAGE_KEYS = {
   language: "agt-language",
@@ -36,8 +41,13 @@ const products = (window.catalogStore?.getProducts() ?? (Array.isArray(window.ca
 const translations = {
   en: {
     pageTitle: "Product Price List | Angkor Garden Tools",
+    depoPageTitle: "Depo Price List | Angkor Garden Tools",
     catalogEyebrow: "Angkor Garden Tools",
     catalogTitle: "Product Price List",
+    depoCatalogTitle: "Depo Price List",
+    heroSubline: "Product price list with shared catalog data and quick search",
+    footerText: "Catalog layout . Shared product data for quick browsing",
+    footerPage: "Catalog overview page",
     languageLabel: "Language",
     languageEnglish: "English",
     languageKhmer: "Khmer",
@@ -56,10 +66,11 @@ const translations = {
     next: "Next",
     emptyState: "No catalog items match that search.",
     paginationLabel: "Catalog pagination",
-    code: "Code",
+    code: "Item Code",
     series: "Series",
     depot: "Depo",
     user: "User",
+    price: "Price",
     stockOut: "Out of stock",
     openDetails: "Open product details",
     pageOf(page, total) {
@@ -70,9 +81,15 @@ const translations = {
     },
   },
   km: {
+    depoPageTitle: "តារាងតម្លៃដេប៉ូ | Angkor Garden Tools",
+    depoCatalogTitle: "តារាងតម្លៃដេប៉ូ",
+    price: "តម្លៃ",
     pageTitle: "តារាងតម្លៃផលិតផល | Angkor Garden Tools",
     catalogEyebrow: "អង្គរហ្គាដិនធូក",
     catalogTitle: "តារាងតម្លៃផលិតផល",
+    heroSubline: "តារាងតម្លៃផលិតផល មានទិន្នន័យរួម និងស្វែងរកបានរហ័ស",
+    footerText: "ទំព័រកាតាឡុក . ទិន្នន័យផលិតផលរួម សម្រាប់មើលបានរហ័ស",
+    footerPage: "ទំព័រកាតាឡុកផលិតផល",
     languageLabel: "ភាសា",
     languageEnglish: "English",
     languageKhmer: "ខ្មែរ",
@@ -115,6 +132,22 @@ function getDictionary() {
   return translations[currentLanguage] ?? translations.km;
 }
 
+function isDepoCatalogView() {
+  return catalogView === "depo";
+}
+
+function getCatalogPageTitle(dictionary) {
+  return isDepoCatalogView() ? dictionary.depoPageTitle ?? dictionary.pageTitle : dictionary.pageTitle;
+}
+
+function getCatalogHeading(dictionary) {
+  return isDepoCatalogView() ? dictionary.depoCatalogTitle ?? dictionary.catalogTitle : dictionary.catalogTitle;
+}
+
+function getCatalogUserPriceLabel(dictionary) {
+  return isDepoCatalogView() ? dictionary.user : dictionary.price ?? dictionary.user;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -122,6 +155,82 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function getPublicContactSettings() {
+  return window.catalogStore?.getBannerContactSettings?.()
+    ?? window.catalogStore?.getContactSettings?.()
+    ?? { address: "", contacts: [] };
+}
+
+function getContactVisualType(entry) {
+  return window.catalogStore?.getContactDisplayType?.(entry) ?? entry?.type;
+}
+
+function getContactIconId(entry) {
+  const type = getContactVisualType(entry);
+
+  if (type === "email") {
+    return "icon-mail";
+  }
+
+  if (type === "telegram") {
+    return "icon-telegram";
+  }
+
+  if (type === "link") {
+    return "icon-link";
+  }
+
+  return "icon-phone";
+}
+
+function buildPublicContactHref(entry) {
+  return window.catalogStore?.buildContactHref?.(entry) ?? "";
+}
+
+function buildContactLinkAttributes(href) {
+  if (/^https?:/i.test(href)) {
+    return ' target="_blank" rel="noopener noreferrer"';
+  }
+
+  return "";
+}
+
+function renderHeroContact() {
+  if (!heroContact) {
+    return;
+  }
+
+  const contactSettings = getPublicContactSettings();
+  const addressMarkup = contactSettings.address
+    ? `
+      <p class="hero__address">
+        <svg aria-hidden="true"><use href="#icon-location"></use></svg>
+        <span>${escapeHtml(contactSettings.address)}</span>
+      </p>
+    `
+    : "";
+  const contactItemsMarkup = (contactSettings.contacts ?? [])
+    .map((entry) => {
+      const href = buildPublicContactHref(entry);
+      const label = String(entry.label ?? entry.value ?? "").trim();
+
+      if (!href || !label) {
+      return "";
+      }
+
+      return `
+        <a class="hero__contact-item" href="${escapeHtml(href)}"${buildContactLinkAttributes(href)}>
+          <svg aria-hidden="true"><use href="#${escapeHtml(getContactIconId(entry))}"></use></svg>
+          <span>${escapeHtml(label)}</span>
+        </a>
+      `;
+    })
+    .join("");
+
+  heroContact.innerHTML = `${addressMarkup}${contactItemsMarkup}`;
+  heroContact.hidden = !addressMarkup && !contactItemsMarkup;
 }
 
 function readStoredPreference(key, allowedValues, fallbackValue) {
@@ -317,6 +426,31 @@ function buildCatalogArtworkMarkup(product) {
   `;
 }
 
+function buildCatalogPriceMarkup(product, dictionary) {
+  const priceRows = [];
+
+  if (isDepoCatalogView()) {
+    priceRows.push(`
+          <div class="catalog-card__price-row">
+            <small>${escapeHtml(dictionary.depot)}</small>
+            <strong>${escapeHtml(product.depoPrice)}</strong>
+          </div>`);
+  }
+
+  priceRows.push(`
+          <div class="catalog-card__price-row">
+            <small>${escapeHtml(getCatalogUserPriceLabel(dictionary))}</small>
+            <strong>${escapeHtml(product.userPrice)}</strong>
+          </div>`);
+
+  return `<div class="catalog-card__price-stack">${priceRows.join("")}
+        </div>`;
+}
+
+function buildDetailUrl(code) {
+  return `detail.html?code=${encodeURIComponent(code)}&view=${encodeURIComponent(catalogView)}`;
+}
+
 function hydrateArtworkImages(root = document) {
   const artworkImages = root.querySelectorAll("[data-artwork-image]");
 
@@ -379,7 +513,7 @@ function buildCatalogCardMarkup(product, dictionary) {
   return `
     <a
       class="catalog-card catalog-card--link"
-      href="detail.html?code=${encodeURIComponent(product.code)}"
+      href="${buildDetailUrl(product.code)}"
       aria-label="${escapeHtml(detailLabel)}"
     >
       <div class="catalog-card__head">
@@ -400,16 +534,7 @@ function buildCatalogCardMarkup(product, dictionary) {
       </div>
       <div class="catalog-card__meta">
         ${buildCardColorsMarkup(product)}
-        <div class="catalog-card__price-stack">
-          <div class="catalog-card__price-row">
-            <small>${escapeHtml(dictionary.depot)}</small>
-            <strong>${escapeHtml(product.depoPrice)}</strong>
-          </div>
-          <div class="catalog-card__price-row">
-            <small>${escapeHtml(dictionary.user)}</small>
-            <strong>${escapeHtml(product.userPrice)}</strong>
-          </div>
-        </div>
+        ${buildCatalogPriceMarkup(product, dictionary)}
       </div>
     </a>
   `;
@@ -467,9 +592,12 @@ function applyLanguage() {
   const dictionary = getDictionary();
 
   document.documentElement.lang = currentLanguage;
-  document.title = dictionary.pageTitle;
+  document.title = getCatalogPageTitle(dictionary);
   catalogEyebrow.textContent = dictionary.catalogEyebrow;
-  catalogTitle.textContent = dictionary.catalogTitle;
+  catalogTitle.textContent = getCatalogHeading(dictionary);
+  if (heroSubline) {
+    heroSubline.textContent = dictionary.heroSubline;
+  }
   languageLabel.textContent = dictionary.languageLabel;
   languageMenuButton?.setAttribute("aria-label", dictionary.languageLabel);
   languageMenuButton?.setAttribute("title", dictionary.languageLabel);
@@ -491,6 +619,12 @@ function applyLanguage() {
   nextPageButton.setAttribute("aria-label", dictionary.next);
   nextPageButton.setAttribute("title", dictionary.next);
   pagination.setAttribute("aria-label", dictionary.paginationLabel);
+  if (siteFooterText) {
+    siteFooterText.textContent = dictionary.footerText;
+  }
+  if (siteFooterPage) {
+    siteFooterPage.textContent = dictionary.footerPage;
+  }
   syncLanguageButtons();
   renderCatalog();
 }
@@ -562,4 +696,5 @@ nextPageButton.addEventListener("click", () => {
 
 buildBrandOptions();
 buildTypeOptions();
+renderHeroContact();
 applyLanguage();

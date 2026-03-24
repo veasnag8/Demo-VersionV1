@@ -11,65 +11,69 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="admin.css">
-  <script src="admin-auth.js"></script>
+  <link rel="stylesheet" href="styles.css?v=20260324-5">
+  <link rel="stylesheet" href="admin.css?v=20260324-23">
+  <script src="admin-auth.js?v=20260324-8"></script>
 </head>
 <body class="admin-login-page">
   <main class="admin-login">
     <section class="admin-login__panel">
-      <a class="admin-login__brand" href="users.html#catalog" aria-label="Open user catalog">
+      <a class="admin-login__brand" id="adminLoginBrand" href="users.html#catalog" aria-label="Open user catalog">
         <span class="admin-login__brand-mark">
           <img src="logo.png" alt="Angkor Garden Tools logo">
         </span>
         <span class="admin-login__brand-copy">
-          <strong>Angkor Garden Tools</strong>
-          <small>Admin sign in</small>
+          <strong id="adminLoginBrandTitle">Angkor Garden Tools</strong>
+          <small id="adminLoginBrandSubtitle">Admin sign in</small>
         </span>
       </a>
 
       <form class="admin-login__form" id="adminLoginForm">
         <label class="admin-auth-field">
-          <span>Username</span>
-          <input id="adminLoginUsername" name="username" type="text" autocomplete="username" required>
+          <span id="adminLoginUsernameLabel">Username</span>
+          <input id="adminLoginUsername" name="username" type="text" autocomplete="username" required
+            placeholder="admin">
         </label>
 
         <label class="admin-auth-field">
-          <span>Password</span>
+          <span id="adminLoginPasswordLabel">Password</span>
           <input id="adminLoginPassword" name="password" type="password" autocomplete="current-password" required>
         </label>
 
-        <p class="admin-login__meta">Default username: <strong>admin</strong>.</p>
+        <a class="admin-login__forgot-link" id="adminLoginForgotPasswordLink" href="recovery.html">Forgot Password?</a>
+
         <p class="empty-state admin-login__status" id="adminLoginStatus" hidden></p>
 
-        <button class="pagination__button admin-button admin-button--primary" type="submit">Sign In</button>
+        <button class="pagination__button admin-button admin-button--primary" id="adminLoginSubmitButton"
+          type="submit">Sign In</button>
       </form>
+
     </section>
 
     <section class="admin-login__showcase">
       <div class="admin-login__showcase-copy">
-        <p class="eyebrow">Admin Features</p>
-        <h2>Standard dashboard flow for catalog control.</h2>
-        <p>Sign in, search records, and update item data.</p>
+        <p class="eyebrow" id="adminLoginShowcaseEyebrow">Admin Features</p>
+        <h2 id="adminLoginShowcaseTitle">Standard dashboard flow for catalog control.</h2>
+        <p id="adminLoginShowcaseText">Sign in, search records, and update item data.</p>
       </div>
 
       <div class="admin-login__cards">
         <article class="admin-login__card">
-          <strong>Manage product data</strong>
-          <p>Create, edit, or delete catalog items.</p>
+          <strong id="adminLoginCardOneTitle">Manage product data</strong>
+          <p id="adminLoginCardOneText">Create, edit, or delete catalog items.</p>
         </article>
         <article class="admin-login__card">
-          <strong>Protected browser session</strong>
-          <p>Sign in before opening the dashboard.</p>
+          <strong id="adminLoginCardTwoTitle">Protected browser session</strong>
+          <p id="adminLoginCardTwoText">Sign in before opening the dashboard.</p>
         </article>
         <article class="admin-login__card">
-          <strong>Shared catalog store</strong>
-          <p>Updates sync with the user catalog.</p>
+          <strong id="adminLoginCardThreeTitle">Shared catalog store</strong>
+          <p id="adminLoginCardThreeText">Updates sync with the user catalog.</p>
         </article>
       </div>
     </section>
   </main>
 
-  <script src="admin-login.js"></script>
+  <script src="admin-login.js?v=20260324-6"></script>
 </body>
 </html>

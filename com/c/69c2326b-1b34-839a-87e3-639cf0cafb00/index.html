@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Loading Catalog...</title>
+  <script src="../../../depo-access.js?v=20260324-1"></script>
+  <script>
+    (function () {
+      const targetHref = window.depoAccess?.isValid?.()
+        ? "../../../depo.html#catalog"
+        : "../../../users.html#catalog";
+
+      window.location.replace(targetHref);
+    })();
+  </script>
+</head>
+<body></body>
+</html>

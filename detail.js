@@ -35,6 +35,8 @@ const detailDepotLabel = document.querySelector("#detailDepotLabel");
 const detailDepotPrice = document.querySelector("#detailDepotPrice");
 const detailUserLabel = document.querySelector("#detailUserLabel");
 const detailUserPrice = document.querySelector("#detailUserPrice");
+const detailDepotCard = detailDepotLabel?.closest(".detail-price-card");
+const detailUserCard = detailUserLabel?.closest(".detail-price-card");
 const similarSection = document.querySelector("#similarSection");
 const similarEyebrow = document.querySelector("#similarEyebrow");
 const similarTitle = document.querySelector("#similarTitle");
@@ -42,6 +44,7 @@ const similarCopy = document.querySelector("#similarCopy");
 const similarGrid = document.querySelector("#similarGrid");
 const detailFooterText = document.querySelector("#detailFooterText");
 const detailFooterPage = document.querySelector("#detailFooterPage");
+const heroContact = document.querySelector(".hero__contact");
 const languageButtons = [...document.querySelectorAll("[data-language-option]")];
 
 const STORAGE_KEYS = {
@@ -51,6 +54,7 @@ const STORAGE_KEYS = {
 const products = (window.catalogStore?.getProducts() ?? (Array.isArray(window.catalogProducts) ? window.catalogProducts : []))
   .filter((product) => product.showOnUserPage !== false);
 let currentProduct = getProductFromLocation();
+const detailView = getDetailViewFromLocation();
 
 const detailCopy = {
   en: {
@@ -93,7 +97,7 @@ const translations = {
     languageKhmer: "Khmer",
     back: "Back to catalog",
     backLabel: "Back to product list",
-    code: "Code",
+    code: "Item Code",
     series: "Series",
     type: "Type",
     stock: "Stock",
@@ -101,6 +105,7 @@ const translations = {
     sizes: "Sizes",
     depot: "Depo",
     user: "User",
+    price: "Price",
     typeSprayer: "Sprayer",
     typeBattery: "Battery Unit",
     typeMister: "Mist Unit",
@@ -172,6 +177,26 @@ function getDetailCopy() {
   return detailCopy[currentLanguage] ?? detailCopy.km;
 }
 
+function getDetailViewFromLocation() {
+  return new URLSearchParams(window.location.search).get("view") === "depo" ? "depo" : "user";
+}
+
+function isDepoDetailView() {
+  return detailView === "depo";
+}
+
+function getCatalogHomeUrl() {
+  return isDepoDetailView() ? "com/c/69c2326b-1b34-839a-87e3-639cf0cafb00/" : "users.html#catalog";
+}
+
+function getDetailUserPriceLabel(dictionary) {
+  if (isDepoDetailView()) {
+    return dictionary.user;
+  }
+
+  return dictionary.price ?? (currentLanguage === "km" ? "តម្លៃ" : dictionary.user);
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -179,6 +204,82 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function getPublicContactSettings() {
+  return window.catalogStore?.getBannerContactSettings?.()
+    ?? window.catalogStore?.getContactSettings?.()
+    ?? { address: "", contacts: [] };
+}
+
+function getContactVisualType(entry) {
+  return window.catalogStore?.getContactDisplayType?.(entry) ?? entry?.type;
+}
+
+function getContactIconId(entry) {
+  const type = getContactVisualType(entry);
+
+  if (type === "email") {
+    return "icon-mail";
+  }
+
+  if (type === "telegram") {
+    return "icon-telegram";
+  }
+
+  if (type === "link") {
+    return "icon-link";
+  }
+
+  return "icon-phone";
+}
+
+function buildPublicContactHref(entry) {
+  return window.catalogStore?.buildContactHref?.(entry) ?? "";
+}
+
+function buildContactLinkAttributes(href) {
+  if (/^https?:/i.test(href)) {
+    return ' target="_blank" rel="noopener noreferrer"';
+  }
+
+  return "";
+}
+
+function renderHeroContact() {
+  if (!heroContact) {
+    return;
+  }
+
+  const contactSettings = getPublicContactSettings();
+  const addressMarkup = contactSettings.address
+    ? `
+      <p class="hero__address">
+        <svg aria-hidden="true"><use href="#icon-location"></use></svg>
+        <span>${escapeHtml(contactSettings.address)}</span>
+      </p>
+    `
+    : "";
+  const contactItemsMarkup = (contactSettings.contacts ?? [])
+    .map((entry) => {
+      const href = buildPublicContactHref(entry);
+      const label = String(entry.label ?? entry.value ?? "").trim();
+
+      if (!href || !label) {
+      return "";
+      }
+
+      return `
+        <a class="hero__contact-item" href="${escapeHtml(href)}"${buildContactLinkAttributes(href)}>
+          <svg aria-hidden="true"><use href="#${escapeHtml(getContactIconId(entry))}"></use></svg>
+          <span>${escapeHtml(label)}</span>
+        </a>
+      `;
+    })
+    .join("");
+
+  heroContact.innerHTML = `${addressMarkup}${contactItemsMarkup}`;
+  heroContact.hidden = !addressMarkup && !contactItemsMarkup;
 }
 
 function readStoredPreference(key, allowedValues, fallbackValue) {
@@ -216,7 +317,7 @@ function getProductFromLocation() {
 }
 
 function buildDetailUrl(code) {
-  return `detail.html?code=${encodeURIComponent(code)}`;
+  return `detail.html?code=${encodeURIComponent(code)}&view=${encodeURIComponent(detailView)}`;
 }
 
 function humanizeTypeName(value) {
@@ -242,6 +343,15 @@ function getTypeText(product, dictionary) {
   }
 
   return dictionary.typeSprayer;
+}
+
+function isProductOutOfStock(product) {
+  if (String(product?.status ?? "").toLowerCase() === "inactive") {
+    return true;
+  }
+
+  const stockValue = Number.parseInt(product?.stock, 10);
+  return !Number.isFinite(stockValue) || stockValue <= 0;
 }
 
 function getFallbackOverviewItems(product, dictionary, uiCopy) {
@@ -312,11 +422,32 @@ function buildCatalogArtworkMarkup(product) {
 }
 
 function buildCatalogStockMarkup(product, dictionary) {
-  if (Number(product.stock ?? 0) > 0) {
+  if (!isProductOutOfStock(product)) {
     return "";
   }
 
   return `<span class="catalog-card__stock catalog-card__stock--out">${escapeHtml(dictionary.stockOut)}</span>`;
+}
+
+function buildCatalogPriceMarkup(product, dictionary) {
+  const priceRows = [];
+
+  if (isDepoDetailView()) {
+    priceRows.push(`
+          <div class="catalog-card__price-row">
+            <small>${escapeHtml(dictionary.depot)}</small>
+            <strong>${escapeHtml(product.depoPrice)}</strong>
+          </div>`);
+  }
+
+  priceRows.push(`
+          <div class="catalog-card__price-row">
+            <small>${escapeHtml(getDetailUserPriceLabel(dictionary))}</small>
+            <strong>${escapeHtml(product.userPrice)}</strong>
+          </div>`);
+
+  return `<div class="catalog-card__price-stack">${priceRows.join("")}
+        </div>`;
 }
 
 function buildDetailArtworkMarkup(product) {
@@ -440,16 +571,7 @@ function buildSimilarCardMarkup(product, dictionary) {
       </div>
       <div class="catalog-card__meta">
         ${buildCardColorsMarkup(product)}
-        <div class="catalog-card__price-stack">
-          <div class="catalog-card__price-row">
-            <small>${escapeHtml(dictionary.depot)}</small>
-            <strong>${escapeHtml(product.depoPrice)}</strong>
-          </div>
-          <div class="catalog-card__price-row">
-            <small>${escapeHtml(dictionary.user)}</small>
-            <strong>${escapeHtml(product.userPrice)}</strong>
-          </div>
-        </div>
+        ${buildCatalogPriceMarkup(product, dictionary)}
       </div>
     </a>
   `;
@@ -582,13 +704,19 @@ function renderProduct(product) {
   detailBrand.textContent = product.brand;
   detailVolume.textContent = product.volume;
   if (detailStockPill) {
-    detailStockPill.hidden = Number(product.stock ?? 0) > 0;
+    detailStockPill.hidden = !isProductOutOfStock(product);
     detailStockPill.textContent = dictionary.stockOut;
   }
   detailTitle.textContent = product.title;
   detailDescription.textContent = product.description;
   detailDepotPrice.textContent = product.depoPrice;
   detailUserPrice.textContent = product.userPrice;
+  if (detailDepotCard) {
+    detailDepotCard.hidden = !isDepoDetailView();
+  }
+  if (detailUserCard) {
+    detailUserCard.hidden = false;
+  }
   detailArt.innerHTML = buildDetailArtworkMarkup(product);
   hydrateArtworkImages(detailArt);
   detailOverview.hidden = overviewItems.length === 0;
@@ -646,7 +774,9 @@ function applyLanguage() {
   detailHeading.textContent = dictionary.detailHeading;
   detailCopyEyebrow.textContent = dictionary.detailCopyEyebrow;
   detailBack.textContent = dictionary.back;
+  detailBack.href = getCatalogHomeUrl();
   detailBack.setAttribute("aria-label", dictionary.backLabel);
+  heroLogoLink.href = getCatalogHomeUrl();
   heroLogoLink.setAttribute("aria-label", dictionary.backLabel);
   detailCodeLabel.textContent = dictionary.code;
   detailSpecsLabel.textContent = uiCopy.specs;
@@ -654,7 +784,7 @@ function applyLanguage() {
   detailFeaturesLabel.textContent = uiCopy.featurePoints;
   detailSizesLabel.textContent = uiCopy.sizes;
   detailDepotLabel.textContent = dictionary.depot;
-  detailUserLabel.textContent = dictionary.user;
+  detailUserLabel.textContent = getDetailUserPriceLabel(dictionary);
   similarEyebrow.textContent = dictionary.similarEyebrow;
   similarTitle.textContent = dictionary.similarTitle;
   similarCopy.textContent = dictionary.similarCopy;
@@ -755,4 +885,5 @@ window.addEventListener("popstate", () => {
   renderCurrentProduct();
 });
 
+renderHeroContact();
 applyLanguage();

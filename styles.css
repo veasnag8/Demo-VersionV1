@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800;900&display=swap");
+
 @font-face {
   font-family: "AngkorSovannRound";
   src: url("Fonts/ANGKOR%20SOVANN%20ROUND.TTF") format("truetype");
@@ -67,9 +69,9 @@
   --radius-xl: 32px;
   --radius-lg: 24px;
   --radius-md: 18px;
-  --font-body: "Segoe UI", "Trebuchet MS", sans-serif;
-  --font-ui: "KhJrungThom", "Franklin Gothic Medium", sans-serif;
-  --font-display: "Book Antiqua", "Palatino Linotype", serif;
+  --font-body: "Roboto", "Segoe UI", "Trebuchet MS", sans-serif;
+  --font-ui: "Roboto", "Segoe UI", "Trebuchet MS", sans-serif;
+  --font-display: "Roboto", "Segoe UI", "Trebuchet MS", sans-serif;
   --font-kh-hero: "AngkorSovannNokorreach", "Leelawadee UI", sans-serif;
   --font-kh-display: "KhmerRegular", "Noto Sans Khmer", "Khmer OS Battambang", "Arial", sans-serif;
   --font-kh-ui: "KhmerRegular", "Noto Sans Khmer", "Khmer OS Battambang", "Arial", sans-serif;
@@ -486,7 +488,7 @@ html[lang="km"] .section-heading h2 {
 }
 
 html[lang="km"] .catalog-card__label {
-  font-family: var(--font-kh-ui) !important;
+  font-family: var(--font-body) !important;
 }
 
 html[lang="km"] .catalog-card__body h3,
@@ -750,9 +752,10 @@ html[lang="km"] #detailMissing {
   border-radius: 999px;
   background: rgba(240, 40, 40, 0.08);
   color: var(--danger);
-  font-family: "AngkorSovannPreahVihear", "Leelawadee UI", sans-serif;
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .catalog-card__code {
@@ -1344,6 +1347,10 @@ body.detail-page-view .detail-similar .catalog-card__art::before {
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+}
+
+.stock-pill[hidden] {
+  display: none !important;
 }
 
 .stock-pill--in {

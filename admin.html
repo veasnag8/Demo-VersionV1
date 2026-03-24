@@ -12,9 +12,9 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="shortcut icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css?v=20260317">
-  <link rel="stylesheet" href="admin.css?v=20260317-3">
-  <script src="admin-auth.js"></script>
+  <link rel="stylesheet" href="styles.css?v=20260324-5">
+  <link rel="stylesheet" href="admin.css?v=20260324-25">
+  <script src="admin-auth.js?v=20260324-8"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -83,6 +83,17 @@
             <strong>🏷️ Item Brands</strong>
           </span>
         </button>
+        <button class="admin-nav__item" type="button" data-admin-section-option="contact" aria-pressed="false">
+          <span class="admin-nav__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M6.8 3.8h3.1l1.4 4.5-2.1 1.9a15.5 15.5 0 0 0 4.6 4.6l1.9-2.1 4.5 1.4v3.1c0 .8-.6 1.5-1.4 1.6a16.5 16.5 0 0 1-14.4-14.4c.1-.8.8-1.4 1.6-1.4Z" />
+            </svg>
+          </span>
+          <span class="admin-nav__copy">
+            <strong>Contact</strong>
+          </span>
+        </button>
         <button class="admin-nav__item" type="button" data-admin-section-option="settings" aria-pressed="false">
           <span class="admin-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -138,24 +149,52 @@
             <p class="admin-topbar__action-label">Quick Access</p>
 
             <div class="admin-topbar__action-row">
-              <a class="admin-topbar__catalog-link" href="users.html#catalog" target="_blank" rel="noopener">
-                <span class="admin-topbar__catalog-copy">
-                  <strong>Open User Catalog</strong>
-                  <small>Open in a new tab</small>
-                </span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M14 5h5v5h-2V8.41l-6.29 6.3-1.42-1.42L15.59 7H14zm-9 2h6v2H7v8h8v-4h2v6H5z" />
-                </svg>
-              </a>
+              <div class="admin-topbar__menu" id="adminCatalogMenuRoot" data-admin-quick-menu="catalog">
+                <button class="admin-topbar__catalog-link admin-topbar__menu-trigger" id="adminCatalogMenuButton"
+                  type="button" aria-haspopup="true" aria-expanded="false" aria-controls="adminCatalogMenu"
+                  aria-label="Open catalog options" title="Open catalog options">
+                  <span class="admin-topbar__catalog-copy">
+                    <strong id="adminCatalogMenuTitle">Open Catalog</strong>
+                    <small id="adminCatalogMenuHint">Choose Depo or Users</small>
+                  </span>
+                  <span class="admin-topbar__menu-caret" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="m7 10 5 5 5-5z"></path>
+                    </svg>
+                  </span>
+                </button>
+                <div class="admin-topbar__menu-panel" id="adminCatalogMenu" role="menu" hidden>
+                  <a class="admin-topbar__menu-item" href="users.html#catalog" target="_blank" rel="noopener"
+                    data-admin-catalog-target="user" role="menuitem">Users</a>
+                  <a class="admin-topbar__menu-item" href="com/c/69c2326b-1b34-839a-87e3-639cf0cafb00/" target="_blank" rel="noopener"
+                    data-admin-catalog-target="depo" role="menuitem">Depo</a>
+                </div>
+              </div>
 
-              <button class="admin-topbar__qr-button" id="adminOpenQrButton" type="button"
-                aria-label="Show catalog QR code" title="Show catalog QR code">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M3 3h7v7H3zm2 2v3h3V5zm9-2h7v7h-7zm2 2v3h3V5zM3 14h7v7H3zm2 2v3h3v-3zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h4v4h-2v-2h-2zm-4 4h2v3h-2zm3 1h2v2h-2zm3 0h2v2h-2z" />
-                </svg>
-                <span>QR</span>
-              </button>
+              <div class="admin-topbar__menu admin-topbar__menu--compact" id="adminQrMenuRoot"
+                data-admin-quick-menu="qr">
+                <button class="admin-topbar__qr-button admin-topbar__menu-trigger" id="adminQrMenuButton"
+                  type="button" aria-haspopup="true" aria-expanded="false" aria-controls="adminQrMenu"
+                  aria-label="Choose catalog QR code" title="Choose catalog QR code">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M3 3h7v7H3zm2 2v3h3V5zm9-2h7v7h-7zm2 2v3h3V5zM3 14h7v7H3zm2 2v3h3v-3zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h4v4h-2v-2h-2zm-4 4h2v3h-2zm3 1h2v2h-2zm3 0h2v2h-2z" />
+                  </svg>
+                  <span id="adminQrButtonLabel">QR</span>
+                  <span class="admin-topbar__menu-caret" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="m7 10 5 5 5-5z"></path>
+                    </svg>
+                  </span>
+                </button>
+                <div class="admin-topbar__menu-panel admin-topbar__menu-panel--compact" id="adminQrMenu" role="menu"
+                  hidden>
+                  <button class="admin-topbar__menu-item" type="button" data-admin-qr-target="user"
+                    role="menuitem">Users</button>
+                  <button class="admin-topbar__menu-item" type="button" data-admin-qr-target="depo"
+                    role="menuitem">Depo</button>
+                </div>
+              </div>
             </div>
           </section>
         </div>
@@ -226,6 +265,9 @@
                 <h3 id="adminListHeading">Items</h3>
               </div>
               <div class="admin-panel__actions">
+                <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                  id="adminOpenItemColumnsButton" type="button" aria-haspopup="dialog"
+                  aria-controls="adminItemColumnsModal">Columns</button>
                 <button
                   class="pagination__button admin-button admin-button--ghost admin-button--compact admin-button--icon"
                   id="adminImportItemsButton" type="button" aria-label="Import items from Excel"
@@ -291,7 +333,7 @@
 
                   <label class="search-field admin-list-search" for="adminSearch">
                     <span>Search Items</span>
-                    <input id="adminSearch" type="search" placeholder="Search by code, item brand, title, or series"
+                    <input id="adminSearch" type="search" placeholder="Search by code, item brand, name, or color"
                       autocomplete="off">
                   </label>
                 </div>
@@ -299,16 +341,8 @@
             </div>
 
             <div class="admin-list-shell">
-              <div class="admin-list-table" aria-label="Items list">
-                <div class="admin-list-table__head" aria-hidden="true">
-                  <span>Item Code</span>
-                  <span>Title</span>
-                  <span>Item Brand</span>
-                  <span>Group</span>
-                  <span>Status</span>
-                  <span>Series</span>
-                  <span>Actions</span>
-                </div>
+              <div class="admin-list-table" id="adminItemListTable" aria-label="Items list">
+                <div class="admin-list-table__head" id="adminItemListHead" aria-hidden="true"></div>
                 <div class="admin-list" id="adminList"></div>
               </div>
               <p class="empty-state" id="adminListEmpty" hidden>No items match the current filters.</p>
@@ -380,32 +414,33 @@
                 </label>
 
                 <label class="admin-field">
-                  <span>Similar Group</span>
-                  <select name="similarKey">
-                    <option value="sprayer">Sprayer</option>
-                    <option value="battery">Battery</option>
-                    <option value="mister">Mister</option>
-                  </select>
-                </label>
-
-                <label class="admin-field">
-                  <span>Icon</span>
-                  <select name="icon">
-                    <option value="sprayer">Sprayer</option>
-                    <option value="battery">Battery</option>
-                    <option value="mister">Mister</option>
-                  </select>
-                </label>
-
-                <label class="admin-field">
                   <span>Volume</span>
                   <input name="volume" type="text">
                 </label>
 
-                <label class="admin-field">
-                  <span>Series</span>
-                  <input name="series" type="text">
-                </label>
+                <div class="admin-field admin-field--wide admin-field--color-picker">
+                  <span>Color</span>
+                  <div class="admin-color-picker">
+                    <div class="admin-color-picker__controls">
+                      <select id="adminColorPresetSelect">
+                        <option value="">Choose color</option>
+                      </select>
+                      <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                        id="adminAddColorPresetButton" type="button">Add</button>
+                    </div>
+                    <div class="admin-color-picker__custom">
+                      <input id="adminCustomColorName" type="text" placeholder="Custom color name">
+                      <input id="adminCustomColorHex" type="color" value="#2bb673" aria-label="Choose custom color">
+                      <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+                        id="adminAddCustomColorButton" type="button">Add Custom</button>
+                    </div>
+                    <div class="admin-color-picker__list" id="adminSelectedColors">
+                      <p class="admin-color-picker__empty">No colors selected.</p>
+                    </div>
+                    <textarea name="colors" hidden></textarea>
+                    <small>Choose from saved colors or add your own color name and hex.</small>
+                  </div>
+                </div>
 
                 <label class="admin-field">
                   <span>Depot Price</span>
@@ -425,8 +460,7 @@
 
                 <div class="admin-field admin-field--wide admin-field--image">
                   <span>Image</span>
-                  <input id="adminImageInput" name="image" type="text"
-                    placeholder="images/item.png or https://example.com/item.png">
+                  <input id="adminImageInput" name="image" type="hidden">
                   <div class="admin-image-tools">
                     <input id="adminImageFileInput" type="file" accept="image/*" hidden>
                     <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
@@ -437,16 +471,16 @@
                   <div class="admin-image-preview">
                     <img class="admin-image-preview__image" id="adminImagePreview" alt="Selected product image preview"
                       hidden>
-                    <p class="admin-image-preview__empty" id="adminImagePreviewEmpty">No image selected. The selected
-                      icon will be shown.</p>
+                    <p class="admin-image-preview__empty" id="adminImagePreviewEmpty">No image selected. A matching
+                      system icon will be shown automatically.</p>
                   </div>
-                  <small id="adminImageUploadMeta">Paste an image URL or choose a local file from this device. Local
-                    images stay in this browser.</small>
+                  <small id="adminImageUploadMeta">Choose a local file from this device. Local images stay in this
+                    browser, or leave it empty to use the matching system icon automatically.</small>
                 </div>
 
                 <label class="admin-field admin-field--wide">
-                  <span>Product Title</span>
-                  <input name="title" type="text" placeholder="Khmer product title" required lang="km">
+                  <span>Name</span>
+                  <input name="title" type="text" placeholder="Khmer product name" required lang="km">
                 </label>
 
                 <label class="admin-field admin-field--span-2">
@@ -698,88 +732,315 @@
         </section>
       </section>
       <section class="admin-content-section" id="adminSettingsSection" hidden>
-        <section class="admin-settings">
-          <div class="admin-settings__intro">
-            <p class="eyebrow" id="adminSettingsEyebrow">Preferences</p>
-            <h2 id="adminSettingsTitle">Settings</h2>
-            <p class="admin-settings__text" id="adminSettingsText">Choose the admin interface language and review the
-              current session profile.</p>
-          </div>
+        <section class="admin-settings admin-settings--workspace">
+          <div class="admin-settings__shell">
+            <article class="admin-panel admin-settings__profile-card">
+              <div class="admin-settings__profile-top">
+                <div class="admin-settings__profile-avatar" aria-hidden="true">
+                  <img src="logo.png" alt="">
+                </div>
 
-          <div class="admin-settings__grid">
-            <article class="admin-panel admin-settings__card">
-              <div class="admin-settings__card-head">
-                <p class="eyebrow" id="adminSettingsLanguageEyebrow">Interface</p>
-                <h3 id="adminSettingsLanguageTitle">Language</h3>
-                <p id="adminSettingsLanguageCopy">Switch the admin shell between English and Khmer.</p>
+                <div class="admin-settings__profile-heading">
+                  <p class="eyebrow" id="adminSettingsProfileEyebrow">Account</p>
+                  <p class="admin-settings__profile-panel-title" id="adminSettingsProfileTitle">User Profile</p>
+                </div>
               </div>
 
-              <div class="admin-settings__language-list" role="group" aria-labelledby="adminSettingsLanguageTitle">
-                <button class="admin-settings__language-button" id="adminLanguageEnglishButton"
-                  data-admin-language-option="en" type="button" aria-pressed="true">
-                  <span class="admin-settings__language-copy">
-                    <strong id="adminLanguageEnglishLabel">English</strong>
-                    <small id="adminLanguageEnglishHint">Use English across the admin shell.</small>
-                  </span>
-                  <span class="admin-settings__language-tag">EN</span>
-                </button>
-
-                <button class="admin-settings__language-button" id="adminLanguageKhmerButton"
-                  data-admin-language-option="km" type="button" aria-pressed="false">
-                  <span class="admin-settings__language-copy">
-                    <strong id="adminLanguageKhmerLabel">Khmer</strong>
-                    <small id="adminLanguageKhmerHint">Use Khmer for navigation and settings labels.</small>
-                  </span>
-                  <span class="admin-settings__language-tag">KH</span>
-                </button>
-              </div>
-            </article>
-
-            <article class="admin-panel admin-settings__card">
-              <div class="admin-settings__card-head">
-                <p class="eyebrow" id="adminSettingsProfileEyebrow">Account</p>
-                <h3 id="adminSettingsProfileTitle">User Profile</h3>
-                <p id="adminSettingsProfileCopy">Current signed-in details from this browser session.</p>
-              </div>
-
-              <div class="admin-settings__profile-grid">
-                <article class="admin-settings__profile-item">
-                  <span class="admin-settings__profile-label" id="adminSettingsUsernameLabel">Username</span>
-                  <strong class="admin-settings__profile-value" id="adminSettingsProfileUsername">Administrator</strong>
-                </article>
-
-                <article class="admin-settings__profile-item">
-                  <span class="admin-settings__profile-label" id="adminSettingsRoleLabel">Role</span>
-                  <strong class="admin-settings__profile-value" id="adminSettingsProfileRole">Administrator</strong>
-                </article>
-
-                <article class="admin-settings__profile-item">
-                  <span class="admin-settings__profile-label" id="adminSettingsIssuedLabel">Signed in at</span>
-                  <strong class="admin-settings__profile-value" id="adminSettingsProfileIssuedAt">-</strong>
-                </article>
-
-                <article class="admin-settings__profile-item">
-                  <span class="admin-settings__profile-label" id="adminSettingsExpiresLabel">Session expires</span>
-                  <strong class="admin-settings__profile-value" id="adminSettingsProfileExpiresAt">-</strong>
-                </article>
-
-                <article class="admin-settings__profile-item admin-settings__profile-item--status">
-                  <span class="admin-settings__profile-label" id="adminSettingsStatusLabel">Session status</span>
-                  <strong class="admin-settings__profile-value" id="adminSettingsProfileStatus">Active</strong>
-                </article>
+              <div class="admin-settings__profile-copy-block">
+                <span class="admin-settings__profile-kicker" id="adminSettingsUsernameLabel">Username</span>
+                <h2 class="admin-settings__profile-name" id="adminSettingsProfileUsername">Administrator</h2>
+                <p class="admin-settings__profile-description" id="adminSettingsProfileCopy">Current signed-in details
+                  from this browser session.</p>
               </div>
 
               <div class="admin-settings__actions">
-                <button class="pagination__button admin-button admin-button--ghost admin-button--icon"
+                <button class="pagination__button admin-button admin-button--ghost admin-settings__logout-button"
                   id="adminSettingsLogoutButton" type="button" aria-label="Sign Out" title="Sign Out">
-                  <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" style="width: 20px; height: 20px;">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
                     <path
                       d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
                   </svg>
+                  <span id="adminSettingsLogoutText">Sign Out</span>
                 </button>
               </div>
             </article>
+
+            <article class="admin-panel admin-settings__workspace-card">
+              <div class="admin-settings__intro admin-settings__intro--workspace">
+                <p class="eyebrow" id="adminSettingsEyebrow">Preferences</p>
+                <h2 id="adminSettingsTitle">Settings</h2>
+                <p class="admin-settings__text" id="adminSettingsText">Choose the admin interface language and review
+                  the current session profile.</p>
+              </div>
+
+              <div class="admin-settings__tab-strip" role="tablist" aria-label="Settings sections">
+                <button class="admin-settings__tab admin-settings__tab--active" id="adminSettingsProfileTab"
+                  data-admin-settings-panel-option="profile" type="button" role="tab" aria-selected="true"
+                  aria-controls="adminSettingsProfilePanel">User Profile</button>
+                <button class="admin-settings__tab" id="adminSettingsLanguageTab"
+                  data-admin-settings-panel-option="language" type="button" role="tab" aria-selected="false"
+                  aria-controls="adminSettingsLanguagePanel">Language</button>
+                <button class="admin-settings__tab" id="adminSettingsStatusTab"
+                  data-admin-settings-panel-option="session" type="button" role="tab" aria-selected="false"
+                  aria-controls="adminSettingsSessionPanel">Session Status</button>
+              </div>
+
+              <div class="admin-settings__panel-stack">
+                <section class="admin-settings__surface admin-settings__surface--profile" id="adminSettingsProfilePanel"
+                  data-admin-settings-panel="profile" role="tabpanel" aria-labelledby="adminSettingsProfileTab">
+                  <div class="admin-settings__card-head">
+                    <p class="eyebrow" id="adminSettingsProfilePanelEyebrow">Account</p>
+                    <h3 id="adminSettingsProfilePanelTitle">User Profile</h3>
+                    <p id="adminSettingsProfilePanelCopy">Current signed-in details from this browser session.</p>
+                  </div>
+
+                  <div class="admin-settings__identity-grid">
+                    <article class="admin-settings__session-card">
+                      <span class="admin-settings__session-label" id="adminSettingsUsernameLabelPanel">Username</span>
+                      <strong class="admin-settings__session-value"
+                        id="adminSettingsProfileUsernamePanel">Administrator</strong>
+                    </article>
+
+                    <article class="admin-settings__session-card">
+                      <span class="admin-settings__session-label" id="adminSettingsRoleLabel">Role</span>
+                      <strong class="admin-settings__session-value"
+                        id="adminSettingsProfileRole">Administrator</strong>
+                    </article>
+                  </div>
+
+                  <form class="admin-settings__password-card" id="adminSettingsPasswordForm" autocomplete="off">
+                    <div class="admin-settings__card-head">
+                      <p class="eyebrow" id="adminSettingsPasswordEyebrow">Security</p>
+                      <h3 id="adminSettingsPasswordTitle">Reset Password</h3>
+                      <p id="adminSettingsPasswordCopy">Change the admin password used to sign in on this browser.</p>
+                    </div>
+
+                    <div class="admin-settings__password-grid">
+                      <label class="admin-field admin-field--wide">
+                        <span id="adminSettingsCurrentPasswordLabel">Current Password</span>
+                        <input id="adminSettingsCurrentPasswordInput" type="password" autocomplete="current-password"
+                          placeholder="Enter current password" required>
+                      </label>
+
+                      <label class="admin-field">
+                        <span id="adminSettingsNewPasswordLabel">New Password</span>
+                        <input id="adminSettingsNewPasswordInput" type="password" autocomplete="new-password"
+                          placeholder="Enter new password" minlength="6" required>
+                      </label>
+
+                      <label class="admin-field">
+                        <span id="adminSettingsConfirmPasswordLabel">Confirm New Password</span>
+                        <input id="adminSettingsConfirmPasswordInput" type="password" autocomplete="new-password"
+                          placeholder="Confirm new password" minlength="6" required>
+                      </label>
+                    </div>
+
+                    <div class="admin-settings__password-actions">
+                      <button class="pagination__button admin-button admin-button--primary admin-settings__password-save"
+                        id="adminSettingsPasswordSaveButton" type="submit">Save New Password</button>
+                    </div>
+                  </form>
+
+                  <form class="admin-settings__recovery-card" id="adminSettingsRecoveryEmailForm" autocomplete="off">
+                    <div class="admin-settings__card-head">
+                      <p class="eyebrow" id="adminSettingsRecoveryEyebrow">Recovery</p>
+                      <h3 id="adminSettingsRecoveryTitle">Forgot Password Email</h3>
+                      <p id="adminSettingsRecoveryCopy">Save the recovery email used for OTP and reset-link recovery.</p>
+                    </div>
+
+                    <div class="admin-settings__recovery-grid">
+                      <label class="admin-field admin-field--wide">
+                        <span id="adminSettingsRecoveryEmailLabel">Email</span>
+                        <input id="adminSettingsRecoveryEmailInput" type="email" inputmode="email"
+                          autocomplete="email" placeholder="Enter recovery email" required>
+                      </label>
+                    </div>
+
+                    <div class="admin-settings__password-actions">
+                      <button class="pagination__button admin-button admin-button--primary admin-settings__password-save"
+                        id="adminSettingsRecoveryEmailSaveButton" type="submit">Save Recovery Email</button>
+                    </div>
+                  </form>
+                </section>
+
+                <section class="admin-settings__surface" id="adminSettingsLanguagePanel"
+                  data-admin-settings-panel="language" role="tabpanel" aria-labelledby="adminSettingsLanguageTab" hidden>
+                  <div class="admin-settings__card-head">
+                    <p class="eyebrow" id="adminSettingsLanguageEyebrow">Interface</p>
+                    <h3 id="adminSettingsLanguageTitle">Language</h3>
+                    <p id="adminSettingsLanguageCopy">Switch the admin shell between English and Khmer.</p>
+                  </div>
+
+                  <div class="admin-settings__language-list" role="group" aria-labelledby="adminSettingsLanguageTitle">
+                    <button class="admin-settings__language-button" id="adminLanguageEnglishButton"
+                      data-admin-language-option="en" type="button" aria-pressed="true">
+                      <span class="admin-settings__language-copy">
+                        <strong id="adminLanguageEnglishLabel">English</strong>
+                        <small id="adminLanguageEnglishHint">Use English across the admin shell.</small>
+                      </span>
+                      <span class="admin-settings__language-tag">EN</span>
+                    </button>
+
+                    <button class="admin-settings__language-button" id="adminLanguageKhmerButton"
+                      data-admin-language-option="km" type="button" aria-pressed="false">
+                      <span class="admin-settings__language-copy">
+                        <strong id="adminLanguageKhmerLabel">Khmer</strong>
+                        <small id="adminLanguageKhmerHint">Use Khmer for navigation and settings labels.</small>
+                      </span>
+                      <span class="admin-settings__language-tag">KH</span>
+                    </button>
+                  </div>
+                </section>
+
+                <section class="admin-settings__surface admin-settings__surface--session" id="adminSettingsSessionPanel"
+                  data-admin-settings-panel="session" role="tabpanel" aria-labelledby="adminSettingsStatusTab" hidden>
+                  <div class="admin-settings__card-head">
+                    <p class="eyebrow" id="adminSettingsSessionEyebrow">Session</p>
+                    <h3 id="adminSettingsSessionTitle">Current Browser Session</h3>
+                    <p id="adminSettingsSessionCopy">Your admin access details stay here while the browser session is
+                      active.</p>
+                  </div>
+
+                  <div class="admin-settings__session-grid">
+                    <article class="admin-settings__session-card">
+                      <span class="admin-settings__session-label" id="adminSettingsStatusLabelMirror">Session
+                        status</span>
+                      <strong class="admin-settings__session-value"
+                        id="adminSettingsProfileStatusMirror">Active</strong>
+                    </article>
+
+                    <article class="admin-settings__session-card admin-settings__session-card--wide">
+                      <span class="admin-settings__session-label" id="adminSettingsIssuedLabelMirror">Signed in
+                        at</span>
+                      <strong class="admin-settings__session-value"
+                        id="adminSettingsProfileIssuedAtMirror">-</strong>
+                    </article>
+
+                    <article class="admin-settings__session-card admin-settings__session-card--wide">
+                      <span class="admin-settings__session-label" id="adminSettingsExpiresLabelMirror">Session
+                        expires</span>
+                      <strong class="admin-settings__session-value"
+                        id="adminSettingsProfileExpiresAtMirror">-</strong>
+                    </article>
+                  </div>
+
+                  <form class="admin-settings__timeout-card" id="adminSettingsTimeoutForm">
+                    <div class="admin-settings__card-head">
+                      <p class="eyebrow" id="adminSettingsTimeoutEyebrow">Auto Logout</p>
+                      <h3 id="adminSettingsTimeoutTitle">Session Expire Time</h3>
+                      <p id="adminSettingsTimeoutCopy">If the system is left unused, it will sign out automatically
+                        after the selected time.</p>
+                    </div>
+
+                    <div class="admin-settings__timeout-controls">
+                      <label class="admin-field admin-field--wide">
+                        <span id="adminSettingsTimeoutLabel">Session expires after</span>
+                        <select id="adminSettingsTimeoutInput"></select>
+                      </label>
+
+                      <button class="pagination__button admin-button admin-button--primary admin-settings__timeout-save"
+                        id="adminSettingsTimeoutSaveButton" type="submit">Save Session Time</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </article>
           </div>
+        </section>
+      </section>
+      <section class="admin-content-section" id="adminContactSection" hidden>
+        <section class="admin-settings">
+          <div class="admin-settings__intro">
+            <p class="eyebrow" id="adminContactEyebrow">Contact Banner</p>
+            <h2 id="adminContactTitle">Contact</h2>
+            <p class="admin-settings__text" id="adminContactText">Control the public address, 2 phone lines, email,
+              and optional Telegram usernames.</p>
+          </div>
+
+          <form class="admin-panel admin-settings__card admin-contact-form" id="adminContactForm">
+            <div class="admin-contact-shell">
+              <div class="admin-contact-main">
+                <section class="admin-contact-card admin-contact-card--address">
+                  <div class="admin-settings__card-head">
+                    <p class="eyebrow" id="adminContactAddressEyebrow">Line 1</p>
+                    <h3 id="adminContactAddressTitle">Address</h3>
+                    <p id="adminContactAddressCopy">This is the first public line shown in the contact banner.</p>
+                  </div>
+
+                  <label class="admin-field admin-field--wide">
+                    <span id="adminContactAddressLabel">Address</span>
+                    <textarea id="adminContactAddressInput" rows="4"
+                      placeholder="Input address"></textarea>
+                    <small id="adminContactAddressHint">Leave blank if you do not want to show an address line.</small>
+                  </label>
+                </section>
+
+                <section class="admin-contact-card admin-contact-card--primary">
+                  <div class="admin-settings__card-head">
+                    <p class="eyebrow" id="adminContactPrimaryEyebrow">Phone And Email</p>
+                    <h3 id="adminContactPrimaryTitle">Public Contact Lines</h3>
+                  </div>
+
+                  <div class="admin-contact-classic-stack">
+                    <section class="admin-contact-line-card">
+                      <div class="admin-contact-line-card__head">
+                        <h4 id="adminContactPhoneOneTitle">Phone 1</h4>
+                      </div>
+
+                      <div class="admin-contact-line-grid">
+                        <label class="admin-field admin-field--wide">
+                          <span id="adminContactPhoneOneLabel">Phone Number</span>
+                          <input id="adminContactPhoneOneInput" type="text" inputmode="tel"
+                            placeholder="Input phone number">
+                        </label>
+
+                        <label class="admin-field">
+                          <span id="adminContactPhoneOneTelegramLabel">Link Telegram</span>
+                          <input id="adminContactPhoneOneTelegramInput" type="text" inputmode="text"
+                            placeholder="@username telegram">
+                        </label>
+                      </div>
+                    </section>
+
+                    <section class="admin-contact-line-card">
+                      <div class="admin-contact-line-card__head">
+                        <h4 id="adminContactPhoneTwoTitle">Phone 2</h4>
+                      </div>
+
+                      <div class="admin-contact-line-grid">
+                        <label class="admin-field admin-field--wide">
+                          <span id="adminContactPhoneTwoLabel">Phone Number</span>
+                          <input id="adminContactPhoneTwoInput" type="text" inputmode="tel" placeholder="Input phone number">
+                        </label>
+
+                        <label class="admin-field">
+                          <span id="adminContactPhoneTwoTelegramLabel">Link Telegram</span>
+                          <input id="adminContactPhoneTwoTelegramInput" type="text" inputmode="text"
+                            placeholder="@username telegram">
+                        </label>
+                      </div>
+                    </section>
+
+                    <label class="admin-field admin-field--wide">
+                      <span id="adminContactEmailLabel">Email</span>
+                      <input id="adminContactEmailInput" type="email" inputmode="email"
+                        placeholder="Input email">
+                    </label>
+                  </div>
+                </section>
+              </div>
+
+            </div>
+
+            <p class="admin-status" id="adminContactStatus" hidden></p>
+
+            <div class="admin-panel__actions admin-panel__actions--form">
+              <button class="pagination__button admin-button admin-button--ghost" id="adminContactResetButton"
+                type="button">Reset</button>
+              <button class="pagination__button admin-button admin-button--primary" id="adminContactSaveButton"
+                type="submit">Save Contact</button>
+            </div>
+          </form>
         </section>
       </section>
     </main>
@@ -828,10 +1089,56 @@
     </section>
   </div>
 
+  <div class="admin-modal" id="adminItemColumnsModal" hidden>
+    <div class="admin-modal__backdrop" data-admin-close="item-columns"></div>
+    <section class="admin-modal__dialog admin-modal__dialog--columns" role="dialog" aria-modal="true"
+      aria-labelledby="adminItemColumnsModalTitle">
+      <div class="admin-modal__head">
+        <div>
+          <h2 id="adminItemColumnsModalTitle" style="margin-top: 8px;">Choose Visible Columns</h2>
+        </div>
+        <button class="admin-modal__close" id="adminCloseItemColumnsButton" type="button"
+          aria-label="Close columns popup">X</button>
+      </div>
+
+      <div class="admin-modal__body admin-modal__body--columns">
+        <section class="admin-column-config admin-column-config--modal" aria-label="Column configuration">
+          <div class="admin-column-config__head">
+            <div>
+              <p class="eyebrow">Column Configuration</p>
+              <h4>Choose Visible Columns</h4>
+              <p>Move columns between Available Columns and Selected Columns for the items list.</p>
+            </div>
+            <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
+              id="adminResetItemColumnsButton" type="button">Reset Columns</button>
+          </div>
+
+          <div class="admin-column-config__grid">
+            <section class="admin-column-config__panel">
+              <div class="admin-column-config__panel-head">
+                <h5>Available Columns</h5>
+                <small>Hidden from the items list</small>
+              </div>
+              <div class="admin-column-config__list" id="adminAvailableColumns"></div>
+            </section>
+
+            <section class="admin-column-config__panel">
+              <div class="admin-column-config__panel-head">
+                <h5>Selected Columns</h5>
+                <small>Visible in the items list</small>
+              </div>
+              <div class="admin-column-config__list" id="adminSelectedColumns"></div>
+            </section>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
   <script src="catalog-data.js"></script>
-  <script src="catalog-store.js"></script>
+  <script src="catalog-store.js?v=20260324-2"></script>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="admin.js?v=20260317-3"></script>
+  <script src="admin.js?v=20260324-23"></script>
 </body>
 
 </html>

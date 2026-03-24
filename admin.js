@@ -16,10 +16,17 @@ const adminSidebarBrandSubline = document.querySelector(".admin-sidebar__brand-c
 const adminSidebarSessionLabel = document.querySelector(".admin-sidebar__label");
 const adminSidebarSessionHint = document.querySelector(".admin-sidebar__hint");
 const adminQuickAccessLabel = document.querySelector(".admin-topbar__action-label");
-const adminCatalogLink = document.querySelector(".admin-topbar__catalog-link");
-const adminCatalogLinkTitle = adminCatalogLink?.querySelector("strong");
-const adminCatalogLinkHint = adminCatalogLink?.querySelector("small");
-const adminQrButtonLabel = document.querySelector(".admin-topbar__qr-button span");
+const adminCatalogMenuRoot = document.querySelector("#adminCatalogMenuRoot");
+const adminCatalogMenuButton = document.querySelector("#adminCatalogMenuButton");
+const adminCatalogMenu = document.querySelector("#adminCatalogMenu");
+const adminCatalogMenuTitle = document.querySelector("#adminCatalogMenuTitle");
+const adminCatalogMenuHint = document.querySelector("#adminCatalogMenuHint");
+const adminCatalogMenuItems = [...document.querySelectorAll("[data-admin-catalog-target]")];
+const adminQrMenuRoot = document.querySelector("#adminQrMenuRoot");
+const adminQrMenuButton = document.querySelector("#adminQrMenuButton");
+const adminQrMenu = document.querySelector("#adminQrMenu");
+const adminQrButtonLabel = document.querySelector("#adminQrButtonLabel");
+const adminQrMenuItems = [...document.querySelectorAll("[data-admin-qr-target]")];
 const adminOverviewEyebrow = document.querySelector(".admin-overview__intro .eyebrow");
 const adminOverviewTitle = document.querySelector(".admin-overview__intro h2");
 const adminStats = [...document.querySelectorAll(".admin-stat")];
@@ -32,17 +39,24 @@ const adminItemsSection = document.querySelector("#adminItemsSection");
 const adminBrandsSection = document.querySelector("#adminBrandsSection");
 const adminTypesSection = document.querySelector("#adminTypesSection");
 const adminSettingsSection = document.querySelector("#adminSettingsSection");
+const adminContactSection = document.querySelector("#adminContactSection");
 const adminControls = document.querySelector("#adminControls");
 const adminWorkspace = document.querySelector("#adminWorkspace");
 const adminListPanel = document.querySelector("#adminListPanel");
 const adminEditorPanel = document.querySelector("#adminEditorPanel");
 const adminListHeading = document.querySelector("#adminListHeading");
+const adminItemListTable = document.querySelector("#adminItemListTable");
+const adminItemListHead = document.querySelector("#adminItemListHead");
 const adminList = document.querySelector("#adminList");
 const adminListEmpty = document.querySelector("#adminListEmpty");
 const adminListRange = document.querySelector("#adminListRange");
 const adminListPageSize = document.querySelector("#adminListPageSize");
 const adminListBrandFilter = document.querySelector("#adminListBrandFilter");
 let adminListStatusFilter = document.querySelector("#adminListStatusFilter");
+const adminOpenItemColumnsButton = document.querySelector("#adminOpenItemColumnsButton");
+const adminAvailableColumns = document.querySelector("#adminAvailableColumns");
+const adminSelectedColumns = document.querySelector("#adminSelectedColumns");
+const adminResetItemColumnsButton = document.querySelector("#adminResetItemColumnsButton");
 const adminPrevPageButton = document.querySelector("#adminPrevPageButton");
 const adminNextPageButton = document.querySelector("#adminNextPageButton");
 const adminPageStatus = document.querySelector("#adminPageStatus");
@@ -50,6 +64,12 @@ const adminFormHeading = document.querySelector("#adminFormHeading");
 const adminModeBadge = document.querySelector("#adminModeBadge");
 const adminStatus = document.querySelector("#adminStatus");
 const adminForm = document.querySelector("#adminForm");
+const adminColorPresetSelect = document.querySelector("#adminColorPresetSelect");
+const adminAddColorPresetButton = document.querySelector("#adminAddColorPresetButton");
+const adminCustomColorName = document.querySelector("#adminCustomColorName");
+const adminCustomColorHex = document.querySelector("#adminCustomColorHex");
+const adminAddCustomColorButton = document.querySelector("#adminAddCustomColorButton");
+const adminSelectedColors = document.querySelector("#adminSelectedColors");
 const adminImageInput = document.querySelector("#adminImageInput");
 const adminImageFileInput = document.querySelector("#adminImageFileInput");
 const adminImageUploadButton = document.querySelector("#adminImageUploadButton");
@@ -119,6 +139,28 @@ const adminLanguageKhmerHint = document.querySelector("#adminLanguageKhmerHint")
 const adminSettingsProfileEyebrow = document.querySelector("#adminSettingsProfileEyebrow");
 const adminSettingsProfileTitle = document.querySelector("#adminSettingsProfileTitle");
 const adminSettingsProfileCopy = document.querySelector("#adminSettingsProfileCopy");
+const adminSettingsProfileInitial = document.querySelector("#adminSettingsProfileInitial");
+const adminSettingsPanelButtons = [...document.querySelectorAll("[data-admin-settings-panel-option]")];
+const adminSettingsPanels = [...document.querySelectorAll("[data-admin-settings-panel]")];
+const adminSettingsProfileTab = document.querySelector("#adminSettingsProfileTab");
+const adminSettingsLanguageTab = document.querySelector("#adminSettingsLanguageTab");
+const adminSettingsStatusTab = document.querySelector("#adminSettingsStatusTab");
+const adminSettingsProfilePanelEyebrow = document.querySelector("#adminSettingsProfilePanelEyebrow");
+const adminSettingsProfilePanelTitle = document.querySelector("#adminSettingsProfilePanelTitle");
+const adminSettingsProfilePanelCopy = document.querySelector("#adminSettingsProfilePanelCopy");
+const adminSettingsUsernameLabelPanel = document.querySelector("#adminSettingsUsernameLabelPanel");
+const adminSettingsProfileUsernamePanel = document.querySelector("#adminSettingsProfileUsernamePanel");
+const adminSettingsSessionEyebrow = document.querySelector("#adminSettingsSessionEyebrow");
+const adminSettingsSessionTitle = document.querySelector("#adminSettingsSessionTitle");
+const adminSettingsSessionCopy = document.querySelector("#adminSettingsSessionCopy");
+const adminSettingsTimeoutForm = document.querySelector("#adminSettingsTimeoutForm");
+const adminSettingsTimeoutEyebrow = document.querySelector("#adminSettingsTimeoutEyebrow");
+const adminSettingsTimeoutTitle = document.querySelector("#adminSettingsTimeoutTitle");
+const adminSettingsTimeoutCopy = document.querySelector("#adminSettingsTimeoutCopy");
+const adminSettingsTimeoutLabel = document.querySelector("#adminSettingsTimeoutLabel");
+const adminSettingsTimeoutInput = document.querySelector("#adminSettingsTimeoutInput");
+const adminSettingsTimeoutSaveButton = document.querySelector("#adminSettingsTimeoutSaveButton");
+const adminSettingsLogoutText = document.querySelector("#adminSettingsLogoutText");
 const adminSettingsUsernameLabel = document.querySelector("#adminSettingsUsernameLabel");
 const adminSettingsRoleLabel = document.querySelector("#adminSettingsRoleLabel");
 const adminSettingsIssuedLabel = document.querySelector("#adminSettingsIssuedLabel");
@@ -126,12 +168,69 @@ const adminSettingsExpiresLabel = document.querySelector("#adminSettingsExpiresL
 const adminSettingsStatusLabel = document.querySelector("#adminSettingsStatusLabel");
 const adminSettingsProfileUsername = document.querySelector("#adminSettingsProfileUsername");
 const adminSettingsProfileRole = document.querySelector("#adminSettingsProfileRole");
+const adminSettingsPasswordForm = document.querySelector("#adminSettingsPasswordForm");
+const adminSettingsPasswordEyebrow = document.querySelector("#adminSettingsPasswordEyebrow");
+const adminSettingsPasswordTitle = document.querySelector("#adminSettingsPasswordTitle");
+const adminSettingsPasswordCopy = document.querySelector("#adminSettingsPasswordCopy");
+const adminSettingsCurrentPasswordLabel = document.querySelector("#adminSettingsCurrentPasswordLabel");
+const adminSettingsCurrentPasswordInput = document.querySelector("#adminSettingsCurrentPasswordInput");
+const adminSettingsNewPasswordLabel = document.querySelector("#adminSettingsNewPasswordLabel");
+const adminSettingsNewPasswordInput = document.querySelector("#adminSettingsNewPasswordInput");
+const adminSettingsConfirmPasswordLabel = document.querySelector("#adminSettingsConfirmPasswordLabel");
+const adminSettingsConfirmPasswordInput = document.querySelector("#adminSettingsConfirmPasswordInput");
+const adminSettingsPasswordSaveButton = document.querySelector("#adminSettingsPasswordSaveButton");
+const adminSettingsRecoveryEmailForm = document.querySelector("#adminSettingsRecoveryEmailForm");
+const adminSettingsRecoveryEyebrow = document.querySelector("#adminSettingsRecoveryEyebrow");
+const adminSettingsRecoveryTitle = document.querySelector("#adminSettingsRecoveryTitle");
+const adminSettingsRecoveryCopy = document.querySelector("#adminSettingsRecoveryCopy");
+const adminSettingsRecoveryEmailLabel = document.querySelector("#adminSettingsRecoveryEmailLabel");
+const adminSettingsRecoveryEmailInput = document.querySelector("#adminSettingsRecoveryEmailInput");
+const adminSettingsRecoveryEmailSaveButton = document.querySelector("#adminSettingsRecoveryEmailSaveButton");
 const adminSettingsProfileIssuedAt = document.querySelector("#adminSettingsProfileIssuedAt");
 const adminSettingsProfileExpiresAt = document.querySelector("#adminSettingsProfileExpiresAt");
 const adminSettingsProfileStatus = document.querySelector("#adminSettingsProfileStatus");
-const adminOpenQrButton = document.querySelector("#adminOpenQrButton");
+const adminSettingsStatusLabelMirror = document.querySelector("#adminSettingsStatusLabelMirror");
+const adminSettingsIssuedLabelMirror = document.querySelector("#adminSettingsIssuedLabelMirror");
+const adminSettingsExpiresLabelMirror = document.querySelector("#adminSettingsExpiresLabelMirror");
+const adminSettingsProfileStatusMirror = document.querySelector("#adminSettingsProfileStatusMirror");
+const adminSettingsProfileIssuedAtMirror = document.querySelector("#adminSettingsProfileIssuedAtMirror");
+const adminSettingsProfileExpiresAtMirror = document.querySelector("#adminSettingsProfileExpiresAtMirror");
+const adminContactForm = document.querySelector("#adminContactForm");
+const adminContactEyebrow = document.querySelector("#adminContactEyebrow");
+const adminContactTitle = document.querySelector("#adminContactTitle");
+const adminContactText = document.querySelector("#adminContactText");
+const adminContactAddressEyebrow = document.querySelector("#adminContactAddressEyebrow");
+const adminContactAddressTitle = document.querySelector("#adminContactAddressTitle");
+const adminContactAddressCopy = document.querySelector("#adminContactAddressCopy");
+const adminContactAddressLabel = document.querySelector("#adminContactAddressLabel");
+const adminContactAddressInput = document.querySelector("#adminContactAddressInput");
+const adminContactAddressHint = document.querySelector("#adminContactAddressHint");
+const adminContactPrimaryEyebrow = document.querySelector("#adminContactPrimaryEyebrow");
+const adminContactPrimaryTitle = document.querySelector("#adminContactPrimaryTitle");
+const adminContactPrimaryCopy = document.querySelector("#adminContactPrimaryCopy");
+const adminContactPhoneOneTitle = document.querySelector("#adminContactPhoneOneTitle");
+const adminContactPhoneOneCopy = document.querySelector("#adminContactPhoneOneCopy");
+const adminContactPhoneOneLabel = document.querySelector("#adminContactPhoneOneLabel");
+const adminContactPhoneOneInput = document.querySelector("#adminContactPhoneOneInput");
+const adminContactPhoneOneTelegramLabel = document.querySelector("#adminContactPhoneOneTelegramLabel");
+const adminContactPhoneOneTelegramInput = document.querySelector("#adminContactPhoneOneTelegramInput");
+const adminContactPhoneTwoTitle = document.querySelector("#adminContactPhoneTwoTitle");
+const adminContactPhoneTwoCopy = document.querySelector("#adminContactPhoneTwoCopy");
+const adminContactPhoneTwoLabel = document.querySelector("#adminContactPhoneTwoLabel");
+const adminContactPhoneTwoInput = document.querySelector("#adminContactPhoneTwoInput");
+const adminContactPhoneTwoTelegramLabel = document.querySelector("#adminContactPhoneTwoTelegramLabel");
+const adminContactPhoneTwoTelegramInput = document.querySelector("#adminContactPhoneTwoTelegramInput");
+const adminContactEmailLabel = document.querySelector("#adminContactEmailLabel");
+const adminContactEmailInput = document.querySelector("#adminContactEmailInput");
+const adminContactPrimaryHint = document.querySelector("#adminContactPrimaryHint");
+const adminContactResetButton = document.querySelector("#adminContactResetButton");
+const adminContactSaveButton = document.querySelector("#adminContactSaveButton");
+const adminContactStatus = document.querySelector("#adminContactStatus");
 const adminQrModal = document.querySelector("#adminQrModal");
+const adminQrModalTitle = document.querySelector("#adminQrModalTitle");
 const adminCloseQrButton = document.querySelector("#adminCloseQrButton");
+const adminItemColumnsModal = document.querySelector("#adminItemColumnsModal");
+const adminCloseItemColumnsButton = document.querySelector("#adminCloseItemColumnsButton");
 const adminCopyQrLinkButton = document.querySelector("#adminCopyQrLinkButton");
 const adminSaveQrButton = document.querySelector("#adminSaveQrButton");
 const adminCatalogQrImage = document.querySelector("#adminCatalogQrImage");
@@ -139,7 +238,33 @@ const adminCatalogQrStatus = document.querySelector("#adminCatalogQrStatus");
 
 const store = window.catalogStore;
 const DEFAULT_LIST_PAGE_SIZE = 30;
-const DEFAULT_QR_STATUS_TEXT = "Scan this QR code to open the customer catalog page.";
+const CATALOG_TARGETS = Object.freeze({
+  user: {
+    href: "users.html#catalog",
+    label: "Users",
+    downloadName: "users-catalog-qr-card.png",
+  },
+  depo: {
+    href: "depo.html#catalog",
+    label: "Depo",
+    downloadName: "depo-catalog-qr-card.png",
+  },
+});
+const DEFAULT_ITEM_COLOR_OPTIONS = Object.freeze([
+  { label: "Black", hex: "#111111" },
+  { label: "Blue", hex: "#2563eb" },
+  { label: "Brown", hex: "#8b5e3c" },
+  { label: "Gold", hex: "#d4a017" },
+  { label: "Gray", hex: "#6b7280" },
+  { label: "Green", hex: "#2bb673" },
+  { label: "Orange", hex: "#f97316" },
+  { label: "Pink", hex: "#ec4899" },
+  { label: "Purple", hex: "#7c3aed" },
+  { label: "Red", hex: "#ef4444" },
+  { label: "Silver", hex: "#b8c0cc" },
+  { label: "White", hex: "#f8fafc" },
+  { label: "Yellow", hex: "#facc15" },
+]);
 const EXCEL_ITEMS_SHEET_NAME = "Items";
 const EXCEL_BRANDS_SHEET_NAME = "Item Brands";
 const EXCEL_TYPES_SHEET_NAME = "Item Groups";
@@ -149,17 +274,18 @@ const ITEM_EXPORT_COLUMNS = [
   { header: "Item Group", width: 16 },
   { header: "Status", width: 12 },
   { header: "Visible On User Page", width: 18 },
-  { header: "Similar Group", width: 16 },
-  { header: "Icon", width: 14 },
   { header: "Image", width: 36 },
   { header: "Volume", width: 14 },
-  { header: "Series", width: 18 },
+  { header: "Colors", width: 24 },
   { header: "Depot Price", width: 14 },
   { header: "User Price", width: 14 },
-  { header: "Product Title", width: 34 },
+  { header: "Name", width: 34 },
   { header: "Description", width: 44 },
   { header: "Sizes", width: 24 },
 ];
+const AUTO_IMAGE_FALLBACK_TEXT = "No image selected. A matching system icon will be shown automatically.";
+const AUTO_IMAGE_UPLOAD_META_TEXT =
+  "Choose a local file from this device. Local images stay in this browser, or leave it empty to use the matching system icon automatically.";
 const BRAND_EXPORT_COLUMNS = [
   { header: "Brand Name", width: 22 },
   { header: "Note", width: 42 },
@@ -179,9 +305,10 @@ const ITEM_IMPORT_ALIASES = {
   image: ["image url", "image", "photo", "picture"],
   volume: ["volume", "capacity"],
   series: ["series"],
+  colors: ["colors", "color"],
   depoPrice: ["depot price", "depo price"],
   userPrice: ["user price", "retail price"],
-  title: ["product title", "title"],
+  title: ["name", "product title", "title"],
   description: ["description"],
   sizes: ["sizes", "size"],
 };
@@ -195,8 +322,113 @@ const TYPE_IMPORT_ALIASES = {
 };
 const STORAGE_KEYS = {
   language: "agt-admin-language",
+  itemListColumns: "agt-admin-item-list-columns",
 };
-const AVAILABLE_SECTIONS = new Set(["dashboard", "items", "types", "brands", "settings"]);
+const ITEM_LIST_COLUMNS = Object.freeze([
+  {
+    key: "code",
+    label: "Item Code",
+    width: "150px",
+    minWidth: 150,
+    required: true,
+    defaultVisible: true,
+  },
+  {
+    key: "image",
+    label: "Image",
+    width: "92px",
+    minWidth: 92,
+    defaultVisible: true,
+  },
+  {
+    key: "title",
+    label: "Name",
+    width: "minmax(280px, 1.95fr)",
+    minWidth: 280,
+    defaultVisible: true,
+  },
+  {
+    key: "brand",
+    label: "Item Brand",
+    width: "minmax(108px, 0.8fr)",
+    minWidth: 128,
+    defaultVisible: true,
+  },
+  {
+    key: "visibility",
+    label: "Visibility",
+    width: "108px",
+    minWidth: 112,
+    defaultVisible: false,
+  },
+  {
+    key: "group",
+    label: "Item Group",
+    width: "minmax(100px, 0.76fr)",
+    minWidth: 120,
+    defaultVisible: true,
+  },
+  {
+    key: "status",
+    label: "Status",
+    width: "minmax(96px, 0.72fr)",
+    minWidth: 112,
+    defaultVisible: true,
+  },
+  {
+    key: "volume",
+    label: "Volume",
+    width: "100px",
+    minWidth: 104,
+    defaultVisible: false,
+  },
+  {
+    key: "color",
+    label: "Color",
+    width: "minmax(106px, 0.8fr)",
+    minWidth: 128,
+    defaultVisible: true,
+  },
+  {
+    key: "depoPrice",
+    label: "Depot Price",
+    width: "118px",
+    minWidth: 122,
+    defaultVisible: false,
+  },
+  {
+    key: "userPrice",
+    label: "User Price",
+    width: "118px",
+    minWidth: 122,
+    defaultVisible: false,
+  },
+  {
+    key: "description",
+    label: "Description",
+    width: "minmax(220px, 1.4fr)",
+    minWidth: 220,
+    defaultVisible: false,
+  },
+  {
+    key: "sizes",
+    label: "Sizes",
+    width: "minmax(140px, 0.95fr)",
+    minWidth: 148,
+    defaultVisible: false,
+  },
+  {
+    key: "actions",
+    label: "Actions",
+    width: "auto",
+    minWidth: 126,
+    required: true,
+    defaultVisible: true,
+  },
+]);
+const LEGACY_DEFAULT_ITEM_LIST_COLUMNS = Object.freeze(["code", "title", "brand", "group", "status", "color", "actions"]);
+const DEPO_ACCESS_TTL_MS = 2 * 60 * 60 * 1000;
+const AVAILABLE_SECTIONS = new Set(["dashboard", "items", "types", "brands", "contact", "settings"]);
 const ADMIN_UI = {
   en: {
     locale: "en-US",
@@ -206,7 +438,9 @@ const ADMIN_UI = {
       items: "Items",
       types: "Item Group",
       brands: "Item Brands",
+      contact: "Contact",
       settings: "Settings",
+
     },
     session: {
       label: "Signed In",
@@ -222,10 +456,11 @@ const ADMIN_UI = {
     },
     quickAccess: {
       label: "Quick Access",
-      openCatalog: "Open User Catalog",
-      openCatalogHint: "Open in a new tab",
+      openCatalog: "Open Catalog",
+      openCatalogHint: "Choose Depo or Users",
+      openCatalogAria: "Open catalog options",
       qr: "QR",
-      qrAria: "Show catalog QR code",
+      qrAria: "Choose catalog QR code",
     },
     sections: {
       dashboard: {
@@ -248,6 +483,12 @@ const ADMIN_UI = {
         title: "Item Brands",
         text: "Manage item brand records, keep the catalog naming consistent, and prepare item brands before assigning them to items.",
       },
+      contact: {
+        eyebrow: "Public Contact",
+        title: "Contact",
+        text: "Control the address and contact banner shown on the users, depo, and detail pages.",
+      },
+
       settings: {
         eyebrow: "Preferences",
         title: "Settings",
@@ -312,6 +553,38 @@ const ADMIN_UI = {
       expiresAt: "Session expires",
       status: "Session status",
     },
+    contact: {
+      eyebrow: "Public Contact",
+      title: "Contact",
+      text: "Control the public address, 2 phone lines, email, and optional Link Telegrams.",
+      addressEyebrow: "Line 1",
+      addressTitle: "Address",
+      addressCopy: "This is the first public line shown in the contact banner.",
+      addressLabel: "Address",
+      addressHint: "Leave blank if you do not want to show an address line.",
+      primaryEyebrow: "Phone And Email",
+      primaryTitle: "Public Contact Lines",
+      primaryCopy: "Add phone and email lines under the address. Telegram is optional for each phone line.",
+      phoneOneTitle: "Phone 1",
+      phoneOneCopy: "Leave Telegram blank to use the phone icon and call link.",
+      phoneOneLabel: "Phone Number",
+      phoneOneTelegramLabel: "Link Telegram",
+      phoneTwoTitle: "Phone 2",
+      phoneTwoCopy: "If Telegram is filled, this line opens Telegram chat instead of calling.",
+      phoneTwoLabel: "Phone Number",
+      phoneTwoTelegramLabel: "Link Telegram",
+      emailLabel: "Email",
+      primaryHint: "If a Link Telegram is filled for a phone line, the public page shows a Telegram icon and opens chat. If it is blank, the phone icon and call link stay the same.",
+      reset: "Reset",
+      save: "Save Contact",
+      saved: "Contact banner saved.",
+      savedTitle: "Contact saved",
+      saveErrorTitle: "Unable to save contact",
+      phonePlaceholder: "Input phone number",
+      phoneTwoPlaceholder: "Input phone number",
+      telegramPlaceholder: "@username telegram",
+      emailPlaceholder: "Input email",
+    },
   },
   km: {
     locale: "km-KH",
@@ -321,6 +594,7 @@ const ADMIN_UI = {
       items: "ទំនិញ",
       types: "ក្រុមទំនិញ",
       brands: "ម៉ាកទំនិញ",
+      contact: "??????????",
       settings: "ការកំណត់",
     },
     session: {
@@ -357,6 +631,11 @@ const ADMIN_UI = {
         eyebrow: "គ្រប់គ្រងក្រុមទំនិញ",
         title: "ក្រុមទំនិញ",
         text: "គ្រប់គ្រងកំណត់ត្រាក្រុមទំនិញ និងរៀបចំឈ្មោះក្រុមឱ្យស្របគ្នានៅក្នុងកាតាឡុក។",
+      },
+      contact: {
+        eyebrow: "?????????????????",
+        title: "??????????",
+        text: "?????????????????? ???????????????????????????????????? users, depo ??? detail?",
       },
       settings: {
         eyebrow: "ចំណង់ចំណូលចិត្ត",
@@ -416,7 +695,153 @@ const ADMIN_UI = {
       expiresAt: "សម័យផុតកំណត់",
       status: "ស្ថានភាពសម័យ",
     },
+    contact: {
+      eyebrow: "ទំនាក់ទំនងសាធារណៈ",
+      title: "ទំនាក់ទំនង",
+      text: "គ្រប់គ្រងអាសយដ្ឋាន លេខទូរស័ព្ទ 2 ខ្សែ អ៊ីមែល និងឈ្មោះ Telegram សម្រាប់ទំព័រសាធារណៈ។",
+      addressEyebrow: "បន្ទាត់ 1",
+      addressTitle: "អាសយដ្ឋាន",
+      addressCopy: "នេះជាបន្ទាត់ទី 1 ដែលបង្ហាញនៅផ្នែកទំនាក់ទំនងខាងលើ។",
+      addressLabel: "អាសយដ្ឋាន",
+      addressHint: "ទុកឱ្យទទេ បើមិនចង់បង្ហាញអាសយដ្ឋាន។",
+      primaryEyebrow: "ទូរស័ព្ទ និងអ៊ីមែល",
+      primaryTitle: "បន្ទាត់ទំនាក់ទំនងសាធារណៈ",
+      primaryCopy: "",
+      phoneOneTitle: "ទូរស័ព្ទ 1",
+      phoneOneCopy: "",
+      phoneOneLabel: "លេខទូរស័ព្ទ",
+      phoneOneTelegramLabel: "ឈ្មោះ Telegram",
+      phoneTwoTitle: "ទូរស័ព្ទ 2",
+      phoneTwoCopy: "",
+      phoneTwoLabel: "លេខទូរស័ព្ទ",
+      phoneTwoTelegramLabel: "ឈ្មោះ Telegram",
+      emailLabel: "អ៊ីមែល",
+      primaryHint: "",
+      reset: "កំណត់ឡើងវិញ",
+      save: "រក្សាទុកទំនាក់ទំនង",
+      saved: "បានរក្សាទុកព័ត៌មានទំនាក់ទំនងរួចរាល់។",
+      savedTitle: "បានរក្សាទុកទំនាក់ទំនង",
+      saveErrorTitle: "មិនអាចរក្សាទុកទំនាក់ទំនងបានទេ",
+      phonePlaceholder: "បញ្ចូលលេខទូរស័ព្ទ",
+      phoneTwoPlaceholder: "បញ្ចូលលេខទូរស័ព្ទ",
+      telegramPlaceholder: "@username telegram",
+      emailPlaceholder: "បញ្ចូលអ៊ីមែល",
+    },
   },
+};
+
+Object.assign(ADMIN_UI.en.settings, {
+  profileTab: ADMIN_UI.en.settings.profileTitle,
+  languageTab: ADMIN_UI.en.settings.languageTitle,
+  statusTab: ADMIN_UI.en.settings.status,
+  sessionEyebrow: "Session",
+  sessionTitle: "Current Browser Session",
+  sessionCopy: "Your admin access details stay here while the browser session is active.",
+  sessionTimeoutEyebrow: "Auto Logout",
+  sessionTimeoutTitle: "Session Expire Time",
+  sessionTimeoutCopy: "If the system is left unused, it will sign out automatically after the selected time.",
+  sessionTimeoutLabel: "Session expires after",
+  sessionTimeoutSave: "Save Session Time",
+  sessionTimeoutSavedTitle: "Session time saved",
+  sessionTimeoutSaved: "The auto logout time has been updated.",
+  sessionTimeoutSaveErrorTitle: "Unable to save session time",
+  sessionTimeoutOption(minutes) {
+    return `${minutes} minute${minutes === 1 ? "" : "s"}`;
+  },
+});
+
+Object.assign(ADMIN_UI.km.settings, {
+  profileTab: ADMIN_UI.km.settings.profileTitle,
+  languageTab: ADMIN_UI.km.settings.languageTitle,
+  statusTab: ADMIN_UI.km.settings.status,
+  sessionEyebrow: "សម័យ",
+  sessionTitle: "សម័យកម្មវិធីរុករកបច្ចុប្បន្ន",
+  sessionCopy: "ព័ត៌មានចូលប្រើរបស់អ្នកត្រូវបានបង្ហាញទីនេះ ខណៈពេលសម័យកម្មវិធីរុករកនៅសកម្ម។",
+});
+
+Object.assign(ADMIN_UI.km.settings, {
+  sessionTimeoutEyebrow: "ការចាកចេញស្វ័យប្រវត្តិ",
+  sessionTimeoutTitle: "រយៈពេលផុតសម័យ",
+  sessionTimeoutCopy: "ទុកចោលមិនប្រើរយៈពេលដែលបានជ្រើស នឹងចាកចេញស្វ័យប្រវត្តិ។",
+  sessionTimeoutLabel: "សម័យផុតបន្ទាប់ពី",
+  sessionTimeoutSave: "រក្សាទុករយៈពេលសម័យ",
+  sessionTimeoutSavedTitle: "បានរក្សាទុករយៈពេលសម័យ",
+  sessionTimeoutSaved: "បានកែប្រែពេលវេលាចាកចេញស្វ័យប្រវត្តិរួចរាល់។",
+  sessionTimeoutSaveErrorTitle: "មិនអាចរក្សាទុករយៈពេលសម័យបានទេ",
+  sessionTimeoutOption(minutes) {
+    return `${minutes} នាទី`;
+  },
+});
+
+Object.assign(ADMIN_UI.en.settings, {
+  passwordEyebrow: "Security",
+  passwordTitle: "Reset Password",
+  passwordCopy: "Change the admin password used to sign in on this browser.",
+  currentPasswordLabel: "Current Password",
+  newPasswordLabel: "New Password",
+  confirmPasswordLabel: "Confirm New Password",
+  currentPasswordPlaceholder: "Enter current password",
+  newPasswordPlaceholder: "Enter new password",
+  confirmPasswordPlaceholder: "Confirm new password",
+  passwordSave: "Save New Password",
+  passwordSavedTitle: "Password updated",
+  passwordSaved: "The admin password has been saved for this browser.",
+  passwordSaveErrorTitle: "Unable to update password",
+  passwordCurrentError: "Current password is incorrect.",
+  passwordMismatchError: "The new password and confirm password do not match.",
+  passwordTooShortError: "New password must be at least 6 characters.",
+  passwordSameError: "New password must be different from the current password.",
+  passwordStorageError: "Unable to save the new password on this browser.",
+  recoveryEyebrow: "Recovery",
+  recoveryTitle: "Forgot Password Email",
+  recoveryCopy: "Save the recovery email used for OTP and reset-link recovery.",
+  recoveryEmailLabel: "Email",
+  recoveryEmailPlaceholder: "Enter recovery email",
+  recoveryEmailSave: "Save Recovery Email",
+  recoveryEmailSavedTitle: "Recovery email saved",
+  recoveryEmailSaved: "The recovery email is ready for forgot-password tools.",
+  recoveryEmailSaveErrorTitle: "Unable to save recovery email",
+  recoveryEmailInvalidError: "Enter a valid email address.",
+  recoveryEmailStorageError: "Unable to save the recovery email on this browser.",
+});
+
+Object.assign(ADMIN_UI.km.settings, {
+  passwordEyebrow: "\u179F\u17BB\u179C\u178F\u17D2\u1790\u17B7\u1797\u17B6\u1796",
+  passwordTitle: "\u1794\u17D2\u178A\u17BC\u179A\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB",
+  passwordCopy: "\u1795\u17D2\u179B\u17B6\u179F\u17CB\u1794\u17D2\u178A\u17BC\u179A\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u17A2\u17D2\u1793\u1780\u1782\u17D2\u179A\u1794\u17CB\u1782\u17D2\u179A\u1784\u178A\u17C2\u179B\u1794\u17D2\u179A\u17BE\u179F\u1798\u17D2\u179A\u17B6\u1794\u17CB\u1785\u17BC\u179B\u1793\u17C5\u1780\u17D2\u1793\u17BB\u1784\u1780\u1798\u17D2\u1798\u179C\u17B7\u1792\u17B8\u179A\u17BB\u1780\u179A\u1780\u1793\u17C1\u17C7\u17D4",
+  currentPasswordLabel: "\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1794\u1785\u17D2\u1785\u17BB\u1794\u17D2\u1794\u1793\u17D2\u1793",
+  newPasswordLabel: "\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8",
+  confirmPasswordLabel: "\u1794\u1789\u17D2\u1787\u17B6\u1780\u17CB\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8",
+  currentPasswordPlaceholder: "\u1794\u1789\u17D2\u1785\u17BC\u179B\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1794\u1785\u17D2\u1785\u17BB\u1794\u17D2\u1794\u1793\u17D2\u1793",
+  newPasswordPlaceholder: "\u1794\u1789\u17D2\u1785\u17BC\u179B\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8",
+  confirmPasswordPlaceholder: "\u1794\u1789\u17D2\u1787\u17B6\u1780\u17CB\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8",
+  passwordSave: "\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8",
+  passwordSavedTitle: "\u1794\u17B6\u1793\u1780\u17C2\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB",
+  passwordSaved: "\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u17A2\u17D2\u1793\u1780\u1782\u17D2\u179A\u1794\u17CB\u1782\u17D2\u179A\u1784\u178F\u17D2\u179A\u17BC\u179C\u1794\u17B6\u1793\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u179F\u1798\u17D2\u179A\u17B6\u1794\u17CB\u1780\u1798\u17D2\u1798\u179C\u17B7\u1792\u17B8\u179A\u17BB\u1780\u179A\u1780\u1793\u17C1\u17C7\u179A\u17BD\u1785\u179A\u17B6\u179B\u17CB\u17D4",
+  passwordSaveErrorTitle: "\u1798\u17B7\u1793\u17A2\u17B6\u1785\u1780\u17C2\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1794\u17B6\u1793\u1791\u17C1",
+  passwordCurrentError: "\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1794\u1785\u17D2\u1785\u17BB\u1794\u17D2\u1794\u1793\u17D2\u1793\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D4",
+  passwordMismatchError: "\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8 \u1793\u17B7\u1784\u1780\u17B6\u179A\u1794\u1789\u17D2\u1787\u17B6\u1780\u17CB\u1798\u17B7\u1793\u178A\u17BC\u1785\u1782\u17D2\u1793\u17B6\u17D4",
+  passwordTooShortError: "\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8\u178F\u17D2\u179A\u17BC\u179C\u1798\u17B6\u1793\u1799\u17C9\u17B6\u1784\u178F\u17B7\u1785 6 \u178F\u17BD\u17A2\u1780\u17D2\u179F\u179A\u17D4",
+  passwordSameError: "\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8\u178F\u17D2\u179A\u17BC\u179C\u1781\u17BB\u179F\u1796\u17B8\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1794\u1785\u17D2\u1785\u17BB\u1794\u17D2\u1794\u1793\u17D2\u1793\u17D4",
+  passwordStorageError: "\u1798\u17B7\u1793\u17A2\u17B6\u1785\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB\u1790\u17D2\u1798\u17B8\u1793\u17C5\u1780\u17D2\u1793\u17BB\u1784\u1780\u1798\u17D2\u1798\u179C\u17B7\u1792\u17B8\u179A\u17BB\u1780\u179A\u1780\u1793\u17C1\u17C7\u1794\u17B6\u1793\u1791\u17C1\u17D4",
+  recoveryEyebrow: "\u179F\u1798\u17D2\u179A\u17B6\u1794\u17CB\u179F\u17D2\u178A\u17B6\u179A\u179C\u17B7\u1789",
+  recoveryTitle: "\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u1797\u17D2\u179B\u17C1\u1785\u1796\u17B6\u1780\u17D2\u1799\u179F\u1798\u17D2\u1784\u17B6\u178F\u17CB",
+  recoveryCopy: "\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u179F\u1798\u17D2\u179A\u17B6\u1794\u17CB OTP \u1793\u17B7\u1784\u178F\u17C6\u178E\u1797\u17D2\u1787\u17B6\u1794\u17CB reset password\u17D4",
+  recoveryEmailLabel: "\u17A2\u17CA\u17B8\u1798\u17C2\u179B",
+  recoveryEmailPlaceholder: "\u1794\u1789\u17D2\u1785\u17BC\u179B\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u179F\u1798\u17D2\u179A\u17B6\u1794\u17CB\u179F\u17D2\u178A\u17B6\u179A\u179C\u17B7\u1789",
+  recoveryEmailSave: "\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u179F\u17D2\u178A\u17B6\u179A\u179C\u17B7\u1789",
+  recoveryEmailSavedTitle: "\u1794\u17B6\u1793\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u179F\u17D2\u178A\u17B6\u179A\u179C\u17B7\u1789",
+  recoveryEmailSaved: "\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u179F\u17D2\u178A\u17B6\u179A\u179C\u17B7\u1789\u17A2\u17B6\u1785\u1794\u17D2\u179A\u17BE\u1794\u17B6\u1793\u179F\u1798\u17D2\u179A\u17B6\u1794\u17CB forgot password \u179A\u17BD\u1785\u17A0\u17BE\u1799\u17D4",
+  recoveryEmailSaveErrorTitle: "\u1798\u17B7\u1793\u17A2\u17B6\u1785\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u179F\u17D2\u178A\u17B6\u179A\u179C\u17B7\u1789\u1794\u17B6\u1793\u1791\u17C1",
+  recoveryEmailInvalidError: "\u179F\u17BC\u1798\u1794\u1789\u17D2\u1785\u17BC\u179B\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u178A\u17C2\u179B\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D4",
+  recoveryEmailStorageError: "\u1798\u17B7\u1793\u17A2\u17B6\u1785\u179A\u1780\u17D2\u179F\u17B6\u1791\u17BB\u1780\u17A2\u17CA\u17B8\u1798\u17C2\u179B\u179F\u17D2\u178A\u17B6\u179A\u179C\u17B7\u1789\u1793\u17C5\u1780\u17D2\u1793\u17BB\u1784\u1780\u1798\u17D2\u1798\u179C\u17B7\u1792\u17B8\u179A\u17BB\u1780\u179A\u1780\u1793\u17C1\u17C7\u1794\u17B6\u1793\u1791\u17C1\u17D4",
+});
+
+ADMIN_UI.km.nav.contact = ADMIN_UI.km.contact.title;
+ADMIN_UI.km.sections.contact = {
+  eyebrow: ADMIN_UI.km.contact.eyebrow,
+  title: ADMIN_UI.km.contact.title,
+  text: ADMIN_UI.km.contact.text,
 };
 
 let products = getSortedProducts();
@@ -430,15 +855,21 @@ let selectedTypeName = null;
 let statusTimeoutId = 0;
 let brandStatusTimeoutId = 0;
 let typeStatusTimeoutId = 0;
+let contactStatusTimeoutId = 0;
 let listPage = 1;
 let qrStatusTimeoutId = 0;
-let catalogQrCardPromise = null;
+const catalogQrCardPromises = new Map();
 let editorHidden = true;
 let brandEditorHidden = true;
 let typeEditorHidden = true;
 let currentAdminLanguage = readStoredPreference(STORAGE_KEYS.language, ["en", "km"], "en");
 let currentSection = "dashboard";
+let currentSettingsPanel = "profile";
 let sidebarCollapsed = window.matchMedia("(max-width: 1024px)").matches;
+let currentQrCatalogTarget = "user";
+let openQuickAccessMenuName = null;
+let selectedItemColors = [];
+let selectedItemListColumns = readStoredItemListColumns();
 
 function readStoredPreference(key, allowedValues, fallbackValue) {
   try {
@@ -457,8 +888,503 @@ function saveStoredPreference(key, value) {
   }
 }
 
+function getDefaultItemListColumns() {
+  return ITEM_LIST_COLUMNS
+    .filter((column) => column.defaultVisible)
+    .map((column) => column.key);
+}
+
+function getItemListColumnDefinition(columnKey) {
+  return ITEM_LIST_COLUMNS.find((column) => column.key === columnKey) ?? null;
+}
+
+function normalizeItemListColumns(columnKeys) {
+  const requestedKeys = Array.isArray(columnKeys)
+    ? columnKeys.map((columnKey) => String(columnKey ?? "").trim()).filter(Boolean)
+    : [];
+  const requestedSet = new Set(requestedKeys);
+  const fallbackKeys = getDefaultItemListColumns();
+
+  return ITEM_LIST_COLUMNS
+    .filter((column) => {
+      if (column.required) {
+        return true;
+      }
+
+      if (!requestedKeys.length) {
+        return fallbackKeys.includes(column.key);
+      }
+
+      return requestedSet.has(column.key);
+    })
+    .map((column) => column.key);
+}
+
+function readStoredItemListColumns() {
+  try {
+    const rawValue = window.localStorage.getItem(STORAGE_KEYS.itemListColumns);
+
+    if (!rawValue) {
+      return getDefaultItemListColumns();
+    }
+
+    const parsedValue = JSON.parse(rawValue);
+    const normalizedColumns = normalizeItemListColumns(parsedValue);
+    const matchesLegacyDefault = (
+      normalizedColumns.length === LEGACY_DEFAULT_ITEM_LIST_COLUMNS.length
+      && LEGACY_DEFAULT_ITEM_LIST_COLUMNS.every((columnKey, index) => normalizedColumns[index] === columnKey)
+    );
+
+    return matchesLegacyDefault ? getDefaultItemListColumns() : normalizedColumns;
+  } catch (error) {
+    return getDefaultItemListColumns();
+  }
+}
+
+function saveStoredItemListColumns() {
+  try {
+    window.localStorage.setItem(STORAGE_KEYS.itemListColumns, JSON.stringify(selectedItemListColumns));
+  } catch (error) {
+    // Ignore storage errors and keep the current in-memory preference.
+  }
+}
+
+function getSelectedItemListColumnDefinitions() {
+  return selectedItemListColumns
+    .map((columnKey) => getItemListColumnDefinition(columnKey))
+    .filter(Boolean);
+}
+
+function getAvailableItemListColumnDefinitions() {
+  const selectedKeys = new Set(selectedItemListColumns);
+  return ITEM_LIST_COLUMNS.filter((column) => !selectedKeys.has(column.key));
+}
+
+function getItemListMinWidth(columns) {
+  const totalWidth = columns.reduce((sum, column) => sum + Number(column.minWidth ?? 120), 0);
+  return `${Math.max(totalWidth, 540)}px`;
+}
+
+function syncItemListTableLayout(columns = getSelectedItemListColumnDefinitions()) {
+  if (!adminItemListTable) {
+    return;
+  }
+
+  adminItemListTable.style.setProperty(
+    "--admin-list-columns",
+    columns.map((column) => column.width).join(" "),
+  );
+  adminItemListTable.style.setProperty("--admin-list-min-width", getItemListMinWidth(columns));
+}
+
+function buildItemColumnOptionMarkup(column, mode) {
+  const isSelectedMode = mode === "selected";
+  const isLocked = Boolean(isSelectedMode && column.required);
+  const actionLabel = isLocked ? "Required" : isSelectedMode ? "Remove" : "Add";
+  const actionAttribute = isLocked
+    ? ""
+    : isSelectedMode
+      ? ` data-admin-item-column-remove="${escapeHtml(column.key)}"`
+      : ` data-admin-item-column-add="${escapeHtml(column.key)}"`;
+  const tagName = isLocked ? "div" : "button";
+  const itemClass = `admin-column-config__item${isLocked ? " is-locked" : ""}`;
+
+  return `
+    <${tagName} class="${itemClass}"${isLocked ? "" : ' type="button"'}${actionAttribute}>
+      <span>${escapeHtml(column.label)}</span>
+      <strong>${actionLabel}</strong>
+    </${tagName}>
+  `;
+}
+
+function renderItemColumnConfiguration(columns = getSelectedItemListColumnDefinitions()) {
+  syncItemListTableLayout(columns);
+
+  if (adminItemListHead) {
+    adminItemListHead.innerHTML = columns
+      .map((column) => `<span>${escapeHtml(column.label)}</span>`)
+      .join("");
+  }
+
+  if (adminAvailableColumns) {
+    const availableColumns = getAvailableItemListColumnDefinitions();
+    adminAvailableColumns.innerHTML = availableColumns.length
+      ? availableColumns.map((column) => buildItemColumnOptionMarkup(column, "available")).join("")
+      : '<p class="admin-column-config__empty">All columns are already selected.</p>';
+  }
+
+  if (adminSelectedColumns) {
+    adminSelectedColumns.innerHTML = columns.length
+      ? columns.map((column) => buildItemColumnOptionMarkup(column, "selected")).join("")
+      : '<p class="admin-column-config__empty">Choose at least one column.</p>';
+  }
+}
+
+function setSelectedItemListColumns(columnKeys) {
+  selectedItemListColumns = normalizeItemListColumns(columnKeys);
+  saveStoredItemListColumns();
+  renderList();
+}
+
+function addItemListColumn(columnKey) {
+  const column = getItemListColumnDefinition(columnKey);
+
+  if (!column || selectedItemListColumns.includes(column.key)) {
+    return;
+  }
+
+  setSelectedItemListColumns([...selectedItemListColumns, column.key]);
+}
+
+function removeItemListColumn(columnKey) {
+  const column = getItemListColumnDefinition(columnKey);
+
+  if (!column || column.required) {
+    return;
+  }
+
+  setSelectedItemListColumns(selectedItemListColumns.filter((selectedKey) => selectedKey !== column.key));
+}
+
+function resetItemListColumns() {
+  setSelectedItemListColumns(getDefaultItemListColumns());
+}
+
 function getAdminCopy() {
   return ADMIN_UI[currentAdminLanguage] ?? ADMIN_UI.en;
+}
+
+function normalizeCatalogTarget(value) {
+  return value === "depo" ? "depo" : "user";
+}
+
+function getCatalogTargetConfig(target) {
+  return CATALOG_TARGETS[normalizeCatalogTarget(target)];
+}
+
+function getCatalogTargetLabel(target) {
+  return getCatalogTargetConfig(target).label;
+}
+
+function getCatalogTargetHref(target) {
+  return getCatalogTargetConfig(target).href;
+}
+
+function grantDepoAccessIfNeeded(target) {
+  if (normalizeCatalogTarget(target) !== "depo") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(
+      "agt-depo-access",
+      JSON.stringify({
+        issuedAt: Date.now(),
+        expiresAt: Date.now() + DEPO_ACCESS_TTL_MS,
+      }),
+    );
+  } catch (error) {
+    // Ignore storage errors and keep the admin flow working.
+  }
+}
+
+function getCatalogMenuParts(menuName) {
+  if (menuName === "catalog") {
+    return {
+      root: adminCatalogMenuRoot,
+      button: adminCatalogMenuButton,
+      panel: adminCatalogMenu,
+    };
+  }
+
+  if (menuName === "qr") {
+    return {
+      root: adminQrMenuRoot,
+      button: adminQrMenuButton,
+      panel: adminQrMenu,
+    };
+  }
+
+  return null;
+}
+
+function closeQuickAccessMenus(exceptMenuName = null) {
+  for (const menuName of ["catalog", "qr"]) {
+    if (menuName === exceptMenuName) {
+      continue;
+    }
+
+    const parts = getCatalogMenuParts(menuName);
+
+    if (!parts?.button || !parts.panel || !parts.root) {
+      continue;
+    }
+
+    parts.root.classList.remove("is-open");
+    parts.button.setAttribute("aria-expanded", "false");
+    parts.panel.hidden = true;
+
+    if (openQuickAccessMenuName === menuName) {
+      openQuickAccessMenuName = null;
+    }
+  }
+}
+
+function setQuickAccessMenuOpen(menuName, isOpen) {
+  const parts = getCatalogMenuParts(menuName);
+
+  if (!parts?.button || !parts.panel || !parts.root) {
+    return;
+  }
+
+  if (isOpen) {
+    closeQuickAccessMenus(menuName);
+  }
+
+  parts.root.classList.toggle("is-open", isOpen);
+  parts.button.setAttribute("aria-expanded", String(isOpen));
+  parts.panel.hidden = !isOpen;
+  openQuickAccessMenuName = isOpen ? menuName : openQuickAccessMenuName === menuName ? null : openQuickAccessMenuName;
+}
+
+function toggleQuickAccessMenu(menuName) {
+  const parts = getCatalogMenuParts(menuName);
+
+  if (!parts?.button || !parts.panel) {
+    return;
+  }
+
+  setQuickAccessMenuOpen(menuName, parts.panel.hidden);
+}
+
+function getDefaultQrStatusText(target = currentQrCatalogTarget) {
+  return `Scan this QR code to open the ${getCatalogTargetLabel(target).toLowerCase()} catalog page.`;
+}
+
+function getQrModalTitleText(target = currentQrCatalogTarget) {
+  return `${getCatalogTargetLabel(target)} QR Code`;
+}
+
+function getQrImageAltText(target = currentQrCatalogTarget, isStyled = true) {
+  const prefix = isStyled ? "Styled QR code" : "QR code";
+  return `${prefix} for the ${getCatalogTargetLabel(target).toLowerCase()} catalog`;
+}
+
+function normalizeAdminColorHex(value) {
+  const text = String(value ?? "").trim();
+
+  if (!text) {
+    return "";
+  }
+
+  const normalized = text.startsWith("#") ? text.slice(1) : text;
+
+  if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
+    return "";
+  }
+
+  return `#${normalized.toLowerCase()}`;
+}
+
+function normalizeAdminColorEntry(color) {
+  const label = String(color?.label ?? "").trim();
+  const hex = normalizeAdminColorHex(color?.hex);
+
+  if (!label && !hex) {
+    return null;
+  }
+
+  return {
+    label: label || (hex ? hex.toUpperCase() : "Color"),
+    hex: hex || "#d8e7e2",
+  };
+}
+
+function getAdminColorKey(color) {
+  const normalizedColor = normalizeAdminColorEntry(color);
+  return normalizedColor ? `${normalizedColor.label.toLowerCase()}|${normalizedColor.hex.toLowerCase()}` : "";
+}
+
+function getAvailableItemColors() {
+  const palette = new Map();
+  const sourceColors = [
+    ...DEFAULT_ITEM_COLOR_OPTIONS,
+    ...products.flatMap((product) => product.colors ?? []),
+    ...selectedItemColors,
+  ];
+
+  for (const color of sourceColors) {
+    const normalizedColor = normalizeAdminColorEntry(color);
+
+    if (!normalizedColor) {
+      continue;
+    }
+
+    palette.set(getAdminColorKey(normalizedColor), normalizedColor);
+  }
+
+  return [...palette.values()].sort((left, right) => left.label.localeCompare(right.label) || left.hex.localeCompare(right.hex));
+}
+
+function formatColorListValue(colors, fallback = "-") {
+  const labels = (colors ?? [])
+    .map((color) => String(color?.label ?? "").trim())
+    .filter(Boolean);
+
+  return labels.length ? labels.join(", ") : fallback;
+}
+
+function syncItemColorFieldValue() {
+  setFormValue("colors", serializeColors(selectedItemColors));
+}
+
+function renderColorPresetOptions() {
+  if (!adminColorPresetSelect) {
+    return;
+  }
+
+  const currentValue = adminColorPresetSelect.value;
+  const options = getAvailableItemColors();
+
+  adminColorPresetSelect.innerHTML = [
+    '<option value="">Choose color</option>',
+    ...options.map(
+      (color) =>
+        `<option value="${escapeHtml(getAdminColorKey(color))}">${escapeHtml(color.label)} (${escapeHtml(color.hex.toUpperCase())})</option>`,
+    ),
+  ].join("");
+
+  if ([...adminColorPresetSelect.options].some((option) => option.value === currentValue)) {
+    adminColorPresetSelect.value = currentValue;
+  } else {
+    adminColorPresetSelect.value = "";
+  }
+}
+
+function renderSelectedItemColors() {
+  if (!adminSelectedColors) {
+    return;
+  }
+
+  if (!selectedItemColors.length) {
+    adminSelectedColors.innerHTML = '<p class="admin-color-picker__empty">No colors selected.</p>';
+    return;
+  }
+
+  adminSelectedColors.innerHTML = selectedItemColors
+    .map(
+      (color, index) => `
+        <button class="admin-color-chip" type="button" data-admin-color-remove="${index}">
+          <span class="admin-color-chip__swatch" style="background-color:${escapeHtml(color.hex)};"></span>
+          <span>${escapeHtml(color.label)}</span>
+          <small>${escapeHtml(color.hex.toUpperCase())}</small>
+        </button>
+      `,
+    )
+    .join("");
+}
+
+function setSelectedItemColors(colors) {
+  const nextColors = [];
+  const seenKeys = new Set();
+
+  for (const color of colors ?? []) {
+    const normalizedColor = normalizeAdminColorEntry(color);
+
+    if (!normalizedColor) {
+      continue;
+    }
+
+    const colorKey = getAdminColorKey(normalizedColor);
+
+    if (seenKeys.has(colorKey)) {
+      continue;
+    }
+
+    seenKeys.add(colorKey);
+    nextColors.push(normalizedColor);
+  }
+
+  selectedItemColors = nextColors;
+  syncItemColorFieldValue();
+  renderColorPresetOptions();
+  renderSelectedItemColors();
+}
+
+function addSelectedItemColor(color) {
+  const normalizedColor = normalizeAdminColorEntry(color);
+
+  if (!normalizedColor) {
+    showStatus("Choose a valid color.", "error");
+    return;
+  }
+
+  const colorKey = getAdminColorKey(normalizedColor);
+
+  if (selectedItemColors.some((item) => getAdminColorKey(item) === colorKey)) {
+    showStatus(`${normalizedColor.label} is already selected.`, "error");
+    return;
+  }
+
+  selectedItemColors = [...selectedItemColors, normalizedColor];
+  syncItemColorFieldValue();
+  renderColorPresetOptions();
+  renderSelectedItemColors();
+}
+
+function addPresetItemColor() {
+  if (!adminColorPresetSelect) {
+    return;
+  }
+
+  const selectedColor = getAvailableItemColors().find((color) => getAdminColorKey(color) === adminColorPresetSelect.value);
+
+  if (!selectedColor) {
+    showStatus("Choose a color to add.", "error");
+    return;
+  }
+
+  addSelectedItemColor(selectedColor);
+  adminColorPresetSelect.value = "";
+}
+
+function addCustomItemColor() {
+  const label = String(adminCustomColorName?.value ?? "").trim();
+  const hex = normalizeAdminColorHex(adminCustomColorHex?.value);
+
+  if (!label && !hex) {
+    showStatus("Enter a color name or choose a color.", "error");
+    return;
+  }
+
+  if (!hex) {
+    showStatus("Choose a valid color hex.", "error");
+    return;
+  }
+
+  addSelectedItemColor({
+    label: label || hex.toUpperCase(),
+    hex,
+  });
+
+  if (adminCustomColorName) {
+    adminCustomColorName.value = "";
+  }
+
+  if (adminCustomColorHex) {
+    adminCustomColorHex.value = "#2bb673";
+  }
+}
+
+function removeSelectedItemColor(index) {
+  if (!Number.isInteger(index) || index < 0 || index >= selectedItemColors.length) {
+    return;
+  }
+
+  selectedItemColors = selectedItemColors.filter((_, colorIndex) => colorIndex !== index);
+  syncItemColorFieldValue();
+  renderColorPresetOptions();
+  renderSelectedItemColors();
 }
 
 function formatAdminDateTime(timestamp) {
@@ -512,21 +1438,36 @@ function syncNavigationLabels() {
     adminQuickAccessLabel.textContent = copy.quickAccess.label;
   }
 
-  if (adminCatalogLinkTitle) {
-    adminCatalogLinkTitle.textContent = copy.quickAccess.openCatalog;
+  if (adminCatalogMenuTitle) {
+    adminCatalogMenuTitle.textContent = copy.quickAccess.openCatalog ?? ADMIN_UI.en.quickAccess.openCatalog;
   }
 
-  if (adminCatalogLinkHint) {
-    adminCatalogLinkHint.textContent = copy.quickAccess.openCatalogHint;
+  if (adminCatalogMenuHint) {
+    adminCatalogMenuHint.textContent = copy.quickAccess.openCatalogHint ?? ADMIN_UI.en.quickAccess.openCatalogHint;
   }
 
   if (adminQrButtonLabel) {
     adminQrButtonLabel.textContent = copy.quickAccess.qr;
   }
 
-  if (adminOpenQrButton) {
-    adminOpenQrButton.setAttribute("aria-label", copy.quickAccess.qrAria);
-    adminOpenQrButton.setAttribute("title", copy.quickAccess.qrAria);
+  if (adminCatalogMenuButton) {
+    const openCatalogAria = copy.quickAccess.openCatalogAria ?? ADMIN_UI.en.quickAccess.openCatalogAria;
+    adminCatalogMenuButton.setAttribute("aria-label", openCatalogAria);
+    adminCatalogMenuButton.setAttribute("title", openCatalogAria);
+  }
+
+  if (adminQrMenuButton) {
+    const qrAria = copy.quickAccess.qrAria ?? ADMIN_UI.en.quickAccess.qrAria;
+    adminQrMenuButton.setAttribute("aria-label", qrAria);
+    adminQrMenuButton.setAttribute("title", qrAria);
+  }
+
+  for (const item of adminCatalogMenuItems) {
+    item.textContent = getCatalogTargetLabel(item.dataset.adminCatalogTarget);
+  }
+
+  for (const item of adminQrMenuItems) {
+    item.textContent = getCatalogTargetLabel(item.dataset.adminQrTarget);
   }
 }
 
@@ -637,29 +1578,679 @@ function syncSettingsCopy() {
     adminSettingsProfileCopy.textContent = copy.profileCopy;
   }
 
+  if (adminSettingsProfilePanelEyebrow) {
+    adminSettingsProfilePanelEyebrow.textContent = copy.profileEyebrow;
+  }
+
+  if (adminSettingsProfilePanelTitle) {
+    adminSettingsProfilePanelTitle.textContent = copy.profileTitle;
+  }
+
+  if (adminSettingsProfilePanelCopy) {
+    adminSettingsProfilePanelCopy.textContent = copy.profileCopy;
+  }
+
+  if (adminSettingsProfileTab) {
+    adminSettingsProfileTab.textContent = copy.profileTab ?? copy.profileTitle;
+  }
+
+  if (adminSettingsLanguageTab) {
+    adminSettingsLanguageTab.textContent = copy.languageTab ?? copy.languageTitle;
+  }
+
+  if (adminSettingsStatusTab) {
+    adminSettingsStatusTab.textContent = copy.statusTab ?? copy.status;
+  }
+
+  if (adminSettingsSessionEyebrow) {
+    adminSettingsSessionEyebrow.textContent = copy.sessionEyebrow ?? copy.status;
+  }
+
+  if (adminSettingsSessionTitle) {
+    adminSettingsSessionTitle.textContent = copy.sessionTitle ?? copy.status;
+  }
+
+  if (adminSettingsSessionCopy) {
+    adminSettingsSessionCopy.textContent = copy.sessionCopy ?? copy.profileCopy;
+  }
+
+  if (adminSettingsTimeoutEyebrow) {
+    adminSettingsTimeoutEyebrow.textContent = copy.sessionTimeoutEyebrow ?? copy.sessionEyebrow ?? copy.status;
+  }
+
+  if (adminSettingsTimeoutTitle) {
+    adminSettingsTimeoutTitle.textContent = copy.sessionTimeoutTitle ?? copy.expiresAt;
+  }
+
+  if (adminSettingsTimeoutCopy) {
+    adminSettingsTimeoutCopy.textContent = copy.sessionTimeoutCopy ?? copy.sessionCopy ?? copy.profileCopy;
+  }
+
+  if (adminSettingsTimeoutLabel) {
+    adminSettingsTimeoutLabel.textContent = copy.sessionTimeoutLabel ?? copy.expiresAt;
+  }
+
   if (adminSettingsUsernameLabel) {
     adminSettingsUsernameLabel.textContent = copy.username;
+  }
+
+  if (adminSettingsUsernameLabelPanel) {
+    adminSettingsUsernameLabelPanel.textContent = copy.username;
   }
 
   if (adminSettingsRoleLabel) {
     adminSettingsRoleLabel.textContent = copy.role;
   }
 
+  if (adminSettingsPasswordEyebrow) {
+    adminSettingsPasswordEyebrow.textContent = copy.passwordEyebrow ?? "Security";
+  }
+
+  if (adminSettingsPasswordTitle) {
+    adminSettingsPasswordTitle.textContent = copy.passwordTitle ?? "Reset Password";
+  }
+
+  if (adminSettingsPasswordCopy) {
+    adminSettingsPasswordCopy.textContent = copy.passwordCopy ?? "Change the admin password used to sign in on this browser.";
+  }
+
+  if (adminSettingsCurrentPasswordLabel) {
+    adminSettingsCurrentPasswordLabel.textContent = copy.currentPasswordLabel ?? "Current Password";
+  }
+
+  if (adminSettingsCurrentPasswordInput) {
+    adminSettingsCurrentPasswordInput.placeholder = copy.currentPasswordPlaceholder ?? "Enter current password";
+  }
+
+  if (adminSettingsNewPasswordLabel) {
+    adminSettingsNewPasswordLabel.textContent = copy.newPasswordLabel ?? "New Password";
+  }
+
+  if (adminSettingsNewPasswordInput) {
+    adminSettingsNewPasswordInput.placeholder = copy.newPasswordPlaceholder ?? "Enter new password";
+  }
+
+  if (adminSettingsConfirmPasswordLabel) {
+    adminSettingsConfirmPasswordLabel.textContent = copy.confirmPasswordLabel ?? "Confirm New Password";
+  }
+
+  if (adminSettingsConfirmPasswordInput) {
+    adminSettingsConfirmPasswordInput.placeholder = copy.confirmPasswordPlaceholder ?? "Confirm new password";
+  }
+
+  if (adminSettingsPasswordSaveButton) {
+    adminSettingsPasswordSaveButton.textContent = copy.passwordSave ?? "Save New Password";
+  }
+
+  if (adminSettingsRecoveryEyebrow) {
+    adminSettingsRecoveryEyebrow.textContent = copy.recoveryEyebrow ?? "Recovery";
+  }
+
+  if (adminSettingsRecoveryTitle) {
+    adminSettingsRecoveryTitle.textContent = copy.recoveryTitle ?? "Forgot Password Email";
+  }
+
+  if (adminSettingsRecoveryCopy) {
+    adminSettingsRecoveryCopy.textContent = copy.recoveryCopy ?? "Save the recovery email used for OTP and reset-link recovery.";
+  }
+
+  if (adminSettingsRecoveryEmailLabel) {
+    adminSettingsRecoveryEmailLabel.textContent = copy.recoveryEmailLabel ?? "Email";
+  }
+
+  if (adminSettingsRecoveryEmailInput) {
+    adminSettingsRecoveryEmailInput.placeholder = copy.recoveryEmailPlaceholder ?? "Enter recovery email";
+  }
+
+  if (adminSettingsRecoveryEmailSaveButton) {
+    adminSettingsRecoveryEmailSaveButton.textContent = copy.recoveryEmailSave ?? "Save Recovery Email";
+  }
+
   if (adminSettingsIssuedLabel) {
     adminSettingsIssuedLabel.textContent = copy.issuedAt;
+  }
+
+  if (adminSettingsIssuedLabelMirror) {
+    adminSettingsIssuedLabelMirror.textContent = copy.issuedAt;
   }
 
   if (adminSettingsExpiresLabel) {
     adminSettingsExpiresLabel.textContent = copy.expiresAt;
   }
 
+  if (adminSettingsExpiresLabelMirror) {
+    adminSettingsExpiresLabelMirror.textContent = copy.expiresAt;
+  }
+
   if (adminSettingsStatusLabel) {
     adminSettingsStatusLabel.textContent = copy.status;
+  }
+
+  if (adminSettingsStatusLabelMirror) {
+    adminSettingsStatusLabelMirror.textContent = copy.status;
   }
 
   if (adminSettingsLogoutButton) {
     adminSettingsLogoutButton.setAttribute("aria-label", getAdminCopy().session.signOut);
     adminSettingsLogoutButton.setAttribute("title", getAdminCopy().session.signOut);
+  }
+
+  if (adminSettingsLogoutText) {
+    adminSettingsLogoutText.textContent = getAdminCopy().session.signOut;
+  }
+
+  if (adminSettingsTimeoutSaveButton) {
+    adminSettingsTimeoutSaveButton.textContent = copy.sessionTimeoutSave ?? "Save Session Time";
+  }
+
+  renderSessionTimeoutOptions();
+}
+
+function getAdminIdleTimeoutOptions() {
+  return Array.isArray(window.adminAuth?.idleTimeoutOptions) && window.adminAuth.idleTimeoutOptions.length > 0
+    ? window.adminAuth.idleTimeoutOptions
+    : [1, 2, 5, 15, 30];
+}
+
+function renderSessionTimeoutOptions() {
+  if (!adminSettingsTimeoutInput) {
+    return;
+  }
+
+  const copy = getAdminCopy().settings;
+  const timeoutOptions = getAdminIdleTimeoutOptions();
+  const selectedMinutes = String(window.adminAuth?.getIdleTimeoutMinutes?.() ?? 15);
+
+  adminSettingsTimeoutInput.replaceChildren(
+    ...timeoutOptions.map((minutes) => {
+      const option = document.createElement("option");
+      option.value = String(minutes);
+      option.textContent = copy.sessionTimeoutOption?.(minutes) ?? `${minutes} min`;
+      return option;
+    }),
+  );
+
+  adminSettingsTimeoutInput.value = timeoutOptions.includes(Number.parseInt(selectedMinutes, 10))
+    ? selectedMinutes
+    : String(timeoutOptions[0]);
+}
+
+function saveSessionTimeoutSetting(event) {
+  event.preventDefault();
+
+  try {
+    const copy = getAdminCopy().settings;
+    const timeoutMinutes = window.adminAuth?.saveIdleTimeoutMinutes?.(adminSettingsTimeoutInput?.value);
+
+    if (!timeoutMinutes) {
+      throw new Error("Unable to save the selected session time.");
+    }
+
+    renderSessionTimeoutOptions();
+    syncAuthSession();
+    showImportExportNotice(
+      copy.sessionTimeoutSavedTitle ?? "Session time saved",
+      copy.sessionTimeoutSaved ?? "The auto logout time has been updated.",
+      "success",
+    );
+  } catch (error) {
+    const copy = getAdminCopy().settings;
+    const message = error instanceof Error ? error.message : "Unable to save the selected session time.";
+    showImportExportNotice(
+      copy.sessionTimeoutSaveErrorTitle ?? "Unable to save session time",
+      message,
+      "error",
+    );
+  }
+}
+
+function saveAdminPasswordSetting(event) {
+  event.preventDefault();
+
+  const copy = getAdminCopy().settings;
+  const currentPassword = String(adminSettingsCurrentPasswordInput?.value ?? "");
+  const nextPassword = String(adminSettingsNewPasswordInput?.value ?? "");
+  const confirmPassword = String(adminSettingsConfirmPasswordInput?.value ?? "");
+
+  try {
+    if (nextPassword.trim().length < 6) {
+      throw new Error(copy.passwordTooShortError ?? "New password must be at least 6 characters.");
+    }
+
+    if (nextPassword !== confirmPassword) {
+      throw new Error(copy.passwordMismatchError ?? "The new password and confirm password do not match.");
+    }
+
+    const result = window.adminAuth?.changePassword?.(currentPassword, nextPassword);
+
+    if (!result?.ok) {
+      const localizedMessage = result?.code === "incorrect_current_password"
+        ? copy.passwordCurrentError
+        : result?.code === "password_too_short"
+          ? copy.passwordTooShortError
+          : result?.code === "password_unchanged"
+            ? copy.passwordSameError
+            : result?.code === "password_storage_unavailable"
+              ? copy.passwordStorageError
+              : result?.message;
+
+      throw new Error(localizedMessage ?? copy.passwordSaveErrorTitle ?? "Unable to update password.");
+    }
+
+    adminSettingsPasswordForm?.reset();
+    showImportExportNotice(
+      copy.passwordSavedTitle ?? "Password updated",
+      copy.passwordSaved ?? "The admin password has been saved for this browser.",
+      "success",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to update password.";
+    showImportExportNotice(
+      copy.passwordSaveErrorTitle ?? "Unable to update password",
+      message,
+      "error",
+    );
+  }
+}
+
+function syncRecoveryEmailSetting() {
+  if (!adminSettingsRecoveryEmailInput) {
+    return;
+  }
+
+  if (document.activeElement === adminSettingsRecoveryEmailInput) {
+    return;
+  }
+
+  adminSettingsRecoveryEmailInput.value = window.adminAuth?.getRecoveryEmail?.() ?? "";
+}
+
+function saveRecoveryEmailSetting(event) {
+  event.preventDefault();
+
+  const copy = getAdminCopy().settings;
+
+  try {
+    const result = window.adminAuth?.saveRecoveryEmail?.(adminSettingsRecoveryEmailInput?.value ?? "");
+
+    if (!result?.ok) {
+      const localizedMessage = result?.code === "invalid_recovery_email"
+        ? copy.recoveryEmailInvalidError
+        : result?.code === "recovery_email_storage_unavailable"
+          ? copy.recoveryEmailStorageError
+          : result?.message;
+
+      throw new Error(localizedMessage ?? copy.recoveryEmailSaveErrorTitle ?? "Unable to save recovery email.");
+    }
+
+    syncRecoveryEmailSetting();
+    showImportExportNotice(
+      copy.recoveryEmailSavedTitle ?? "Recovery email saved",
+      copy.recoveryEmailSaved ?? "The recovery email is ready for forgot-password tools.",
+      "success",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to save recovery email.";
+    showImportExportNotice(
+      copy.recoveryEmailSaveErrorTitle ?? "Unable to save recovery email",
+      message,
+      "error",
+    );
+  }
+}
+
+function syncSettingsPanels() {
+  for (const button of adminSettingsPanelButtons) {
+    const panelKey = button.dataset.adminSettingsPanelOption;
+    const isActive = panelKey === currentSettingsPanel;
+
+    button.classList.toggle("admin-settings__tab--active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+    button.setAttribute("tabindex", isActive ? "0" : "-1");
+  }
+
+  for (const panel of adminSettingsPanels) {
+    panel.hidden = panel.dataset.adminSettingsPanel !== currentSettingsPanel;
+  }
+}
+
+function setAdminSettingsPanel(panelKey) {
+  const nextPanel = panelKey === "language" || panelKey === "session" ? panelKey : "profile";
+
+  if (currentSettingsPanel === nextPanel) {
+    syncSettingsPanels();
+    return;
+  }
+
+  currentSettingsPanel = nextPanel;
+  syncSettingsPanels();
+}
+
+function getContactCopy() {
+  return getAdminCopy().contact ?? ADMIN_UI.en.contact;
+}
+
+function getStoredContactSettings() {
+  return store.getContactSettings?.() ?? store.getEmptyContactSettings?.() ?? { address: "", contacts: [] };
+}
+
+function normalizePrimaryContactType(type) {
+  const normalizedType = String(type ?? "").trim().toLowerCase();
+  return normalizedType === "email" || normalizedType === "phone" ? normalizedType : "";
+}
+
+function getContactEntryText(entry = {}) {
+  return String(entry.label ?? entry.value ?? "").trim()
+    || String(entry.value ?? "").trim();
+}
+
+function getContactTelegramValue(entry = {}) {
+  return String(entry.telegram ?? "").trim();
+}
+
+function getContactInputValue(input) {
+  return String(input?.value ?? "").trim();
+}
+
+function getPrimaryContactValues(settings = getStoredContactSettings()) {
+  const normalizedSettings = store.normalizeContactSettings?.(settings) ?? settings;
+  const contacts = Array.isArray(normalizedSettings.contacts) ? normalizedSettings.contacts : [];
+  const phoneEntries = [];
+  let emailValue = "";
+
+  for (const entry of contacts) {
+    const type = normalizePrimaryContactType(entry?.type);
+    const text = getContactEntryText(entry);
+
+    if (!type || !text) {
+      continue;
+    }
+
+    if (type === "phone" && phoneEntries.length < 2) {
+      phoneEntries.push({
+        phone: text,
+        telegram: getContactTelegramValue(entry),
+      });
+      continue;
+    }
+
+    if (type === "email" && !emailValue) {
+      emailValue = text;
+    }
+  }
+
+  return {
+    address: String(normalizedSettings.address ?? ""),
+    phoneOne: phoneEntries[0]?.phone ?? "",
+    phoneOneTelegram: phoneEntries[0]?.telegram ?? "",
+    phoneTwo: phoneEntries[1]?.phone ?? "",
+    phoneTwoTelegram: phoneEntries[1]?.telegram ?? "",
+    email: emailValue,
+  };
+}
+
+function syncContactCopy() {
+  const copy = getContactCopy();
+
+  if (adminContactEyebrow) {
+    adminContactEyebrow.textContent = copy.eyebrow;
+  }
+
+  if (adminContactTitle) {
+    adminContactTitle.textContent = copy.title;
+  }
+
+  if (adminContactText) {
+    adminContactText.textContent = copy.text;
+  }
+
+  if (adminContactAddressEyebrow) {
+    adminContactAddressEyebrow.textContent = copy.addressEyebrow;
+  }
+
+  if (adminContactAddressTitle) {
+    adminContactAddressTitle.textContent = copy.addressTitle;
+  }
+
+  if (adminContactAddressCopy) {
+    adminContactAddressCopy.textContent = copy.addressCopy;
+  }
+
+  if (adminContactAddressLabel) {
+    adminContactAddressLabel.textContent = copy.addressLabel;
+  }
+
+  if (adminContactAddressHint) {
+    adminContactAddressHint.textContent = copy.addressHint;
+  }
+
+  if (adminContactPrimaryEyebrow) {
+    adminContactPrimaryEyebrow.textContent = copy.primaryEyebrow;
+  }
+
+  if (adminContactPrimaryTitle) {
+    adminContactPrimaryTitle.textContent = copy.primaryTitle;
+  }
+
+  if (adminContactPrimaryCopy) {
+    adminContactPrimaryCopy.textContent = copy.primaryCopy;
+  }
+
+  if (adminContactPhoneOneTitle) {
+    adminContactPhoneOneTitle.textContent = copy.phoneOneTitle;
+  }
+
+  if (adminContactPhoneOneCopy) {
+    adminContactPhoneOneCopy.textContent = copy.phoneOneCopy;
+  }
+
+  if (adminContactPhoneOneLabel) {
+    adminContactPhoneOneLabel.textContent = copy.phoneOneLabel;
+  }
+
+  if (adminContactPhoneOneTelegramLabel) {
+    adminContactPhoneOneTelegramLabel.textContent = copy.phoneOneTelegramLabel;
+  }
+
+  if (adminContactPhoneTwoTitle) {
+    adminContactPhoneTwoTitle.textContent = copy.phoneTwoTitle;
+  }
+
+  if (adminContactPhoneTwoCopy) {
+    adminContactPhoneTwoCopy.textContent = copy.phoneTwoCopy;
+  }
+
+  if (adminContactPhoneTwoLabel) {
+    adminContactPhoneTwoLabel.textContent = copy.phoneTwoLabel;
+  }
+
+  if (adminContactPhoneTwoTelegramLabel) {
+    adminContactPhoneTwoTelegramLabel.textContent = copy.phoneTwoTelegramLabel;
+  }
+
+  if (adminContactEmailLabel) {
+    adminContactEmailLabel.textContent = copy.emailLabel;
+  }
+
+  if (adminContactPrimaryHint) {
+    adminContactPrimaryHint.textContent = copy.primaryHint;
+  }
+
+  if (adminContactResetButton) {
+    adminContactResetButton.textContent = copy.reset;
+  }
+
+  if (adminContactSaveButton) {
+    adminContactSaveButton.textContent = copy.save;
+  }
+
+  if (adminContactAddressInput) {
+    adminContactAddressInput.placeholder = "No775, Str38, Trea2 Village, Sangkat Steng Meanchey, Khan Meanchey, Phnom Penh";
+  }
+
+  if (adminContactPhoneOneInput) {
+    adminContactPhoneOneInput.placeholder = copy.phonePlaceholder;
+  }
+
+  if (adminContactPhoneTwoInput) {
+    adminContactPhoneTwoInput.placeholder = copy.phoneTwoPlaceholder ?? copy.phonePlaceholder;
+  }
+
+  if (adminContactPhoneOneTelegramInput) {
+    adminContactPhoneOneTelegramInput.placeholder = copy.telegramPlaceholder;
+  }
+
+  if (adminContactPhoneTwoTelegramInput) {
+    adminContactPhoneTwoTelegramInput.placeholder = copy.telegramPlaceholder;
+  }
+
+  if (adminContactEmailInput) {
+    adminContactEmailInput.placeholder = copy.emailPlaceholder;
+  }
+}
+
+function readContactFormDraft() {
+  const contacts = [];
+  const phoneOne = getContactInputValue(adminContactPhoneOneInput);
+  const phoneOneTelegram = getContactInputValue(adminContactPhoneOneTelegramInput);
+  const phoneTwo = getContactInputValue(adminContactPhoneTwoInput);
+  const phoneTwoTelegram = getContactInputValue(adminContactPhoneTwoTelegramInput);
+  const email = getContactInputValue(adminContactEmailInput);
+
+  if (phoneOne) {
+    contacts.push({
+      type: "phone",
+      label: phoneOne,
+      value: phoneOne,
+      link: "",
+      telegram: phoneOneTelegram,
+    });
+  }
+
+  if (phoneTwo) {
+    contacts.push({
+      type: "phone",
+      label: phoneTwo,
+      value: phoneTwo,
+      link: "",
+      telegram: phoneTwoTelegram,
+    });
+  }
+
+  if (email) {
+    contacts.push({
+      type: "email",
+      label: email,
+      value: email,
+      link: "",
+    });
+  }
+
+  return {
+    address: adminContactAddressInput?.value ?? "",
+    contacts,
+  };
+}
+
+function renderContactForm(settings = getStoredContactSettings()) {
+  const primaryValues = getPrimaryContactValues(settings);
+
+  if (adminContactAddressInput) {
+    adminContactAddressInput.value = primaryValues.address;
+  }
+
+  if (adminContactPhoneOneInput) {
+    adminContactPhoneOneInput.value = primaryValues.phoneOne;
+  }
+
+  if (adminContactPhoneOneTelegramInput) {
+    adminContactPhoneOneTelegramInput.value = primaryValues.phoneOneTelegram;
+  }
+
+  if (adminContactPhoneTwoInput) {
+    adminContactPhoneTwoInput.value = primaryValues.phoneTwo;
+  }
+
+  if (adminContactPhoneTwoTelegramInput) {
+    adminContactPhoneTwoTelegramInput.value = primaryValues.phoneTwoTelegram;
+  }
+
+  if (adminContactEmailInput) {
+    adminContactEmailInput.value = primaryValues.email;
+  }
+}
+
+function showContactStatus(message, tone = "success") {
+  window.clearTimeout(contactStatusTimeoutId);
+
+  if (!adminContactStatus) {
+    return;
+  }
+
+  adminContactStatus.textContent = message;
+  adminContactStatus.hidden = !message;
+  adminContactStatus.classList.toggle("admin-status--error", tone === "error");
+
+  if (!message) {
+    return;
+  }
+
+  contactStatusTimeoutId = window.setTimeout(() => {
+    adminContactStatus.hidden = true;
+    adminContactStatus.textContent = "";
+    adminContactStatus.classList.remove("admin-status--error");
+  }, 2200);
+}
+
+function showContactNotice(title, text, type = "success") {
+  if (window.Swal?.fire) {
+    const isSuccess = type === "success";
+
+    window.Swal.fire({
+      title,
+      text,
+      icon: type,
+      showConfirmButton: !isSuccess,
+      timer: isSuccess ? 900 : undefined,
+      timerProgressBar: isSuccess,
+    });
+    return;
+  }
+
+  window.alert(text);
+}
+
+function refreshContactsView() {
+  syncContactCopy();
+  renderContactForm(getStoredContactSettings());
+}
+
+function resetContactForm() {
+  showContactStatus("");
+  renderContactForm(getStoredContactSettings());
+}
+
+function saveContactForm(event) {
+  event.preventDefault();
+
+  try {
+    const draft = readContactFormDraft();
+    const savedSettings = store.saveContactSettings?.(draft) ?? draft;
+    renderContactForm(savedSettings);
+    showContactStatus(getContactCopy().saved);
+    showContactNotice(
+      getContactCopy().savedTitle ?? "Contact saved",
+      getContactCopy().saved,
+      "success"
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to save contact settings.";
+    showContactStatus(message, "error");
+    showContactNotice(
+      getContactCopy().saveErrorTitle ?? "Unable to save contact",
+      message,
+      "error"
+    );
   }
 }
 
@@ -675,6 +2266,9 @@ function syncAuthSession() {
   const session = window.adminAuth?.getSession?.();
   const copy = getAdminCopy();
   const username = session?.username ?? copy.session.role;
+  const issuedAt = formatAdminDateTime(session?.issuedAt);
+  const expiresAt = formatAdminDateTime(session?.expiresAt);
+  const status = session ? copy.session.status : "-";
 
   if (adminSessionUser) {
     adminSessionUser.textContent = username;
@@ -684,20 +2278,41 @@ function syncAuthSession() {
     adminSettingsProfileUsername.textContent = username;
   }
 
+  if (adminSettingsProfileUsernamePanel) {
+    adminSettingsProfileUsernamePanel.textContent = username;
+  }
+
+  if (adminSettingsProfileInitial) {
+    const initial = String(username || copy.session.role || "A").trim().charAt(0) || "A";
+    adminSettingsProfileInitial.textContent = initial.toUpperCase();
+  }
+
   if (adminSettingsProfileRole) {
     adminSettingsProfileRole.textContent = copy.session.role;
   }
 
   if (adminSettingsProfileIssuedAt) {
-    adminSettingsProfileIssuedAt.textContent = formatAdminDateTime(session?.issuedAt);
+    adminSettingsProfileIssuedAt.textContent = issuedAt;
+  }
+
+  if (adminSettingsProfileIssuedAtMirror) {
+    adminSettingsProfileIssuedAtMirror.textContent = issuedAt;
   }
 
   if (adminSettingsProfileExpiresAt) {
-    adminSettingsProfileExpiresAt.textContent = formatAdminDateTime(session?.expiresAt);
+    adminSettingsProfileExpiresAt.textContent = expiresAt;
+  }
+
+  if (adminSettingsProfileExpiresAtMirror) {
+    adminSettingsProfileExpiresAtMirror.textContent = expiresAt;
   }
 
   if (adminSettingsProfileStatus) {
-    adminSettingsProfileStatus.textContent = session ? copy.session.status : "-";
+    adminSettingsProfileStatus.textContent = status;
+  }
+
+  if (adminSettingsProfileStatusMirror) {
+    adminSettingsProfileStatusMirror.textContent = status;
   }
 }
 
@@ -726,9 +2341,12 @@ function applyAdminLanguage() {
   syncNavigationLabels();
   syncDashboardCopy();
   syncSettingsCopy();
+  syncSettingsPanels();
+  syncContactCopy();
   syncAdminLanguageButtons();
   syncAuthSession();
   syncSectionCopy();
+  syncQrModalCopy();
 }
 
 function syncSectionNavigation() {
@@ -792,8 +2410,16 @@ function syncSectionVisibility() {
     adminTypesSection.hidden = currentSection !== "types";
   }
 
+  if (adminContactSection) {
+    adminContactSection.hidden = currentSection !== "contact";
+  }
+
   if (adminSettingsSection) {
     adminSettingsSection.hidden = currentSection !== "settings";
+  }
+
+  if (currentSection !== "dashboard") {
+    closeQuickAccessMenus();
   }
 
   syncSectionNavigation();
@@ -860,12 +2486,13 @@ function syncTypeVisibility() {
   }
 }
 
-function getCatalogShareUrl() {
-  return new URL("users.html#catalog", window.location.href).href;
+function getCatalogShareUrl(target = currentQrCatalogTarget) {
+  grantDepoAccessIfNeeded(target);
+  return new URL(getCatalogTargetHref(target), window.location.href).href;
 }
 
-function getCatalogQrUrl() {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=16&data=${encodeURIComponent(getCatalogShareUrl())}`;
+function getCatalogQrUrl(target = currentQrCatalogTarget) {
+  return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=16&data=${encodeURIComponent(getCatalogShareUrl(target))}`;
 }
 
 function loadImage(sourceUrl) {
@@ -953,8 +2580,9 @@ function strokeRoundedRect(context, x, y, width, height, radius, strokeStyle, li
   context.restore();
 }
 
-async function buildCatalogQrCard() {
-  const qrResponse = await fetch(getCatalogQrUrl());
+async function buildCatalogQrCard(target = currentQrCatalogTarget) {
+  const normalizedTarget = normalizeCatalogTarget(target);
+  const qrResponse = await fetch(getCatalogQrUrl(normalizedTarget));
 
   if (!qrResponse.ok) {
     throw new Error(`QR request failed with ${qrResponse.status}`);
@@ -1000,12 +2628,12 @@ async function buildCatalogQrCard() {
 
   // Header Text
   context.fillStyle = "#ffffff";
-  context.font = "800 42px 'Segoe UI', sans-serif";
+  context.font = "800 42px 'Roboto', 'Segoe UI', sans-serif";
   context.fillText("ANGKOR GARDEN TOOLS", 310, 186);
 
   context.fillStyle = "rgba(232, 255, 248, 0.85)";
-  context.font = "600 24px 'Segoe UI', sans-serif";
-  context.fillText("Customer product catalog", 310, 226);
+  context.font = "600 24px 'Roboto', 'Segoe UI', sans-serif";
+  context.fillText(`${getCatalogTargetLabel(normalizedTarget)} product catalog`, 310, 226);
 
   // Clean, large QR Code without excessive borders
   const qrSize = 640;
@@ -1035,15 +2663,30 @@ async function buildCatalogQrCard() {
   };
 }
 
-async function getCatalogQrCardAsset() {
-  if (!catalogQrCardPromise) {
-    catalogQrCardPromise = buildCatalogQrCard().catch((error) => {
-      catalogQrCardPromise = null;
-      throw error;
-    });
+async function getCatalogQrCardAsset(target = currentQrCatalogTarget) {
+  const normalizedTarget = normalizeCatalogTarget(target);
+
+  if (!catalogQrCardPromises.has(normalizedTarget)) {
+    catalogQrCardPromises.set(
+      normalizedTarget,
+      buildCatalogQrCard(normalizedTarget).catch((error) => {
+        catalogQrCardPromises.delete(normalizedTarget);
+        throw error;
+      }),
+    );
   }
 
-  return catalogQrCardPromise;
+  return catalogQrCardPromises.get(normalizedTarget);
+}
+
+function syncQrModalCopy() {
+  if (adminQrModalTitle) {
+    adminQrModalTitle.textContent = getQrModalTitleText(currentQrCatalogTarget);
+  }
+
+  if (adminCatalogQrImage) {
+    adminCatalogQrImage.alt = getQrImageAltText(currentQrCatalogTarget, true);
+  }
 }
 
 function showCatalogQrStatus(message, type = "info") {
@@ -1056,7 +2699,7 @@ function showCatalogQrStatus(message, type = "info") {
   adminCatalogQrStatus.classList.toggle("admin-modal__text--error", type === "error");
 
   qrStatusTimeoutId = window.setTimeout(() => {
-    adminCatalogQrStatus.textContent = DEFAULT_QR_STATUS_TEXT;
+    adminCatalogQrStatus.textContent = getDefaultQrStatusText(currentQrCatalogTarget);
     adminCatalogQrStatus.classList.remove("admin-modal__text--error");
   }, 1500);
 }
@@ -1066,14 +2709,23 @@ async function syncCatalogQrState() {
     return;
   }
 
-  adminCatalogQrImage.alt = "Styled QR code for the user catalog";
+  adminCatalogQrImage.alt = getQrImageAltText(currentQrCatalogTarget, true);
 
-  const qrCardAsset = await getCatalogQrCardAsset();
+  const qrCardAsset = await getCatalogQrCardAsset(currentQrCatalogTarget);
   adminCatalogQrImage.src = qrCardAsset.dataUrl;
 }
 
+function syncAdminModalBodyState() {
+  const hasOpenModal = (
+    (adminQrModal && !adminQrModal.hasAttribute("hidden"))
+    || (adminItemColumnsModal && !adminItemColumnsModal.hasAttribute("hidden"))
+  );
+
+  document.body.classList.toggle("admin-modal-open", Boolean(hasOpenModal));
+}
+
 async function copyCatalogLink() {
-  const shareUrl = getCatalogShareUrl();
+  const shareUrl = getCatalogShareUrl(currentQrCatalogTarget);
 
   try {
     if (navigator.clipboard?.writeText) {
@@ -1087,26 +2739,29 @@ async function copyCatalogLink() {
       tempInput.remove();
     }
 
-    showCatalogQrStatus("Catalog link copied.");
+    showCatalogQrStatus(`${getCatalogTargetLabel(currentQrCatalogTarget)} catalog link copied.`);
   } catch (error) {
     showCatalogQrStatus("Copy failed. Please try again.", "error");
   }
 }
 
-function openQrModal() {
+function openQrModal(target = "user") {
+  currentQrCatalogTarget = normalizeCatalogTarget(target);
+  adminItemColumnsModal?.setAttribute("hidden", "");
   adminQrModal?.removeAttribute("hidden");
-  document.body.classList.add("admin-modal-open");
+  syncAdminModalBodyState();
+  syncQrModalCopy();
   adminCatalogQrStatus.textContent = "Preparing branded QR card...";
   adminCatalogQrStatus.classList.remove("admin-modal__text--error");
 
   syncCatalogQrState()
     .then(() => {
-      adminCatalogQrStatus.textContent = DEFAULT_QR_STATUS_TEXT;
+      adminCatalogQrStatus.textContent = getDefaultQrStatusText(currentQrCatalogTarget);
     })
     .catch(() => {
       if (adminCatalogQrImage) {
-        adminCatalogQrImage.src = getCatalogQrUrl();
-        adminCatalogQrImage.alt = "QR code for the user catalog";
+        adminCatalogQrImage.src = getCatalogQrUrl(currentQrCatalogTarget);
+        adminCatalogQrImage.alt = getQrImageAltText(currentQrCatalogTarget, false);
       }
 
       showCatalogQrStatus("Unable to build branded QR. Plain QR shown instead.", "error");
@@ -1115,24 +2770,35 @@ function openQrModal() {
 
 function closeQrModal() {
   adminQrModal?.setAttribute("hidden", "");
-  document.body.classList.remove("admin-modal-open");
+  syncAdminModalBodyState();
+}
+
+function openItemColumnsModal() {
+  renderItemColumnConfiguration();
+  adminItemColumnsModal?.removeAttribute("hidden");
+  syncAdminModalBodyState();
+}
+
+function closeItemColumnsModal() {
+  adminItemColumnsModal?.setAttribute("hidden", "");
+  syncAdminModalBodyState();
 }
 
 async function saveCatalogQrCode() {
   try {
-    const qrCardAsset = await getCatalogQrCardAsset();
+    const qrCardAsset = await getCatalogQrCardAsset(currentQrCatalogTarget);
     const objectUrl = window.URL.createObjectURL(qrCardAsset.blob);
     const downloadLink = document.createElement("a");
 
     downloadLink.href = objectUrl;
-    downloadLink.download = "user-catalog-qr-card.png";
+    downloadLink.download = getCatalogTargetConfig(currentQrCatalogTarget).downloadName;
     document.body.append(downloadLink);
     downloadLink.click();
     downloadLink.remove();
     window.URL.revokeObjectURL(objectUrl);
     showCatalogQrStatus("Branded QR card downloaded.");
   } catch (error) {
-    window.open(getCatalogQrUrl(), "_blank", "noopener");
+    window.open(getCatalogQrUrl(currentQrCatalogTarget), "_blank", "noopener");
     showCatalogQrStatus("Styled QR failed. Plain QR opened in a new tab instead.", "error");
   }
 }
@@ -1368,12 +3034,18 @@ function formatTypeLabel(value) {
   return text === "-" ? text : `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }
 
-function buildListItemMarkup(product) {
-  const isActive = product.code === selectedCode;
+function formatSizesListValue(sizes, fallback = "-") {
+  const labels = (Array.isArray(sizes) ? sizes : [])
+    .map((size) => String(size ?? "").trim())
+    .filter(Boolean);
 
-  return `
-    <article class="admin-list-item${isActive ? " is-active" : ""}">
-      <span class="admin-list-cell admin-list-cell--code" data-label="Code">
+  return labels.length ? labels.join(", ") : fallback;
+}
+
+function buildListCellMarkup(column, product) {
+  if (column.key === "code") {
+    return `
+      <span class="admin-list-cell admin-list-cell--code" data-label="${escapeHtml(column.label)}">
         <button
           class="admin-list-code-button"
           type="button"
@@ -1384,15 +3056,80 @@ function buildListItemMarkup(product) {
           <small>${escapeHtml(formatListValue(product.volume))}</small>
         </button>
       </span>
-      <span class="admin-list-cell admin-list-cell--title" data-label="Title">
+    `;
+  }
+
+  if (column.key === "image") {
+    const imageUrl = String(product.image ?? "").trim();
+    const hasImage = Boolean(imageUrl);
+
+    return `
+      <span class="admin-list-cell admin-list-cell--image" data-label="${escapeHtml(column.label)}">
+        <span class="admin-list-image${hasImage ? " has-image" : ""}">
+          ${hasImage
+            ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.code)}" loading="lazy" decoding="async">`
+            : `<strong>${escapeHtml(formatTypeLabel(product.icon || "system"))}</strong><small>System icon</small>`}
+        </span>
+      </span>
+    `;
+  }
+
+  if (column.key === "title") {
+    return `
+      <span class="admin-list-cell admin-list-cell--title" data-label="${escapeHtml(column.label)}">
         <strong lang="km">${escapeHtml(product.title)}</strong>
         <small lang="km">${escapeHtml(formatListValue(product.description))}</small>
       </span>
-      <span class="admin-list-cell" data-label="Brand">${escapeHtml(formatListValue(product.brand))}</span>
-      <span class="admin-list-cell" data-label="Type">${escapeHtml(formatTypeLabel(product.filterType))}</span>
-      <span class="admin-list-cell" data-label="Status">${escapeHtml(formatTypeLabel(product.status))}</span>
-      <span class="admin-list-cell" data-label="Series">${escapeHtml(formatListValue(product.series))}</span>
-      <span class="admin-list-cell admin-list-cell--actions" data-label="Actions">
+    `;
+  }
+
+  if (column.key === "brand") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatListValue(product.brand))}</span>`;
+  }
+
+  if (column.key === "visibility") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(product.showOnUserPage ? "Visible" : "Hidden")}</span>`;
+  }
+
+  if (column.key === "group") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatTypeLabel(product.filterType))}</span>`;
+  }
+
+  if (column.key === "status") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatTypeLabel(product.status))}</span>`;
+  }
+
+  if (column.key === "volume") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatListValue(product.volume))}</span>`;
+  }
+
+  if (column.key === "color") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatColorListValue(product.colors))}</span>`;
+  }
+
+  if (column.key === "depoPrice") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatListValue(product.depoPrice))}</span>`;
+  }
+
+  if (column.key === "userPrice") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatListValue(product.userPrice))}</span>`;
+  }
+
+  if (column.key === "description") {
+    return `
+      <span class="admin-list-cell admin-list-cell--description" data-label="${escapeHtml(column.label)}">
+        <small lang="km">${escapeHtml(formatListValue(product.description))}</small>
+      </span>
+    `;
+  }
+
+  if (column.key === "sizes") {
+    return `<span class="admin-list-cell" data-label="${escapeHtml(column.label)}">${escapeHtml(formatSizesListValue(product.sizes))}</span>`;
+  }
+
+  if (column.key === "actions") {
+    return `
+      <span class="admin-list-cell admin-list-cell--actions" data-label="${escapeHtml(column.label)}">
         <button
           class="pagination__button admin-button admin-button--danger"
           type="button"
@@ -1402,6 +3139,18 @@ function buildListItemMarkup(product) {
           Delete
         </button>
       </span>
+    `;
+  }
+
+  return "";
+}
+
+function buildListItemMarkup(product, columns = getSelectedItemListColumnDefinitions()) {
+  const isActive = product.code === selectedCode;
+
+  return `
+    <article class="admin-list-item${isActive ? " is-active" : ""}">
+      ${columns.map((column) => buildListCellMarkup(column, product)).join("")}
     </article>
   `;
 }
@@ -1418,13 +3167,15 @@ function updateStats() {
 function renderList() {
   const filteredProducts = getFilteredProducts();
   const visibleProducts = getVisibleProducts(filteredProducts);
+  const selectedColumns = getSelectedItemListColumnDefinitions();
   const pageSize = getActivePageSize();
   const totalFilteredProducts = filteredProducts.length;
   const pageCount = getPageCount(filteredProducts);
   const rangeStart = totalFilteredProducts ? ((Number.isFinite(pageSize) ? (listPage - 1) * pageSize : 0) + 1) : 0;
   const rangeEnd = totalFilteredProducts ? (Number.isFinite(pageSize) ? Math.min(listPage * pageSize, totalFilteredProducts) : totalFilteredProducts) : 0;
 
-  adminList.innerHTML = visibleProducts.map((product) => buildListItemMarkup(product)).join("");
+  renderItemColumnConfiguration(selectedColumns);
+  adminList.innerHTML = visibleProducts.map((product) => buildListItemMarkup(product, selectedColumns)).join("");
   adminListHeading.textContent = `Items (${totalFilteredProducts})`;
   adminListRange.textContent = totalFilteredProducts
     ? `Showing ${rangeStart}-${rangeEnd} of ${totalFilteredProducts} records`
@@ -1707,13 +3458,13 @@ function syncItemImageFieldState() {
 
   if (adminImageUploadMeta) {
     if (directImageValue) {
-      adminImageUploadMeta.textContent = "Using the image URL above. You can replace it with a local file at any time.";
+      adminImageUploadMeta.textContent = "Using the saved item image. You can replace it with a local file at any time.";
     } else if (pendingLocalImageDataUrl) {
       adminImageUploadMeta.textContent = pendingLocalImageName
         ? `${pendingLocalImageName} selected from this device.`
         : "Using a saved local image from this browser.";
     } else {
-      adminImageUploadMeta.textContent = "Paste an image URL or choose a local file from this device. Local images stay in this browser.";
+      adminImageUploadMeta.textContent = AUTO_IMAGE_UPLOAD_META_TEXT;
     }
   }
 
@@ -1725,7 +3476,7 @@ function syncItemImageFieldState() {
     adminImagePreview.hidden = true;
     adminImagePreview.removeAttribute("src");
     adminImagePreviewEmpty.hidden = false;
-    adminImagePreviewEmpty.textContent = "No image selected. The selected icon will be shown.";
+    adminImagePreviewEmpty.textContent = AUTO_IMAGE_FALLBACK_TEXT;
     return;
   }
 
@@ -1757,8 +3508,6 @@ function fillForm(product) {
   setFormValue("filterType", nextProduct.filterType);
   setFormValue("status", nextProduct.status);
   setFormChecked("showOnUserPage", nextProduct.showOnUserPage);
-  setFormValue("similarKey", nextProduct.similarKey);
-  setFormValue("icon", nextProduct.icon);
   setItemImageValue(nextProduct.image);
   setFormValue("volume", nextProduct.volume);
   setFormValue("series", nextProduct.series);
@@ -1769,12 +3518,7 @@ function fillForm(product) {
   setFormValue("artColor", nextProduct.artColor);
   setFormValue("title", nextProduct.title);
   setFormValue("description", nextProduct.description);
-  setFormValue(
-    "colors",
-    (nextProduct.colors ?? [])
-      .map((color) => `${color.label}|${color.hex}`)
-      .join("\n"),
-  );
+  setSelectedItemColors(nextProduct.colors ?? []);
   setFormValue("sizes", (nextProduct.sizes ?? []).join(", "));
   setFormValue(
     "specRows",
@@ -1957,7 +3701,11 @@ function showImportExportNotice(title, text, type = "success") {
 }
 
 function hasExcelSupport() {
-  return Boolean(window.XLSX?.utils && window.XLSX?.read && window.XLSX?.writeFile);
+  return Boolean(
+    window.XLSX?.utils
+    && window.XLSX?.read
+    && (window.XLSX?.writeFile || window.XLSX?.writeFileXLSX),
+  );
 }
 
 function ensureExcelSupport() {
@@ -1989,21 +3737,33 @@ function serializeColors(colors) {
     .join("\n");
 }
 
+function getExportableImageValue(imageValue) {
+  const value = String(imageValue ?? "").trim();
+
+  if (!value) {
+    return "";
+  }
+
+  if (isImageDataUrl(value)) {
+    return "[Local browser image]";
+  }
+
+  return value;
+}
+
 function buildItemExportRow(product) {
   return {
     Code: product.code,
-    Brand: product.brand,
-    "Items Type": product.filterType,
+    "Item Brand": product.brand,
+    "Item Group": product.filterType,
     Status: formatTypeLabel(product.status),
     "Visible On User Page": Boolean(product.showOnUserPage),
-    "Similar Group": product.similarKey,
-    Icon: product.icon,
-    Image: product.image,
+    Image: getExportableImageValue(product.image),
     Volume: product.volume,
-    Series: product.series,
+    Colors: serializeColors(product.colors),
     "Depot Price": product.depoPrice,
     "User Price": product.userPrice,
-    "Product Title": product.title,
+    Name: product.title,
     Description: product.description,
     Sizes: (product.sizes ?? []).join("\n"),
   };
@@ -2034,6 +3794,20 @@ function buildWorkbook(rows, columns, sheetName) {
   const workbook = window.XLSX.utils.book_new();
   window.XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
   return workbook;
+}
+
+function saveWorkbookFile(workbook, fileName) {
+  if (window.XLSX?.writeFileXLSX) {
+    window.XLSX.writeFileXLSX(workbook, fileName);
+    return;
+  }
+
+  if (window.XLSX?.writeFile) {
+    window.XLSX.writeFile(workbook, fileName);
+    return;
+  }
+
+  throw new Error("Excel tools did not load.");
 }
 
 function normalizeSpreadsheetHeader(header) {
@@ -2103,11 +3877,12 @@ function buildImportedProduct(row, existingProduct) {
     filterType: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.filterType, existingProduct.filterType).value,
     status: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.status, existingProduct.status).value,
     showOnUserPage: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.showOnUserPage, existingProduct.showOnUserPage).value,
-    similarKey: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.similarKey, existingProduct.similarKey).value,
-    icon: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.icon, existingProduct.icon).value,
+    similarKey: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.similarKey, "").value,
+    icon: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.icon, "").value,
     image: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.image, existingProduct.image).value,
     volume: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.volume, existingProduct.volume).value,
     series: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.series, existingProduct.series).value,
+    colors: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.colors, serializeColors(existingProduct.colors)).value,
     depoPrice: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.depoPrice, existingProduct.depoPrice).value,
     userPrice: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.userPrice, existingProduct.userPrice).value,
     title: getSpreadsheetValue(row, ITEM_IMPORT_ALIASES.title, existingProduct.title).value,
@@ -2148,18 +3923,26 @@ function exportItemsToExcel() {
     return;
   }
 
-  const workbook = buildWorkbook(
-    filteredProducts.map((product) => buildItemExportRow(product)),
-    ITEM_EXPORT_COLUMNS,
-    EXCEL_ITEMS_SHEET_NAME,
-  );
+  try {
+    const workbook = buildWorkbook(
+      filteredProducts.map((product) => buildItemExportRow(product)),
+      ITEM_EXPORT_COLUMNS,
+      EXCEL_ITEMS_SHEET_NAME,
+    );
 
-  window.XLSX.writeFile(workbook, `agt-items-${formatExcelDateToken()}.xlsx`);
-  showImportExportNotice(
-    "Items exported",
-    `Exported ${filteredProducts.length} ${pluralize(filteredProducts.length, "item")} to Excel.`,
-    "success",
-  );
+    saveWorkbookFile(workbook, `agt-items-${formatExcelDateToken()}.xlsx`);
+    showImportExportNotice(
+      "Items exported",
+      `Exported ${filteredProducts.length} ${pluralize(filteredProducts.length, "item")} to Excel.`,
+      "success",
+    );
+  } catch (error) {
+    showImportExportNotice(
+      "Items export failed",
+      error instanceof Error ? error.message : "Unable to export items to Excel.",
+      "error",
+    );
+  }
 }
 
 function exportBrandsToExcel() {
@@ -2178,18 +3961,26 @@ function exportBrandsToExcel() {
     return;
   }
 
-  const workbook = buildWorkbook(
-    filteredBrands.map((brand) => buildBrandExportRow(brand)),
-    BRAND_EXPORT_COLUMNS,
-    EXCEL_BRANDS_SHEET_NAME,
-  );
+  try {
+    const workbook = buildWorkbook(
+      filteredBrands.map((brand) => buildBrandExportRow(brand)),
+      BRAND_EXPORT_COLUMNS,
+      EXCEL_BRANDS_SHEET_NAME,
+    );
 
-  window.XLSX.writeFile(workbook, `agt-brands-${formatExcelDateToken()}.xlsx`);
-  showImportExportNotice(
-    "Brands exported",
-    `Exported ${filteredBrands.length} ${pluralize(filteredBrands.length, "brand")} to Excel.`,
-    "success",
-  );
+    saveWorkbookFile(workbook, `agt-brands-${formatExcelDateToken()}.xlsx`);
+    showImportExportNotice(
+      "Brands exported",
+      `Exported ${filteredBrands.length} ${pluralize(filteredBrands.length, "brand")} to Excel.`,
+      "success",
+    );
+  } catch (error) {
+    showImportExportNotice(
+      "Brands export failed",
+      error instanceof Error ? error.message : "Unable to export brands to Excel.",
+      "error",
+    );
+  }
 }
 
 function exportTypesToExcel() {
@@ -2208,18 +3999,26 @@ function exportTypesToExcel() {
     return;
   }
 
-  const workbook = buildWorkbook(
-    filteredTypes.map((type) => buildTypeExportRow(type)),
-    TYPE_EXPORT_COLUMNS,
-    EXCEL_TYPES_SHEET_NAME,
-  );
+  try {
+    const workbook = buildWorkbook(
+      filteredTypes.map((type) => buildTypeExportRow(type)),
+      TYPE_EXPORT_COLUMNS,
+      EXCEL_TYPES_SHEET_NAME,
+    );
 
-  window.XLSX.writeFile(workbook, `agt-item-types-${formatExcelDateToken()}.xlsx`);
-  showImportExportNotice(
-    "Item groups exported",
-    `Exported ${filteredTypes.length} ${pluralize(filteredTypes.length, "item group")} to Excel.`,
-    "success",
-  );
+    saveWorkbookFile(workbook, `agt-item-types-${formatExcelDateToken()}.xlsx`);
+    showImportExportNotice(
+      "Item groups exported",
+      `Exported ${filteredTypes.length} ${pluralize(filteredTypes.length, "item group")} to Excel.`,
+      "success",
+    );
+  } catch (error) {
+    showImportExportNotice(
+      "Item groups export failed",
+      error instanceof Error ? error.message : "Unable to export item groups to Excel.",
+      "error",
+    );
+  }
 }
 
 async function importItemsFromExcel(file) {
@@ -2250,7 +4049,7 @@ async function importItemsFromExcel(file) {
       skippedCount += 1;
 
       if (issues.length < 3) {
-        issues.push(`Row ${index + 2}: code, brand, and product title are required.`);
+        issues.push(`Row ${index + 2}: code, brand, and name are required.`);
       }
 
       return;
@@ -2446,6 +4245,7 @@ function refreshTypesView() {
 function refreshSettingsView() {
   syncAdminLanguageButtons();
   syncAuthSession();
+  syncRecoveryEmailSetting();
 }
 
 function refreshCurrentSection() {
@@ -2471,6 +4271,11 @@ function refreshCurrentSection() {
     return;
   }
 
+  if (currentSection === "contact") {
+    refreshContactsView();
+    return;
+  }
+
   refreshItemsView();
 }
 
@@ -2483,8 +4288,6 @@ function readFormProduct() {
     filterType: getFormValue("filterType"),
     status: getFormValue("status", selectedProduct.status),
     showOnUserPage: getFormChecked("showOnUserPage", selectedProduct.showOnUserPage),
-    similarKey: getFormValue("similarKey"),
-    icon: getFormValue("icon"),
     image: getActiveImageValue(),
     volume: getFormValue("volume"),
     series: getFormValue("series"),
@@ -2541,7 +4344,7 @@ function saveProduct(event) {
   const isNewItem = !previousCode;
 
   if (!normalizedProduct.code || !normalizedProduct.brand || !normalizedProduct.title) {
-    showStatus("Code, brand, and product title are required.", "error");
+    showStatus("Code, brand, and name are required.", "error");
     return;
   }
 
@@ -2996,13 +4799,6 @@ adminImageFileInput?.addEventListener("change", async (event) => {
     showStatus(error instanceof Error ? error.message : "Unable to read this image file.", "error");
   }
 });
-adminImageInput?.addEventListener("input", () => {
-  if (getFormValue("image")) {
-    clearPendingLocalImage();
-  }
-
-  syncItemImageFieldState();
-});
 adminImageClearButton?.addEventListener("click", () => {
   clearPendingLocalImage();
   setFormValue("image", "");
@@ -3012,7 +4808,7 @@ adminImageClearButton?.addEventListener("click", () => {
 adminImagePreview?.addEventListener("load", () => {
   if (adminImagePreviewEmpty) {
     adminImagePreviewEmpty.hidden = true;
-    adminImagePreviewEmpty.textContent = "No image selected. The selected icon will be shown.";
+    adminImagePreviewEmpty.textContent = AUTO_IMAGE_FALLBACK_TEXT;
   }
 
   adminImagePreview.hidden = false;
@@ -3030,6 +4826,26 @@ adminListPageSize?.addEventListener("change", () => {
   setPageForCode(selectedCode);
   renderList();
 });
+adminOpenItemColumnsButton?.addEventListener("click", openItemColumnsModal);
+adminAvailableColumns?.addEventListener("click", (event) => {
+  const addButton = event.target.closest("[data-admin-item-column-add]");
+
+  if (!addButton) {
+    return;
+  }
+
+  addItemListColumn(addButton.dataset.adminItemColumnAdd);
+});
+adminSelectedColumns?.addEventListener("click", (event) => {
+  const removeButton = event.target.closest("[data-admin-item-column-remove]");
+
+  if (!removeButton) {
+    return;
+  }
+
+  removeItemListColumn(removeButton.dataset.adminItemColumnRemove);
+});
+adminResetItemColumnsButton?.addEventListener("click", resetItemListColumns);
 adminPrevPageButton?.addEventListener("click", () => {
   listPage = Math.max(1, listPage - 1);
   renderList();
@@ -3184,26 +5000,100 @@ for (const button of adminLanguageButtons) {
     setAdminLanguage(button.dataset.adminLanguageOption);
   });
 }
+for (const button of adminSettingsPanelButtons) {
+  button.addEventListener("click", () => {
+    setAdminSettingsPanel(button.dataset.adminSettingsPanelOption);
+  });
+}
+adminSettingsTimeoutForm?.addEventListener("submit", saveSessionTimeoutSetting);
+adminSettingsPasswordForm?.addEventListener("submit", saveAdminPasswordSetting);
+adminSettingsRecoveryEmailForm?.addEventListener("submit", saveRecoveryEmailSetting);
+adminContactResetButton?.addEventListener("click", resetContactForm);
+adminContactForm?.addEventListener("submit", saveContactForm);
 adminLogoutButton?.addEventListener("click", handleLogout);
 adminSettingsLogoutButton?.addEventListener("click", handleLogout);
+window.addEventListener("agt-admin-session-refresh", () => {
+  syncAuthSession();
+});
 for (const button of [adminSidebarToggle, adminSidebarRevealToggle]) {
   button?.addEventListener("click", () => {
     sidebarCollapsed = !sidebarCollapsed;
     syncSidebarLayout();
   });
 }
-adminOpenQrButton?.addEventListener("click", openQrModal);
+adminCatalogMenuButton?.addEventListener("click", () => {
+  toggleQuickAccessMenu("catalog");
+});
+adminQrMenuButton?.addEventListener("click", () => {
+  toggleQuickAccessMenu("qr");
+});
+for (const item of adminCatalogMenuItems) {
+  item.addEventListener("click", () => {
+    grantDepoAccessIfNeeded(item.dataset.adminCatalogTarget);
+    closeQuickAccessMenus();
+  });
+}
+for (const item of adminQrMenuItems) {
+  item.addEventListener("click", () => {
+    closeQuickAccessMenus();
+    openQrModal(item.dataset.adminQrTarget);
+  });
+}
+adminAddColorPresetButton?.addEventListener("click", addPresetItemColor);
+adminAddCustomColorButton?.addEventListener("click", addCustomItemColor);
+adminCustomColorName?.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    addCustomItemColor();
+  }
+});
+adminSelectedColors?.addEventListener("click", (event) => {
+  const removeButton = event.target instanceof Element ? event.target.closest("[data-admin-color-remove]") : null;
+
+  if (!removeButton) {
+    return;
+  }
+
+  removeSelectedItemColor(Number.parseInt(removeButton.dataset.adminColorRemove, 10));
+});
 adminCloseQrButton?.addEventListener("click", closeQrModal);
+adminCloseItemColumnsButton?.addEventListener("click", closeItemColumnsModal);
 adminCopyQrLinkButton?.addEventListener("click", copyCatalogLink);
 adminSaveQrButton?.addEventListener("click", saveCatalogQrCode);
+document.addEventListener("click", (event) => {
+  const target = event.target;
+
+  if (!(target instanceof Node)) {
+    return;
+  }
+
+  if (adminCatalogMenuRoot?.contains(target) || adminQrMenuRoot?.contains(target)) {
+    return;
+  }
+
+  closeQuickAccessMenus();
+});
 adminQrModal?.addEventListener("click", (event) => {
   if (event.target instanceof Element && event.target.hasAttribute("data-admin-close")) {
     closeQrModal();
   }
 });
+adminItemColumnsModal?.addEventListener("click", (event) => {
+  if (event.target instanceof Element && event.target.hasAttribute("data-admin-close")) {
+    closeItemColumnsModal();
+  }
+});
 window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && openQuickAccessMenuName) {
+    closeQuickAccessMenus();
+  }
+
   if (event.key === "Escape" && adminQrModal && !adminQrModal.hasAttribute("hidden")) {
     closeQrModal();
+  }
+
+  if (event.key === "Escape" && adminItemColumnsModal && !adminItemColumnsModal.hasAttribute("hidden")) {
+    closeItemColumnsModal();
   }
 });
 

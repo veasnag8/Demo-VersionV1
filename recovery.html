@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Recovery | Angkor Garden Tools</title>
+  <meta
+    name="description"
+    content="Recovery page for the Angkor Garden Tools admin account."
+  >
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="shortcut icon" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="stylesheet" href="styles.css?v=20260324-5">
+  <link rel="stylesheet" href="admin.css?v=20260324-23">
+  <script src="admin-auth.js?v=20260324-8"></script>
+</head>
+<body class="admin-login-page">
+  <main class="admin-login admin-login--single">
+    <section class="admin-login__panel admin-login__panel--recovery">
+      <a class="admin-login__brand" id="adminLoginBrand" href="users.html#catalog" aria-label="Open user catalog">
+        <span class="admin-login__brand-mark">
+          <img src="logo.png" alt="Angkor Garden Tools logo">
+        </span>
+        <span class="admin-login__brand-copy">
+          <strong id="adminLoginBrandTitle">Angkor Garden Tools</strong>
+          <small id="adminLoginBrandSubtitle">Password recovery</small>
+        </span>
+      </a>
+
+      <a class="admin-login__back-link" id="adminLoginBackLink" href="index.html">Back to Sign In</a>
+      <p class="empty-state admin-login__status" id="adminLoginStatus" hidden></p>
+
+      <section class="admin-login__recovery" id="adminLoginRecoverySection">
+        <div class="admin-login__recovery-head">
+          <p class="eyebrow" id="adminLoginRecoveryEyebrow">Forgot Password</p>
+          <h3 id="adminLoginRecoveryTitle">Recovery</h3>
+          <p id="adminLoginRecoveryCopy">Use the recovery email saved in Settings to create an OTP or reset link.</p>
+        </div>
+
+        <form class="admin-login__recovery-card" id="adminLoginRecoveryRequestForm" autocomplete="off">
+          <div class="admin-login__recovery-card-head">
+            <p class="eyebrow" id="adminLoginRecoveryRequestStep">Step 1</p>
+            <h4 id="adminLoginRecoveryRequestTitle">Send OTP / Send Reset Link</h4>
+          </div>
+
+          <label class="admin-auth-field">
+            <span id="adminLoginRecoveryEmailLabel">Email</span>
+            <input id="adminLoginRecoveryEmail" type="email" inputmode="email" autocomplete="email"
+              placeholder="Enter recovery email" required>
+          </label>
+
+          <div class="admin-login__recovery-actions">
+            <button class="pagination__button admin-button admin-button--ghost" id="adminLoginSendOtpButton"
+              type="button">Send OTP</button>
+            <button class="pagination__button admin-button admin-button--primary" id="adminLoginSendResetLinkButton"
+              type="button">Send Reset Link</button>
+          </div>
+        </form>
+
+        <form class="admin-login__recovery-card" id="adminLoginOtpResetForm" autocomplete="off" hidden>
+          <div class="admin-login__recovery-card-head">
+            <p class="eyebrow" id="adminLoginOtpStepLabel">Step 2</p>
+            <h4 id="adminLoginOtpResetTitle">Enter OTP Code</h4>
+            <p id="adminLoginOtpStepCopy">Enter the OTP code first. If it is correct, you can set a new password.</p>
+          </div>
+
+          <div class="admin-login__recovery-grid">
+            <label class="admin-auth-field admin-login__recovery-grid-full">
+              <span id="adminLoginOtpEmailLabel">Email</span>
+              <input id="adminLoginOtpEmail" type="email" inputmode="email" autocomplete="email"
+                placeholder="Enter recovery email" required>
+            </label>
+
+            <label class="admin-auth-field admin-login__recovery-grid-full">
+              <span id="adminLoginOtpCodeLabel">OTP Code</span>
+              <input id="adminLoginOtpCode" type="text" inputmode="numeric" autocomplete="one-time-code"
+                placeholder="Enter OTP code" required>
+            </label>
+          </div>
+
+          <div class="admin-login__recovery-actions">
+            <button class="pagination__button admin-button admin-button--ghost" id="adminLoginOtpVerifyButton"
+              type="button">Verify OTP</button>
+          </div>
+
+          <div class="admin-login__recovery-password-fields" id="adminLoginOtpPasswordFields" hidden>
+            <div class="admin-login__recovery-grid">
+              <label class="admin-auth-field">
+              <span id="adminLoginOtpNewPasswordLabel">New Password</span>
+              <input id="adminLoginOtpNewPassword" type="password" autocomplete="new-password"
+                placeholder="Enter new password" minlength="6" required>
+              </label>
+
+              <label class="admin-auth-field">
+                <span id="adminLoginOtpConfirmPasswordLabel">Confirm Password</span>
+                <input id="adminLoginOtpConfirmPassword" type="password" autocomplete="new-password"
+                  placeholder="Confirm new password" minlength="6" required>
+              </label>
+            </div>
+
+            <button class="pagination__button admin-button admin-button--primary" id="adminLoginOtpSubmitButton"
+              type="submit">Save New Password</button>
+          </div>
+        </form>
+
+        <form class="admin-login__recovery-card" id="adminLoginLinkResetForm" autocomplete="off" hidden>
+          <div class="admin-login__recovery-card-head">
+            <h4 id="adminLoginLinkResetTitle">Reset Password With Link</h4>
+            <p id="adminLoginLinkResetCopy">Open the reset link, then set a new password here.</p>
+          </div>
+
+          <div class="admin-login__recovery-grid">
+            <label class="admin-auth-field admin-login__recovery-grid-full">
+              <span id="adminLoginLinkEmailLabel">Email</span>
+              <input id="adminLoginLinkEmail" type="email" autocomplete="email" readonly>
+            </label>
+
+            <label class="admin-auth-field">
+              <span id="adminLoginLinkNewPasswordLabel">New Password</span>
+              <input id="adminLoginLinkNewPassword" type="password" autocomplete="new-password"
+                placeholder="Enter new password" minlength="6" required>
+            </label>
+
+            <label class="admin-auth-field">
+              <span id="adminLoginLinkConfirmPasswordLabel">Confirm Password</span>
+              <input id="adminLoginLinkConfirmPassword" type="password" autocomplete="new-password"
+                placeholder="Confirm new password" minlength="6" required>
+            </label>
+          </div>
+
+          <button class="pagination__button admin-button admin-button--primary" id="adminLoginLinkSubmitButton"
+            type="submit">Submit Link Reset</button>
+        </form>
+
+        <div class="admin-login__recovery-output" id="adminLoginRecoveryOutputWrap" hidden>
+          <span class="admin-login__recovery-output-label" id="adminLoginRecoveryOutputLabel">Recovery Result</span>
+          <textarea id="adminLoginRecoveryOutput" rows="3" readonly></textarea>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="admin-login.js?v=20260324-6"></script>
+</body>
+</html>

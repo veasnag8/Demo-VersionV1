@@ -2,10 +2,38 @@
   const STORAGE_KEY = "agt-products";
   const BRAND_STORAGE_KEY = "agt-brands";
   const TYPE_STORAGE_KEY = "agt-types";
+  const CONTACT_STORAGE_KEY = "agt-contact-settings";
   const defaultProducts = cloneProducts(Array.isArray(window.catalogProducts) ? window.catalogProducts : []);
+  const defaultContactSettings = Object.freeze({
+    address: "No775, Str38, Trea2 Village, Sangkat Steng Meanchey, Khan Meanchey, Phnom Penh",
+    contacts: [
+      {
+        type: "phone",
+        label: "+855 (0) 70 516 333",
+        value: "+85570516333",
+        link: "",
+      },
+      {
+        type: "phone",
+        label: "078 96 36 36",
+        value: "078963636",
+        link: "",
+      },
+      {
+        type: "email",
+        label: "angkorgardentools@gmail.com",
+        value: "angkorgardentools@gmail.com",
+        link: "",
+      },
+    ],
+  });
 
   function cloneProducts(products) {
     return JSON.parse(JSON.stringify(products));
+  }
+
+  function cloneContactSettings(settings) {
+    return JSON.parse(JSON.stringify(settings));
   }
 
   function cleanString(value) {
@@ -162,6 +190,219 @@
     return [...new Set(source.map((item) => cleanString(item)).filter(Boolean))];
   }
 
+  function normalizeContactType(value) {
+    const type = cleanString(value).toLowerCase();
+
+    if (type === "email" || type === "telegram" || type === "link") {
+      return type;
+    }
+
+    return "phone";
+  }
+
+  function normalizePublicUrl(value) {
+    const url = cleanString(value);
+
+    if (!url) {
+      return "";
+    }
+
+    if (/^(?:https?:|mailto:|tel:|tg:)/i.test(url)) {
+      return url;
+    }
+
+    return `https://${url.replace(/^\/+/, "")}`;
+  }
+
+  function normalizePhoneValue(value) {
+    return cleanString(value).replace(/[^0-9+]/g, "");
+  }
+
+  function buildTelegramHref(value) {
+    const telegramValue = cleanString(value);
+
+    if (!telegramValue) {
+      return "";
+    }
+
+    if (/^(?:https?:|tg:)/i.test(telegramValue)) {
+      return telegramValue;
+    }
+
+    if (telegramValue.startsWith("@")) {
+      return `https://t.me/${telegramValue.slice(1)}`;
+    }
+
+    const compactValue = telegramValue.replace(/\s+/g, "");
+
+    if (/^t\.me\//i.test(compactValue)) {
+      return `https://${compactValue}`;
+    }
+
+    return `https://t.me/${compactValue}`;
+  }
+
+  function getContactDisplayType(entry = {}) {
+    const type = normalizeContactType(entry.type);
+    const telegram = cleanString(entry.telegram);
+
+    if (type === "phone" && telegram) {
+      return "telegram";
+    }
+
+    return type;
+  }
+
+  function buildContactHref(entry = {}) {
+    const type = normalizeContactType(entry.type);
+    const value = cleanString(entry.value);
+    const label = cleanString(entry.label);
+    const link = cleanString(entry.link ?? entry.href);
+    const telegram = cleanString(entry.telegram);
+
+    if (type === "phone" && telegram) {
+      return buildTelegramHref(telegram);
+    }
+
+    if (type === "phone") {
+      const phoneValue = normalizePhoneValue(value || label);
+      return phoneValue ? `tel:${phoneValue}` : (link ? normalizePublicUrl(link) : "");
+    }
+
+    if (type === "email") {
+      const emailValue = cleanString(value || label);
+      return emailValue ? `mailto:${emailValue}` : "";
+    }
+
+    if (type === "telegram") {
+      return buildTelegramHref(value || link);
+    }
+
+    if (link) {
+      return normalizePublicUrl(link);
+    }
+
+    return normalizePublicUrl(value);
+  }
+
+  function normalizeContactEntry(input = {}) {
+    const type = normalizeContactType(input.type);
+    const label = cleanString(input.label);
+    const value = cleanString(input.value);
+    const link = cleanString(input.link ?? input.href);
+    const telegram = cleanString(input.telegram);
+
+    if (!label && !value && !link) {
+      return null;
+    }
+
+    return {
+      type,
+      label: label || value || link,
+      value,
+      link,
+      telegram,
+    };
+  }
+
+  function normalizeContactSettings(input = {}) {
+    return {
+      address: cleanString(input.address),
+      contacts: (Array.isArray(input.contacts) ? input.contacts : [])
+        .map((entry) => normalizeContactEntry(entry))
+        .filter(Boolean),
+    };
+  }
+
+  function getBannerContactSettings(settings = getContactSettings()) {
+    const normalizedSettings = normalizeContactSettings(settings);
+    const bannerContacts = [];
+    let phoneCount = 0;
+    let emailAdded = false;
+
+    for (const entry of normalizedSettings.contacts) {
+      const type = normalizeContactType(entry.type);
+
+      if (type === "phone" && phoneCount < 2) {
+        bannerContacts.push(entry);
+        phoneCount += 1;
+        continue;
+      }
+
+      if (type === "email" && !emailAdded) {
+        bannerContacts.push(entry);
+        emailAdded = true;
+      }
+    }
+
+    return {
+      address: normalizedSettings.address,
+      contacts: bannerContacts,
+    };
+  }
+
+  function buildAutoProductKindText(input, filterType, tags, specRows, featurePoints) {
+    return [
+      filterType,
+      cleanString(input.code),
+      cleanString(input.brand),
+      cleanString(input.volume),
+      cleanString(input.series),
+      cleanString(input.title),
+      cleanString(input.description),
+      ...tags,
+      ...featurePoints,
+      ...specRows.flatMap((row) => [row.label, row.value]),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+  }
+
+  function resolveSimilarKey(input, filterType, tags, specRows, featurePoints) {
+    const explicitSimilarKey = cleanString(input.similarKey).toLowerCase();
+    const explicitIcon = cleanString(input.icon).toLowerCase();
+    const autoProductKindText = buildAutoProductKindText(input, filterType, tags, specRows, featurePoints);
+
+    if (filterType.includes("battery") || explicitSimilarKey === "battery" || explicitIcon === "battery") {
+      return "battery";
+    }
+
+    if (
+      filterType.includes("mister") ||
+      explicitSimilarKey === "mister" ||
+      explicitIcon === "mister" ||
+      autoProductKindText.includes("mister")
+    ) {
+      return "mister";
+    }
+
+    if (
+      explicitSimilarKey &&
+      explicitSimilarKey !== "sprayer" &&
+      explicitSimilarKey !== "battery" &&
+      explicitSimilarKey !== "mister"
+    ) {
+      return explicitSimilarKey;
+    }
+
+    return filterType || "sprayer";
+  }
+
+  function resolveIcon(input, filterType, similarKey) {
+    const explicitIcon = cleanString(input.icon).toLowerCase();
+
+    if (similarKey === "mister" || explicitIcon === "mister") {
+      return "mister";
+    }
+
+    if (similarKey === "battery" || filterType.includes("battery") || explicitIcon === "battery") {
+      return "battery";
+    }
+
+    return "sprayer";
+  }
+
   function buildSearchText(product) {
     return [
       product.code,
@@ -173,6 +414,7 @@
       product.icon,
       product.volume,
       product.series,
+      ...(product.colors ?? []).flatMap((color) => [color.label, color.hex]),
       product.title,
       product.description,
       ...(product.specRows ?? []).flatMap((row) => [row.label, row.value]),
@@ -202,8 +444,6 @@
     const code = cleanString(input.code).toUpperCase();
     const brand = cleanString(input.brand);
     const filterType = cleanString(input.filterType).toLowerCase() || "sprayer";
-    const similarKey = cleanString(input.similarKey).toLowerCase() || filterType;
-    const icon = cleanString(input.icon).toLowerCase() || (similarKey === "mister" ? "mister" : filterType === "battery" ? "battery" : "sprayer");
     const volume = cleanString(input.volume);
     const title = cleanString(input.title);
     const description = cleanString(input.description);
@@ -213,6 +453,8 @@
     const tags = normalizeTags(input.tags);
     const specRows = normalizeSpecRows(input.specRows);
     const featurePoints = normalizeFeaturePoints(input.featurePoints);
+    const similarKey = resolveSimilarKey(input, filterType, tags, specRows, featurePoints);
+    const icon = resolveIcon(input, filterType, similarKey);
 
     if (status === "inactive") {
       stock = 0;
@@ -368,6 +610,26 @@
     }
   }
 
+  function getContactSettings() {
+    try {
+      const storedValue = window.localStorage.getItem(CONTACT_STORAGE_KEY);
+
+      if (!storedValue) {
+        return cloneContactSettings(normalizeContactSettings(defaultContactSettings));
+      }
+
+      const parsedValue = JSON.parse(storedValue);
+
+      if (!parsedValue || typeof parsedValue !== "object" || Array.isArray(parsedValue)) {
+        return cloneContactSettings(normalizeContactSettings(defaultContactSettings));
+      }
+
+      return cloneContactSettings(normalizeContactSettings(parsedValue));
+    } catch (error) {
+      return cloneContactSettings(normalizeContactSettings(defaultContactSettings));
+    }
+  }
+
   function sortBrands(brands) {
     return [...brands].sort((left, right) => left.name.localeCompare(right.name));
   }
@@ -446,6 +708,12 @@
     return getTypes();
   }
 
+  function saveContactSettings(settings) {
+    const normalizedSettings = normalizeContactSettings(settings);
+    window.localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(normalizedSettings));
+    return getContactSettings();
+  }
+
   function getEmptyBrand() {
     return normalizeBrand({
       name: "",
@@ -488,10 +756,27 @@
     });
   }
 
+  function getEmptyContactEntry() {
+    return {
+      type: "phone",
+      label: "",
+      value: "",
+      link: "",
+    };
+  }
+
+  function getEmptyContactSettings() {
+    return {
+      address: "",
+      contacts: [],
+    };
+  }
+
   window.catalogStore = {
     STORAGE_KEY,
     BRAND_STORAGE_KEY,
     TYPE_STORAGE_KEY,
+    CONTACT_STORAGE_KEY,
     getProducts,
     saveProducts,
     upsertProduct,
@@ -501,11 +786,21 @@
     saveBrands,
     getTypes,
     saveTypes,
+    getContactSettings,
+    getBannerContactSettings,
+    saveContactSettings,
     normalizeProduct,
     normalizeBrand,
     normalizeType,
+    normalizeContactSettings,
+    normalizeContactEntry,
+    normalizeContactType,
+    getContactDisplayType,
+    buildContactHref,
     getEmptyProduct,
     getEmptyBrand,
     getEmptyType,
+    getEmptyContactEntry,
+    getEmptyContactSettings,
   };
 })();
