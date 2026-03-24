@@ -2900,6 +2900,21 @@
   background: #ffffff;
 }
 
+.admin-button--accent {
+  border-color: transparent;
+  background: linear-gradient(135deg, #0f3b33, #24aa86);
+  color: #f4fffb;
+  box-shadow: 0 14px 24px rgba(16, 63, 54, 0.16);
+}
+
+.admin-button--accent:hover,
+.admin-button--accent:focus-visible {
+  border-color: transparent;
+  background: linear-gradient(135deg, #12463d, #2ac39a);
+  color: #ffffff;
+  box-shadow: 0 18px 28px rgba(16, 63, 54, 0.2);
+}
+
 .admin-button--primary {
   border-color: transparent;
   background: linear-gradient(135deg, #24aa86, #58cfb7);
