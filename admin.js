@@ -57,6 +57,8 @@ const adminOpenItemColumnsButton = document.querySelector("#adminOpenItemColumns
 const adminAvailableColumns = document.querySelector("#adminAvailableColumns");
 const adminSelectedColumns = document.querySelector("#adminSelectedColumns");
 const adminResetItemColumnsButton = document.querySelector("#adminResetItemColumnsButton");
+const adminMoveItemColumnUpButton = document.querySelector("#adminMoveItemColumnUpButton");
+const adminMoveItemColumnDownButton = document.querySelector("#adminMoveItemColumnDownButton");
 const adminPrevPageButton = document.querySelector("#adminPrevPageButton");
 const adminNextPageButton = document.querySelector("#adminNextPageButton");
 const adminPageStatus = document.querySelector("#adminPageStatus");
@@ -124,6 +126,7 @@ const adminLogoutButton = document.querySelector("#adminLogoutButton");
 const adminSettingsLogoutButton = document.querySelector("#adminSettingsLogoutButton");
 const adminSidebarToggle = document.querySelector("#adminSidebarToggle");
 const adminSidebarRevealToggle = document.querySelector("#adminSidebarRevealToggle");
+const adminSidebarBackdrop = document.querySelector("#adminSidebarBackdrop");
 const adminSessionUser = document.querySelector("#adminSessionUser");
 const adminLanguageButtons = [...document.querySelectorAll("[data-admin-language-option]")];
 const adminSettingsEyebrow = document.querySelector("#adminSettingsEyebrow");
@@ -438,7 +441,7 @@ const ADMIN_UI = {
       items: "Items",
       types: "Item Group",
       brands: "Item Brands",
-      contact: "Contact",
+      contact: "Chontact Banner",
       settings: "Settings",
 
     },
@@ -485,7 +488,7 @@ const ADMIN_UI = {
       },
       contact: {
         eyebrow: "Public Contact",
-        title: "Contact",
+        title: "Chontact Banner",
         text: "Control the address and contact banner shown on the users, depo, and detail pages.",
       },
 
@@ -555,7 +558,7 @@ const ADMIN_UI = {
     },
     contact: {
       eyebrow: "Public Contact",
-      title: "Contact",
+      title: "Chontact Banner",
       text: "Control the public address, 2 phone lines, email, and optional Link Telegrams.",
       addressEyebrow: "Line 1",
       addressTitle: "Address",
@@ -865,11 +868,13 @@ let typeEditorHidden = true;
 let currentAdminLanguage = readStoredPreference(STORAGE_KEYS.language, ["en", "km"], "en");
 let currentSection = "dashboard";
 let currentSettingsPanel = "profile";
-let sidebarCollapsed = window.matchMedia("(max-width: 1024px)").matches;
+const mobileSidebarQuery = window.matchMedia("(max-width: 1024px)");
+let sidebarCollapsed = mobileSidebarQuery.matches;
 let currentQrCatalogTarget = "user";
 let openQuickAccessMenuName = null;
 let selectedItemColors = [];
 let selectedItemListColumns = readStoredItemListColumns();
+let activeItemListColumnKey = null;
 
 function readStoredPreference(key, allowedValues, fallbackValue) {
   try {
@@ -898,26 +903,73 @@ function getItemListColumnDefinition(columnKey) {
   return ITEM_LIST_COLUMNS.find((column) => column.key === columnKey) ?? null;
 }
 
+function getItemListColumnMasterIndex(columnKey) {
+  return ITEM_LIST_COLUMNS.findIndex((column) => column.key === columnKey);
+}
+
+function insertItemListColumnAtNaturalPosition(columnKeys, columnKey) {
+  const masterIndex = getItemListColumnMasterIndex(columnKey);
+
+  if (masterIndex === -1 || columnKeys.includes(columnKey)) {
+    return columnKeys;
+  }
+
+  let insertIndex = columnKeys.length;
+
+  for (let index = masterIndex - 1; index >= 0; index -= 1) {
+    const previousKey = ITEM_LIST_COLUMNS[index]?.key;
+    const previousIndex = previousKey ? columnKeys.indexOf(previousKey) : -1;
+
+    if (previousIndex !== -1) {
+      insertIndex = previousIndex + 1;
+      break;
+    }
+  }
+
+  if (insertIndex === columnKeys.length) {
+    for (let index = masterIndex + 1; index < ITEM_LIST_COLUMNS.length; index += 1) {
+      const nextKey = ITEM_LIST_COLUMNS[index]?.key;
+      const nextIndex = nextKey ? columnKeys.indexOf(nextKey) : -1;
+
+      if (nextIndex !== -1) {
+        insertIndex = nextIndex;
+        break;
+      }
+    }
+  }
+
+  columnKeys.splice(insertIndex, 0, columnKey);
+  return columnKeys;
+}
+
 function normalizeItemListColumns(columnKeys) {
   const requestedKeys = Array.isArray(columnKeys)
     ? columnKeys.map((columnKey) => String(columnKey ?? "").trim()).filter(Boolean)
     : [];
-  const requestedSet = new Set(requestedKeys);
   const fallbackKeys = getDefaultItemListColumns();
+  const validRequestedKeys = [];
+  const seenKeys = new Set();
 
-  return ITEM_LIST_COLUMNS
-    .filter((column) => {
-      if (column.required) {
-        return true;
-      }
+  for (const columnKey of requestedKeys) {
+    if (seenKeys.has(columnKey) || !getItemListColumnDefinition(columnKey)) {
+      continue;
+    }
 
-      if (!requestedKeys.length) {
-        return fallbackKeys.includes(column.key);
-      }
+    validRequestedKeys.push(columnKey);
+    seenKeys.add(columnKey);
+  }
 
-      return requestedSet.has(column.key);
-    })
-    .map((column) => column.key);
+  const normalizedKeys = validRequestedKeys.length ? [...validRequestedKeys] : [...fallbackKeys];
+
+  for (const column of ITEM_LIST_COLUMNS) {
+    if (!column.required || normalizedKeys.includes(column.key)) {
+      continue;
+    }
+
+    insertItemListColumnAtNaturalPosition(normalizedKeys, column.key);
+  }
+
+  return normalizedKeys;
 }
 
 function readStoredItemListColumns() {
@@ -977,27 +1029,104 @@ function syncItemListTableLayout(columns = getSelectedItemListColumnDefinitions(
   adminItemListTable.style.setProperty("--admin-list-min-width", getItemListMinWidth(columns));
 }
 
-function buildItemColumnOptionMarkup(column, mode) {
-  const isSelectedMode = mode === "selected";
-  const isLocked = Boolean(isSelectedMode && column.required);
-  const actionLabel = isLocked ? "Required" : isSelectedMode ? "Remove" : "Add";
-  const actionAttribute = isLocked
-    ? ""
-    : isSelectedMode
-      ? ` data-admin-item-column-remove="${escapeHtml(column.key)}"`
-      : ` data-admin-item-column-add="${escapeHtml(column.key)}"`;
-  const tagName = isLocked ? "div" : "button";
-  const itemClass = `admin-column-config__item${isLocked ? " is-locked" : ""}`;
-
+function buildItemColumnActionMarkup(
+  label,
+  attributeName,
+  attributeValue,
+  ariaLabel,
+  isDisabled = false,
+) {
   return `
-    <${tagName} class="${itemClass}"${isLocked ? "" : ' type="button"'}${actionAttribute}>
-      <span>${escapeHtml(column.label)}</span>
-      <strong>${actionLabel}</strong>
-    </${tagName}>
+    <button
+      class="admin-column-config__action"
+      type="button"
+      ${attributeName}="${escapeHtml(attributeValue)}"
+      aria-label="${escapeHtml(ariaLabel)}"
+      title="${escapeHtml(ariaLabel)}"
+      ${isDisabled ? "disabled" : ""}
+    >${escapeHtml(label)}</button>
   `;
 }
 
+function buildItemColumnOptionMarkup(column, mode, options = {}) {
+  const isSelectedMode = mode === "selected";
+  const isLocked = Boolean(isSelectedMode && column.required);
+  const isActive = Boolean(isSelectedMode && options.isActive);
+  const currentIndex = Number.isInteger(options.index) ? options.index : -1;
+  const total = Number.isInteger(options.total) ? options.total : 0;
+  const helperText = isSelectedMode
+    ? `Position ${currentIndex + 1} of ${total}`
+    : "";
+  let actionsMarkup = buildItemColumnActionMarkup(
+    "Add",
+    "data-admin-item-column-add",
+    column.key,
+    `Show ${column.label} column`,
+  );
+
+  if (isSelectedMode) {
+    actionsMarkup = isLocked
+      ? '<span class="admin-column-config__badge">Required</span>'
+      : buildItemColumnActionMarkup(
+        "Hide",
+        "data-admin-item-column-remove",
+        column.key,
+        `Hide ${column.label} column`,
+      );
+  }
+
+  return `
+    <div
+      class="admin-column-config__item${isLocked ? " is-locked" : ""}${isSelectedMode ? " admin-column-config__item--selectable" : ""}${isActive ? " is-active" : ""}"
+      ${isSelectedMode ? `data-admin-item-column-select="${escapeHtml(column.key)}"` : ""}
+    >
+      <div class="admin-column-config__item-copy">
+        <span>${escapeHtml(column.label)}</span>
+        <small>${escapeHtml(helperText)}</small>
+      </div>
+      <div class="admin-column-config__actions">
+        ${actionsMarkup}
+      </div>
+    </div>
+  `;
+}
+
+function syncActiveItemListColumn(columns = getSelectedItemListColumnDefinitions()) {
+  const columnKeys = columns.map((column) => column.key);
+
+  if (!columnKeys.length) {
+    activeItemListColumnKey = null;
+    return;
+  }
+
+  if (!activeItemListColumnKey || !columnKeys.includes(activeItemListColumnKey)) {
+    [activeItemListColumnKey] = columnKeys;
+  }
+}
+
+function syncItemColumnMoveButtons(columns = getSelectedItemListColumnDefinitions()) {
+  syncActiveItemListColumn(columns);
+
+  const activeIndex = columns.findIndex((column) => column.key === activeItemListColumnKey);
+  const activeColumn = activeIndex === -1 ? null : columns[activeIndex];
+  const upLabel = activeColumn ? `Move ${activeColumn.label} column up` : "Move selected column up";
+  const downLabel = activeColumn ? `Move ${activeColumn.label} column down` : "Move selected column down";
+
+  if (adminMoveItemColumnUpButton) {
+    adminMoveItemColumnUpButton.disabled = !activeColumn || activeIndex <= 0;
+    adminMoveItemColumnUpButton.setAttribute("aria-label", upLabel);
+    adminMoveItemColumnUpButton.setAttribute("title", upLabel);
+  }
+
+  if (adminMoveItemColumnDownButton) {
+    adminMoveItemColumnDownButton.disabled = !activeColumn || activeIndex >= columns.length - 1;
+    adminMoveItemColumnDownButton.setAttribute("aria-label", downLabel);
+    adminMoveItemColumnDownButton.setAttribute("title", downLabel);
+  }
+}
+
 function renderItemColumnConfiguration(columns = getSelectedItemListColumnDefinitions()) {
+  syncActiveItemListColumn(columns);
   syncItemListTableLayout(columns);
 
   if (adminItemListHead) {
@@ -1015,9 +1144,26 @@ function renderItemColumnConfiguration(columns = getSelectedItemListColumnDefini
 
   if (adminSelectedColumns) {
     adminSelectedColumns.innerHTML = columns.length
-      ? columns.map((column) => buildItemColumnOptionMarkup(column, "selected")).join("")
+      ? columns
+        .map((column, index) => buildItemColumnOptionMarkup(column, "selected", {
+          index,
+          total: columns.length,
+          isActive: column.key === activeItemListColumnKey,
+        }))
+        .join("")
       : '<p class="admin-column-config__empty">Choose at least one column.</p>';
   }
+
+  syncItemColumnMoveButtons(columns);
+}
+
+function setActiveItemListColumn(columnKey) {
+  if (!selectedItemListColumns.includes(columnKey)) {
+    return;
+  }
+
+  activeItemListColumnKey = columnKey;
+  renderItemColumnConfiguration();
 }
 
 function setSelectedItemListColumns(columnKeys) {
@@ -1033,6 +1179,7 @@ function addItemListColumn(columnKey) {
     return;
   }
 
+  activeItemListColumnKey = column.key;
   setSelectedItemListColumns([...selectedItemListColumns, column.key]);
 }
 
@@ -1043,7 +1190,32 @@ function removeItemListColumn(columnKey) {
     return;
   }
 
-  setSelectedItemListColumns(selectedItemListColumns.filter((selectedKey) => selectedKey !== column.key));
+  const currentIndex = selectedItemListColumns.indexOf(column.key);
+  const remainingColumns = selectedItemListColumns.filter((selectedKey) => selectedKey !== column.key);
+
+  if (activeItemListColumnKey === column.key) {
+    activeItemListColumnKey = remainingColumns[currentIndex] ?? remainingColumns[currentIndex - 1] ?? null;
+  }
+
+  setSelectedItemListColumns(remainingColumns);
+}
+
+function moveItemListColumn(columnKey, direction) {
+  const currentIndex = selectedItemListColumns.indexOf(columnKey);
+
+  if (currentIndex === -1) {
+    return;
+  }
+
+  const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+  if (targetIndex < 0 || targetIndex >= selectedItemListColumns.length) {
+    return;
+  }
+
+  const nextColumns = [...selectedItemListColumns];
+  [nextColumns[currentIndex], nextColumns[targetIndex]] = [nextColumns[targetIndex], nextColumns[currentIndex]];
+  setSelectedItemListColumns(nextColumns);
 }
 
 function resetItemListColumns() {
@@ -2357,11 +2529,28 @@ function syncSectionNavigation() {
   }
 }
 
+function isMobileSidebarLayout() {
+  return mobileSidebarQuery.matches;
+}
+
+function setSidebarCollapsed(isCollapsed) {
+  sidebarCollapsed = isCollapsed;
+  syncSidebarLayout();
+}
+
 function syncSidebarLayout() {
   const copy = getAdminCopy();
+  const isMobileLayout = isMobileSidebarLayout();
 
   if (adminDashboardRoot) {
     adminDashboardRoot.classList.toggle("admin-dashboard--collapsed", sidebarCollapsed);
+  }
+
+  document.body.classList.toggle("admin-mobile-nav-open", isMobileLayout && !sidebarCollapsed);
+
+  if (adminSidebarBackdrop) {
+    adminSidebarBackdrop.hidden = !isMobileLayout || sidebarCollapsed;
+    adminSidebarBackdrop.setAttribute("aria-label", copy.session.hideMenuAria);
   }
 
   const toggleButtons = [adminSidebarToggle, adminSidebarRevealToggle].filter(Boolean);
@@ -4343,6 +4532,24 @@ function saveProduct(event) {
   const previousCode = selectedCode;
   const isNewItem = !previousCode;
 
+  if (isNewItem) {
+    const requiredFields = [
+      { value: rawProduct.code, label: "item code" },
+      { value: rawProduct.brand, label: "item brand" },
+      { value: rawProduct.filterType, label: "item group" },
+      { value: rawProduct.title, label: "name" },
+      { value: rawProduct.description, label: "description" },
+    ];
+    const missingFields = requiredFields
+      .filter((field) => !String(field.value ?? "").trim())
+      .map((field) => field.label);
+
+    if (missingFields.length > 0) {
+      showStatus(`Required on create: ${missingFields.join(", ")}.`, "error");
+      return;
+    }
+  }
+
   if (!normalizedProduct.code || !normalizedProduct.brand || !normalizedProduct.title) {
     showStatus("Code, brand, and name are required.", "error");
     return;
@@ -4839,13 +5046,34 @@ adminAvailableColumns?.addEventListener("click", (event) => {
 adminSelectedColumns?.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-admin-item-column-remove]");
 
-  if (!removeButton) {
+  if (removeButton) {
+    removeItemListColumn(removeButton.dataset.adminItemColumnRemove);
     return;
   }
 
-  removeItemListColumn(removeButton.dataset.adminItemColumnRemove);
+  const selectButton = event.target.closest("[data-admin-item-column-select]");
+
+  if (!selectButton) {
+    return;
+  }
+
+  setActiveItemListColumn(selectButton.dataset.adminItemColumnSelect);
 });
 adminResetItemColumnsButton?.addEventListener("click", resetItemListColumns);
+adminMoveItemColumnUpButton?.addEventListener("click", () => {
+  if (!activeItemListColumnKey) {
+    return;
+  }
+
+  moveItemListColumn(activeItemListColumnKey, "up");
+});
+adminMoveItemColumnDownButton?.addEventListener("click", () => {
+  if (!activeItemListColumnKey) {
+    return;
+  }
+
+  moveItemListColumn(activeItemListColumnKey, "down");
+});
 adminPrevPageButton?.addEventListener("click", () => {
   listPage = Math.max(1, listPage - 1);
   renderList();
@@ -4988,6 +5216,10 @@ adminTypeForm?.addEventListener("submit", saveType);
 for (const button of adminSectionButtons) {
   button.addEventListener("click", () => {
     setSection(button.dataset.adminSectionOption);
+
+    if (isMobileSidebarLayout()) {
+      setSidebarCollapsed(true);
+    }
   });
 }
 for (const button of adminShortcutButtons) {
@@ -5017,8 +5249,24 @@ window.addEventListener("agt-admin-session-refresh", () => {
 });
 for (const button of [adminSidebarToggle, adminSidebarRevealToggle]) {
   button?.addEventListener("click", () => {
-    sidebarCollapsed = !sidebarCollapsed;
-    syncSidebarLayout();
+    setSidebarCollapsed(!sidebarCollapsed);
+  });
+}
+adminSidebarBackdrop?.addEventListener("click", () => {
+  setSidebarCollapsed(true);
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && isMobileSidebarLayout() && !sidebarCollapsed) {
+    setSidebarCollapsed(true);
+  }
+});
+if (typeof mobileSidebarQuery.addEventListener === "function") {
+  mobileSidebarQuery.addEventListener("change", (event) => {
+    setSidebarCollapsed(event.matches);
+  });
+} else if (typeof mobileSidebarQuery.addListener === "function") {
+  mobileSidebarQuery.addListener((event) => {
+    setSidebarCollapsed(event.matches);
   });
 }
 adminCatalogMenuButton?.addEventListener("click", () => {

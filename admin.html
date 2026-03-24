@@ -91,7 +91,7 @@
             </svg>
           </span>
           <span class="admin-nav__copy">
-            <strong>Contact</strong>
+            <strong>Chontact Banner</strong>
           </span>
         </button>
         <button class="admin-nav__item" type="button" data-admin-section-option="settings" aria-pressed="false">
@@ -126,6 +126,9 @@
         </button>
       </div>
     </aside>
+
+    <button class="admin-sidebar-backdrop" id="adminSidebarBackdrop" type="button" aria-label="Close admin menu"
+      hidden></button>
 
     <main class="admin-main">
       <button class="admin-sidebar-toggle admin-sidebar-toggle--reveal" id="adminSidebarRevealToggle" type="button"
@@ -952,7 +955,7 @@
         <section class="admin-settings">
           <div class="admin-settings__intro">
             <p class="eyebrow" id="adminContactEyebrow">Contact Banner</p>
-            <h2 id="adminContactTitle">Contact</h2>
+            <h2 id="adminContactTitle">Chontact Banner</h2>
             <p class="admin-settings__text" id="adminContactText">Control the public address, 2 phone lines, email,
               and optional Telegram usernames.</p>
           </div>
@@ -1107,7 +1110,7 @@
             <div>
               <p class="eyebrow">Column Configuration</p>
               <h4>Choose Visible Columns</h4>
-              <p>Move columns between Available Columns and Selected Columns for the items list.</p>
+              <p>Show, hide, and move columns up or down to change their position in the items list.</p>
             </div>
             <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
               id="adminResetItemColumnsButton" type="button">Reset Columns</button>
@@ -1117,15 +1120,35 @@
             <section class="admin-column-config__panel">
               <div class="admin-column-config__panel-head">
                 <h5>Available Columns</h5>
-                <small>Hidden from the items list</small>
+                <small></small>
               </div>
               <div class="admin-column-config__list" id="adminAvailableColumns"></div>
             </section>
 
             <section class="admin-column-config__panel">
-              <div class="admin-column-config__panel-head">
-                <h5>Selected Columns</h5>
-                <small>Visible in the items list</small>
+              <div class="admin-column-config__panel-head admin-column-config__panel-head--with-actions">
+                <div class="admin-column-config__panel-head-copy">
+                  <h5>Selected Columns</h5>
+                  <small>Visible in the items list in the order shown here</small>
+                </div>
+                <div class="admin-column-config__panel-actions" aria-label="Selected column order controls">
+                  <button class="admin-column-config__action admin-column-config__action--icon"
+                    id="adminMoveItemColumnUpButton" type="button" aria-label="Move selected column up"
+                    title="Move selected column up">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M12 18V6"></path>
+                      <path d="m6.5 11.5 5.5-5.5 5.5 5.5"></path>
+                    </svg>
+                  </button>
+                  <button class="admin-column-config__action admin-column-config__action--icon"
+                    id="adminMoveItemColumnDownButton" type="button" aria-label="Move selected column down"
+                    title="Move selected column down">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M12 6v12"></path>
+                      <path d="m17.5 12.5-5.5 5.5-5.5-5.5"></path>
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="admin-column-config__list" id="adminSelectedColumns"></div>
             </section>

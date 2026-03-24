@@ -98,16 +98,12 @@
     return [...new Set(source.map((item) => cleanString(item)).filter(Boolean))];
   }
 
-  function normalizeSizes(value, volume) {
+  function normalizeSizes(value) {
     const source = Array.isArray(value) ? value : cleanString(value).split(/[\n,]+/);
     const sizes = [...new Set(source.map((item) => cleanString(item)).filter(Boolean))];
 
     if (sizes.length > 0) {
       return sizes;
-    }
-
-    if (cleanString(volume)) {
-      return [cleanString(volume)];
     }
 
     return [];
@@ -482,7 +478,7 @@
       artBg: cleanString(input.artBg) || "#eefbf6",
       artColor: cleanString(input.artColor) || "#89d8c2",
       colors: normalizeColors(input.colors),
-      sizes: normalizeSizes(input.sizes, volume),
+      sizes: normalizeSizes(input.sizes),
       specRows,
       featurePoints,
       tags,
