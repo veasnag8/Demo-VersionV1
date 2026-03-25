@@ -422,7 +422,7 @@
                 </label>
 
                 <div class="admin-field admin-field--wide admin-field--color-picker">
-                  <span>Color</span>
+                  <span>Colors</span>
                   <div class="admin-color-picker">
                     <div class="admin-color-picker__controls">
                       <select id="adminColorPresetSelect">
@@ -433,15 +433,21 @@
                     </div>
                     <div class="admin-color-picker__custom">
                       <input id="adminCustomColorName" type="text" placeholder="Custom color name">
+                      <input id="adminCustomColorCode" type="text" inputmode="text" placeholder="#2BB673"
+                        value="#2BB673" aria-label="Enter custom color hex code" autocomplete="off"
+                        autocapitalize="characters" spellcheck="false">
                       <input id="adminCustomColorHex" type="color" value="#2bb673" aria-label="Choose custom color">
                       <button class="pagination__button admin-button admin-button--ghost admin-button--compact"
                         id="adminAddCustomColorButton" type="button">Add Custom</button>
                     </div>
+                    <small class="admin-color-picker__match" id="adminCustomColorMatch" aria-live="polite">Matched
+                      color name: បៃតង</small>
                     <div class="admin-color-picker__list" id="adminSelectedColors">
                       <p class="admin-color-picker__empty">No colors selected.</p>
                     </div>
                     <textarea name="colors" hidden></textarea>
-                    <small>Choose from saved colors or add your own color name and hex.</small>
+                    <small>Choose saved colors, or create a new one below. New custom colors are saved for future
+                      items too.</small>
                   </div>
                 </div>
 
@@ -737,37 +743,6 @@
       <section class="admin-content-section" id="adminSettingsSection" hidden>
         <section class="admin-settings admin-settings--workspace">
           <div class="admin-settings__shell">
-            <article class="admin-panel admin-settings__profile-card">
-              <div class="admin-settings__profile-top">
-                <div class="admin-settings__profile-avatar" aria-hidden="true">
-                  <img src="logo.png" alt="">
-                </div>
-
-                <div class="admin-settings__profile-heading">
-                  <p class="eyebrow" id="adminSettingsProfileEyebrow">Account</p>
-                  <p class="admin-settings__profile-panel-title" id="adminSettingsProfileTitle">User Profile</p>
-                </div>
-              </div>
-
-              <div class="admin-settings__profile-copy-block">
-                <span class="admin-settings__profile-kicker" id="adminSettingsUsernameLabel">Username</span>
-                <h2 class="admin-settings__profile-name" id="adminSettingsProfileUsername">Administrator</h2>
-                <p class="admin-settings__profile-description" id="adminSettingsProfileCopy">Current signed-in details
-                  from this browser session.</p>
-              </div>
-
-              <div class="admin-settings__actions">
-                <button class="pagination__button admin-button admin-button--ghost admin-settings__logout-button"
-                  id="adminSettingsLogoutButton" type="button" aria-label="Sign Out" title="Sign Out">
-                  <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-                    <path
-                      d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
-                  </svg>
-                  <span id="adminSettingsLogoutText">Sign Out</span>
-                </button>
-              </div>
-            </article>
-
             <article class="admin-panel admin-settings__workspace-card">
               <div class="admin-settings__intro admin-settings__intro--workspace">
                 <p class="eyebrow" id="adminSettingsEyebrow">Preferences</p>

@@ -2,7 +2,45 @@
   const STORAGE_KEY = "agt-products";
   const BRAND_STORAGE_KEY = "agt-brands";
   const TYPE_STORAGE_KEY = "agt-types";
+  const COLOR_STORAGE_KEY = "agt-colors";
   const CONTACT_STORAGE_KEY = "agt-contact-settings";
+  const ENGLISH_COLOR_LABEL_TO_KHMER = Object.freeze({
+    aqua: "ខៀវបៃតង",
+    beige: "ត្នោតខ្ចី",
+    black: "ខ្មៅ",
+    blue: "ខៀវ",
+    brown: "ត្នោត",
+    charcoal: "ប្រផេះចាស់",
+    coral: "ផ្កាថ្ម",
+    crimson: "ក្រហមចាស់",
+    gold: "មាស",
+    gray: "ប្រផេះ",
+    grey: "ប្រផេះ",
+    green: "បៃតង",
+    indigo: "ខៀវស្វាយ",
+    ivory: "សភ្លឺ",
+    lavender: "ស្វាយស្រាល",
+    lime: "បៃតងខ្ចី",
+    magenta: "ស្វាយក្រហម",
+    maroon: "ត្នោតក្រហម",
+    mint: "បៃតងមីន",
+    navy: "ខៀវចាស់",
+    olive: "បៃតងអូលីវ",
+    orange: "ទឹកក្រូច",
+    peach: "ទឹកក្រូចស្រាល",
+    pink: "ផ្កាឈូក",
+    purple: "ស្វាយ",
+    red: "ក្រហម",
+    rose: "ផ្កាកុលាប",
+    silver: "ប្រាក់",
+    "sky blue": "ខៀវស្រាល",
+    slate: "ប្រផេះខៀវ",
+    teal: "បៃតងខៀវ",
+    turquoise: "ខៀវបៃតងស្រាល",
+    violet: "ស្វាយចាស់",
+    white: "ស",
+    yellow: "លឿង",
+  });
   const defaultProducts = cloneProducts(Array.isArray(window.catalogProducts) ? window.catalogProducts : []);
   const defaultContactSettings = Object.freeze({
     address: "No775, Str38, Trea2 Village, Sangkat Steng Meanchey, Khan Meanchey, Phnom Penh",
@@ -115,7 +153,7 @@
     return source
       .map((item) => {
         if (typeof item === "object" && item !== null) {
-          const label = cleanString(item.label);
+          const label = normalizeColorLabel(item.label);
           const hex = cleanString(item.hex);
 
           if (!label && !hex) {
@@ -123,7 +161,7 @@
           }
 
           return {
-            label: label || hex || "Color",
+            label: label || hex || "ពណ៌",
             hex: hex || "#d8e7e2",
           };
         }
@@ -135,15 +173,62 @@
         }
 
         const [labelPart, hexPart] = text.split("|");
-        const label = cleanString(hexPart ? labelPart : "");
+        const label = normalizeColorLabel(hexPart ? labelPart : "");
         const hex = cleanString(hexPart ?? labelPart);
 
         return {
-          label: label || hex || "Color",
+          label: label || hex || "ពណ៌",
           hex: hex || "#d8e7e2",
         };
       })
       .filter(Boolean);
+  }
+
+  function normalizeProductColors(value) {
+    const colorsByKey = new Map();
+
+    for (const color of normalizeColors(value)) {
+      const colorKey = getColorStorageLabelKey(color);
+
+      if (!colorKey || colorsByKey.has(colorKey)) {
+        continue;
+      }
+
+      colorsByKey.set(colorKey, color);
+    }
+
+    return [...colorsByKey.values()];
+  }
+
+  function normalizeColorLabel(value) {
+    const label = cleanString(value);
+
+    if (!label) {
+      return "";
+    }
+
+    const normalizedKey = label.toLowerCase().replace(/\s+/g, " ");
+    return ENGLISH_COLOR_LABEL_TO_KHMER[normalizedKey] ?? label;
+  }
+
+  function getColorStorageKey(color) {
+    const normalizedColor = normalizeColors([color])[0] ?? null;
+
+    if (!normalizedColor) {
+      return "";
+    }
+
+    return `${cleanString(normalizedColor.label).toLowerCase()}|${cleanString(normalizedColor.hex).toLowerCase()}`;
+  }
+
+  function getColorStorageLabelKey(color) {
+    const normalizedColor = normalizeColors([color])[0] ?? null;
+
+    if (!normalizedColor) {
+      return "";
+    }
+
+    return cleanString(normalizedColor.label).toLowerCase();
   }
 
   function normalizeSpecRows(value) {
@@ -477,7 +562,7 @@
       featured: normalizeBoolean(input.featured),
       artBg: cleanString(input.artBg) || "#eefbf6",
       artColor: cleanString(input.artColor) || "#89d8c2",
-      colors: normalizeColors(input.colors),
+      colors: normalizeProductColors(input.colors),
       sizes: normalizeSizes(input.sizes),
       specRows,
       featurePoints,
@@ -488,6 +573,10 @@
       ...product,
       searchText: buildSearchText(product),
     };
+  }
+
+  function getNormalizedDefaultProducts() {
+    return defaultProducts.map((product) => normalizeProduct(product));
   }
 
   function normalizeBrand(input = {}) {
@@ -517,18 +606,18 @@
       const storedValue = window.localStorage.getItem(STORAGE_KEY);
 
       if (!storedValue) {
-        return cloneProducts(defaultProducts);
+        return getNormalizedDefaultProducts();
       }
 
       const parsedValue = JSON.parse(storedValue);
 
       if (!Array.isArray(parsedValue)) {
-        return cloneProducts(defaultProducts);
+        return getNormalizedDefaultProducts();
       }
 
       return parsedValue.map((product) => normalizeProduct(product));
     } catch (error) {
-      return cloneProducts(defaultProducts);
+      return getNormalizedDefaultProducts();
     }
   }
 
@@ -559,7 +648,7 @@
 
   function resetProducts() {
     window.localStorage.removeItem(STORAGE_KEY);
-    return cloneProducts(defaultProducts);
+    return getNormalizedDefaultProducts();
   }
 
   function getStoredBrands() {
@@ -606,6 +695,38 @@
     }
   }
 
+  function getStoredColors() {
+    try {
+      const storedValue = window.localStorage.getItem(COLOR_STORAGE_KEY);
+
+      if (!storedValue) {
+        return [];
+      }
+
+      const parsedValue = JSON.parse(storedValue);
+
+      if (!Array.isArray(parsedValue)) {
+        return [];
+      }
+
+      const colorsByKey = new Map();
+
+      for (const color of parsedValue.flatMap((item) => normalizeColors([item]))) {
+        const colorKey = getColorStorageLabelKey(color);
+
+        if (!colorKey) {
+          continue;
+        }
+
+        colorsByKey.set(colorKey, color);
+      }
+
+      return sortColors([...colorsByKey.values()]);
+    } catch (error) {
+      return [];
+    }
+  }
+
   function getContactSettings() {
     try {
       const storedValue = window.localStorage.getItem(CONTACT_STORAGE_KEY);
@@ -632,6 +753,12 @@
 
   function sortTypes(types) {
     return [...types].sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  function sortColors(colors) {
+    return [...colors].sort(
+      (left, right) => left.label.localeCompare(right.label) || left.hex.localeCompare(right.hex),
+    );
   }
 
   function getBrands() {
@@ -682,6 +809,34 @@
     return sortTypes([...typesByKey.values()]);
   }
 
+  function getColors() {
+    const colorsByKey = new Map();
+
+    for (const product of getProducts()) {
+      for (const color of normalizeColors(product.colors)) {
+        const colorKey = getColorStorageLabelKey(color);
+
+        if (!colorKey) {
+          continue;
+        }
+
+        colorsByKey.set(colorKey, color);
+      }
+    }
+
+    for (const color of getStoredColors()) {
+      const colorKey = getColorStorageLabelKey(color);
+
+      if (!colorKey) {
+        continue;
+      }
+
+      colorsByKey.set(colorKey, color);
+    }
+
+    return sortColors([...colorsByKey.values()]);
+  }
+
   function saveBrands(brands) {
     const normalizedBrands = sortBrands(
       brands
@@ -702,6 +857,24 @@
 
     window.localStorage.setItem(TYPE_STORAGE_KEY, JSON.stringify(normalizedTypes));
     return getTypes();
+  }
+
+  function saveColors(colors) {
+    const colorsByKey = new Map();
+
+    for (const color of normalizeColors(colors)) {
+      const colorKey = getColorStorageLabelKey(color);
+
+      if (!colorKey) {
+        continue;
+      }
+
+      colorsByKey.set(colorKey, color);
+    }
+
+    const normalizedColors = sortColors([...colorsByKey.values()]);
+    window.localStorage.setItem(COLOR_STORAGE_KEY, JSON.stringify(normalizedColors));
+    return getColors();
   }
 
   function saveContactSettings(settings) {
@@ -772,6 +945,7 @@
     STORAGE_KEY,
     BRAND_STORAGE_KEY,
     TYPE_STORAGE_KEY,
+    COLOR_STORAGE_KEY,
     CONTACT_STORAGE_KEY,
     getProducts,
     saveProducts,
@@ -782,6 +956,8 @@
     saveBrands,
     getTypes,
     saveTypes,
+    getColors,
+    saveColors,
     getContactSettings,
     getBannerContactSettings,
     saveContactSettings,
