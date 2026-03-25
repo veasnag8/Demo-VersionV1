@@ -116,6 +116,7 @@
 .admin-nav__item {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
   gap: 10px;
   width: 100%;
   max-width: 100%;
@@ -884,7 +885,7 @@
 
 .admin-settings--workspace .admin-settings__shell {
   display: grid;
-  grid-template-columns: minmax(280px, 332px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   align-items: start;
 }
