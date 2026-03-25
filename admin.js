@@ -811,7 +811,16 @@ Object.assign(ADMIN_UI.en.settings, {
   sessionTimeoutSavedTitle: "Session time saved",
   sessionTimeoutSaved: "The auto logout time has been updated.",
   sessionTimeoutSaveErrorTitle: "Unable to save session time",
+  sessionNoExpiry: "No expiry",
   sessionTimeoutOption(minutes) {
+    if (minutes === 0) {
+      return "No expiry";
+    }
+
+    if (minutes === 1440) {
+      return "1 day";
+    }
+
     return `${minutes} minute${minutes === 1 ? "" : "s"}`;
   },
 });
@@ -834,7 +843,16 @@ Object.assign(ADMIN_UI.km.settings, {
   sessionTimeoutSavedTitle: "បានរក្សាទុករយៈពេលសម័យ",
   sessionTimeoutSaved: "បានកែប្រែពេលវេលាចាកចេញស្វ័យប្រវត្តិរួចរាល់។",
   sessionTimeoutSaveErrorTitle: "មិនអាចរក្សាទុករយៈពេលសម័យបានទេ",
+  sessionNoExpiry: "មិនផុតកំណត់",
   sessionTimeoutOption(minutes) {
+    if (minutes === 0) {
+      return "មិនផុតកំណត់";
+    }
+
+    if (minutes === 1440) {
+      return "1 ថ្ងៃ";
+    }
+
     return `${minutes} នាទី`;
   },
 });
@@ -2249,7 +2267,7 @@ function syncSettingsCopy() {
 function getAdminIdleTimeoutOptions() {
   return Array.isArray(window.adminAuth?.idleTimeoutOptions) && window.adminAuth.idleTimeoutOptions.length > 0
     ? window.adminAuth.idleTimeoutOptions
-    : [1, 2, 5, 15, 30];
+    : [0, 1, 2, 5, 15, 30, 1440];
 }
 
 function renderSessionTimeoutOptions() {
@@ -2282,7 +2300,7 @@ function saveSessionTimeoutSetting(event) {
     const copy = getAdminCopy().settings;
     const timeoutMinutes = window.adminAuth?.saveIdleTimeoutMinutes?.(adminSettingsTimeoutInput?.value);
 
-    if (!timeoutMinutes) {
+    if (timeoutMinutes == null || Number.isNaN(Number(timeoutMinutes))) {
       throw new Error("Unable to save the selected session time.");
     }
 
@@ -2767,7 +2785,11 @@ function syncAuthSession() {
   const copy = getAdminCopy();
   const username = session?.username ?? copy.session.role;
   const issuedAt = formatAdminDateTime(session?.issuedAt);
-  const expiresAt = formatAdminDateTime(session?.expiresAt);
+  const expiresAt = session
+    ? (session.expiresAt == null || session.expiresAt === ""
+      ? copy.settings?.sessionNoExpiry ?? "No expiry"
+      : formatAdminDateTime(session.expiresAt))
+    : "-";
   const status = session ? copy.session.status : "-";
 
   if (adminSessionUser) {
