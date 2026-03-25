@@ -11,7 +11,17 @@
   const PASSWORD_RESET_LINK_KEY = "agt-admin-password-reset-link";
   const IDLE_TIMEOUT_STORAGE_KEY = "agt-admin-idle-timeout-minutes";
   const DEFAULT_IDLE_TIMEOUT_MINUTES = 15;
-  const IDLE_TIMEOUT_OPTIONS = Object.freeze([1, 2, 5, 15, 30]);
+  const NO_IDLE_TIMEOUT_MINUTES = 0;
+  const ONE_DAY_IDLE_TIMEOUT_MINUTES = 24 * 60;
+  const IDLE_TIMEOUT_OPTIONS = Object.freeze([
+    NO_IDLE_TIMEOUT_MINUTES,
+    1,
+    2,
+    5,
+    15,
+    30,
+    ONE_DAY_IDLE_TIMEOUT_MINUTES,
+  ]);
   const RESET_OTP_TTL_MS = 10 * 60 * 1000;
   const RESET_LINK_TTL_MS = 15 * 60 * 1000;
   const ACTIVITY_WRITE_THROTTLE_MS = 5000;
@@ -97,7 +107,13 @@
   }
 
   function getIdleTimeoutMs() {
-    return getIdleTimeoutMinutes() * 60 * 1000;
+    const timeoutMinutes = getIdleTimeoutMinutes();
+    return timeoutMinutes > 0 ? timeoutMinutes * 60 * 1000 : 0;
+  }
+
+  function getNextSessionExpiry(now = Date.now()) {
+    const timeoutMs = getIdleTimeoutMs();
+    return timeoutMs > 0 ? now + timeoutMs : null;
   }
 
   function getPassword() {
@@ -435,8 +451,12 @@
   }
 
   function isSessionValid(session) {
-    if (!session || !session.username || !session.expiresAt) {
+    if (!session || !session.username) {
       return false;
+    }
+
+    if (session.expiresAt == null || session.expiresAt === "") {
+      return true;
     }
 
     if (Date.now() >= Number(session.expiresAt)) {
@@ -462,7 +482,7 @@
       username,
       issuedAt: now,
       lastActiveAt: now,
-      expiresAt: now + getIdleTimeoutMs(),
+      expiresAt: getNextSessionExpiry(now),
     };
 
     writeSession(session);
@@ -486,7 +506,7 @@
     const nextSession = {
       ...session,
       lastActiveAt: now,
-      expiresAt: now + getIdleTimeoutMs(),
+      expiresAt: getNextSessionExpiry(now),
     };
 
     writeSession(nextSession);

@@ -69,8 +69,10 @@ const adminForm = document.querySelector("#adminForm");
 const adminColorPresetSelect = document.querySelector("#adminColorPresetSelect");
 const adminAddColorPresetButton = document.querySelector("#adminAddColorPresetButton");
 const adminCustomColorName = document.querySelector("#adminCustomColorName");
+const adminCustomColorCode = document.querySelector("#adminCustomColorCode");
 const adminCustomColorHex = document.querySelector("#adminCustomColorHex");
 const adminAddCustomColorButton = document.querySelector("#adminAddCustomColorButton");
+const adminCustomColorMatch = document.querySelector("#adminCustomColorMatch");
 const adminSelectedColors = document.querySelector("#adminSelectedColors");
 const adminImageInput = document.querySelector("#adminImageInput");
 const adminImageFileInput = document.querySelector("#adminImageFileInput");
@@ -253,20 +255,81 @@ const CATALOG_TARGETS = Object.freeze({
     downloadName: "depo-catalog-qr-card.png",
   },
 });
+const ADMIN_DEFAULT_CUSTOM_COLOR_HEX = "#2bb673";
+const ENGLISH_COLOR_LABEL_TO_KHMER = Object.freeze({
+  aqua: "ខៀវបៃតង",
+  beige: "ត្នោតខ្ចី",
+  black: "ខ្មៅ",
+  blue: "ខៀវ",
+  brown: "ត្នោត",
+  charcoal: "ប្រផេះចាស់",
+  coral: "ផ្កាថ្ម",
+  crimson: "ក្រហមចាស់",
+  gold: "មាស",
+  gray: "ប្រផេះ",
+  grey: "ប្រផេះ",
+  green: "បៃតង",
+  indigo: "ខៀវស្វាយ",
+  ivory: "សភ្លឺ",
+  lavender: "ស្វាយស្រាល",
+  lime: "បៃតងខ្ចី",
+  magenta: "ស្វាយក្រហម",
+  maroon: "ត្នោតក្រហម",
+  mint: "បៃតងមីន",
+  navy: "ខៀវចាស់",
+  olive: "បៃតងអូលីវ",
+  orange: "ទឹកក្រូច",
+  peach: "ទឹកក្រូចស្រាល",
+  pink: "ផ្កាឈូក",
+  purple: "ស្វាយ",
+  red: "ក្រហម",
+  rose: "ផ្កាកុលាប",
+  silver: "ប្រាក់",
+  "sky blue": "ខៀវស្រាល",
+  slate: "ប្រផេះខៀវ",
+  teal: "បៃតងខៀវ",
+  turquoise: "ខៀវបៃតងស្រាល",
+  violet: "ស្វាយចាស់",
+  white: "ស",
+  yellow: "លឿង",
+});
 const DEFAULT_ITEM_COLOR_OPTIONS = Object.freeze([
-  { label: "Black", hex: "#111111" },
-  { label: "Blue", hex: "#2563eb" },
-  { label: "Brown", hex: "#8b5e3c" },
-  { label: "Gold", hex: "#d4a017" },
-  { label: "Gray", hex: "#6b7280" },
-  { label: "Green", hex: "#2bb673" },
-  { label: "Orange", hex: "#f97316" },
-  { label: "Pink", hex: "#ec4899" },
-  { label: "Purple", hex: "#7c3aed" },
-  { label: "Red", hex: "#ef4444" },
-  { label: "Silver", hex: "#b8c0cc" },
-  { label: "White", hex: "#f8fafc" },
-  { label: "Yellow", hex: "#facc15" },
+  { label: "ខ្មៅ", hex: "#111111" },
+  { label: "ខៀវ", hex: "#2563eb" },
+  { label: "ត្នោត", hex: "#8b5e3c" },
+  { label: "មាស", hex: "#d4a017" },
+  { label: "ប្រផេះ", hex: "#6b7280" },
+  { label: "បៃតង", hex: "#2bb673" },
+  { label: "ទឹកក្រូច", hex: "#f97316" },
+  { label: "ផ្កាឈូក", hex: "#ec4899" },
+  { label: "ស្វាយ", hex: "#7c3aed" },
+  { label: "ក្រហម", hex: "#ef4444" },
+  { label: "ប្រាក់", hex: "#b8c0cc" },
+  { label: "ស", hex: "#f8fafc" },
+  { label: "លឿង", hex: "#facc15" },
+]);
+const ADMIN_COMMON_COLOR_NAME_OPTIONS = Object.freeze([
+  { label: "ខៀវបៃតង", hex: "#00ffff" },
+  { label: "ត្នោតខ្ចី", hex: "#f5f5dc" },
+  { label: "ប្រផេះចាស់", hex: "#36454f" },
+  { label: "ផ្កាថ្ម", hex: "#ff7f50" },
+  { label: "ក្រហមចាស់", hex: "#dc143c" },
+  { label: "ខៀវស្វាយ", hex: "#4f46e5" },
+  { label: "សភ្លឺ", hex: "#fffff0" },
+  { label: "ស្វាយស្រាល", hex: "#e6e6fa" },
+  { label: "បៃតងខ្ចី", hex: "#84cc16" },
+  { label: "ស្វាយក្រហម", hex: "#ff00ff" },
+  { label: "ត្នោតក្រហម", hex: "#800000" },
+  { label: "បៃតងមីន", hex: "#98ff98" },
+  { label: "ខៀវចាស់", hex: "#000080" },
+  { label: "បៃតងអូលីវ", hex: "#808000" },
+  { label: "ទឹកក្រូចស្រាល", hex: "#ffcba4" },
+  { label: "ផ្កាកុលាប", hex: "#f43f5e" },
+  { label: "ខៀវស្រាល", hex: "#38bdf8" },
+  { label: "ប្រផេះខៀវ", hex: "#64748b" },
+  { label: "បៃតងខៀវ", hex: "#0d9488" },
+  { label: "ខៀវបៃតងស្រាល", hex: "#40e0d0" },
+  { label: "ស្វាយចាស់", hex: "#8b5cf6" },
 ]);
 const EXCEL_ITEMS_SHEET_NAME = "Items";
 const EXCEL_BRANDS_SHEET_NAME = "Item Brands";
@@ -748,7 +811,16 @@ Object.assign(ADMIN_UI.en.settings, {
   sessionTimeoutSavedTitle: "Session time saved",
   sessionTimeoutSaved: "The auto logout time has been updated.",
   sessionTimeoutSaveErrorTitle: "Unable to save session time",
+  sessionNoExpiry: "No expiry",
   sessionTimeoutOption(minutes) {
+    if (minutes === 0) {
+      return "No expiry";
+    }
+
+    if (minutes === 1440) {
+      return "1 day";
+    }
+
     return `${minutes} minute${minutes === 1 ? "" : "s"}`;
   },
 });
@@ -771,7 +843,16 @@ Object.assign(ADMIN_UI.km.settings, {
   sessionTimeoutSavedTitle: "បានរក្សាទុករយៈពេលសម័យ",
   sessionTimeoutSaved: "បានកែប្រែពេលវេលាចាកចេញស្វ័យប្រវត្តិរួចរាល់។",
   sessionTimeoutSaveErrorTitle: "មិនអាចរក្សាទុករយៈពេលសម័យបានទេ",
+  sessionNoExpiry: "មិនផុតកំណត់",
   sessionTimeoutOption(minutes) {
+    if (minutes === 0) {
+      return "មិនផុតកំណត់";
+    }
+
+    if (minutes === 1440) {
+      return "1 ថ្ងៃ";
+    }
+
     return `${minutes} នាទី`;
   },
 });
@@ -1351,6 +1432,14 @@ function normalizeAdminColorHex(value) {
 
   const normalized = text.startsWith("#") ? text.slice(1) : text;
 
+  if (/^[0-9a-fA-F]{3}$/.test(normalized)) {
+    return `#${normalized
+      .split("")
+      .map((character) => `${character}${character}`)
+      .join("")
+      .toLowerCase()}`;
+  }
+
   if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
     return "";
   }
@@ -1358,8 +1447,19 @@ function normalizeAdminColorHex(value) {
   return `#${normalized.toLowerCase()}`;
 }
 
+function normalizeAdminColorLabel(value) {
+  const label = String(value ?? "").trim();
+
+  if (!label) {
+    return "";
+  }
+
+  const normalizedKey = label.toLowerCase().replace(/\s+/g, " ");
+  return ENGLISH_COLOR_LABEL_TO_KHMER[normalizedKey] ?? label;
+}
+
 function normalizeAdminColorEntry(color) {
-  const label = String(color?.label ?? "").trim();
+  const label = normalizeAdminColorLabel(color?.label);
   const hex = normalizeAdminColorHex(color?.hex);
 
   if (!label && !hex) {
@@ -1367,7 +1467,7 @@ function normalizeAdminColorEntry(color) {
   }
 
   return {
-    label: label || (hex ? hex.toUpperCase() : "Color"),
+    label: label || (hex ? hex.toUpperCase() : "ពណ៌"),
     hex: hex || "#d8e7e2",
   };
 }
@@ -1377,11 +1477,24 @@ function getAdminColorKey(color) {
   return normalizedColor ? `${normalizedColor.label.toLowerCase()}|${normalizedColor.hex.toLowerCase()}` : "";
 }
 
+function getAdminColorLabelKey(color) {
+  const normalizedColor = normalizeAdminColorEntry(color);
+  return normalizedColor ? normalizedColor.label.toLowerCase() : "";
+}
+
+function getStoredAdminColorOptions() {
+  if (typeof store.getColors === "function") {
+    return store.getColors();
+  }
+
+  return products.flatMap((product) => product.colors ?? []);
+}
+
 function getAvailableItemColors() {
   const palette = new Map();
   const sourceColors = [
     ...DEFAULT_ITEM_COLOR_OPTIONS,
-    ...products.flatMap((product) => product.colors ?? []),
+    ...getStoredAdminColorOptions(),
     ...selectedItemColors,
   ];
 
@@ -1392,10 +1505,100 @@ function getAvailableItemColors() {
       continue;
     }
 
-    palette.set(getAdminColorKey(normalizedColor), normalizedColor);
+    const colorLabelKey = getAdminColorLabelKey(normalizedColor);
+
+    if (!colorLabelKey || palette.has(colorLabelKey)) {
+      continue;
+    }
+
+    palette.set(colorLabelKey, normalizedColor);
   }
 
   return [...palette.values()].sort((left, right) => left.label.localeCompare(right.label) || left.hex.localeCompare(right.hex));
+}
+
+function getAdminColorMatchCandidates() {
+  const candidates = [];
+  const seenKeys = new Set();
+  const sourceColors = [
+    ...selectedItemColors,
+    ...getStoredAdminColorOptions(),
+    ...DEFAULT_ITEM_COLOR_OPTIONS,
+    ...ADMIN_COMMON_COLOR_NAME_OPTIONS,
+  ];
+
+  for (const color of sourceColors) {
+    const normalizedColor = normalizeAdminColorEntry(color);
+
+    if (!normalizedColor) {
+      continue;
+    }
+
+    const colorKey = getAdminColorKey(normalizedColor);
+
+    if (seenKeys.has(colorKey)) {
+      continue;
+    }
+
+    seenKeys.add(colorKey);
+    candidates.push(normalizedColor);
+  }
+
+  return candidates;
+}
+
+function getAdminRgbFromHex(hex) {
+  const normalizedHex = normalizeAdminColorHex(hex);
+
+  if (!normalizedHex) {
+    return null;
+  }
+
+  return {
+    r: Number.parseInt(normalizedHex.slice(1, 3), 16),
+    g: Number.parseInt(normalizedHex.slice(3, 5), 16),
+    b: Number.parseInt(normalizedHex.slice(5, 7), 16),
+  };
+}
+
+function getAdminColorDistance(leftHex, rightHex) {
+  const leftRgb = getAdminRgbFromHex(leftHex);
+  const rightRgb = getAdminRgbFromHex(rightHex);
+
+  if (!leftRgb || !rightRgb) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  return ((leftRgb.r - rightRgb.r) ** 2) + ((leftRgb.g - rightRgb.g) ** 2) + ((leftRgb.b - rightRgb.b) ** 2);
+}
+
+function findAdminColorMatch(hex) {
+  const normalizedHex = normalizeAdminColorHex(hex);
+
+  if (!normalizedHex) {
+    return null;
+  }
+
+  const candidates = getAdminColorMatchCandidates();
+  const exactMatch = candidates.find((color) => color.hex === normalizedHex);
+
+  if (exactMatch) {
+    return { ...exactMatch, exact: true };
+  }
+
+  let closestMatch = null;
+  let closestDistance = Number.POSITIVE_INFINITY;
+
+  for (const candidate of candidates) {
+    const distance = getAdminColorDistance(normalizedHex, candidate.hex);
+
+    if (distance < closestDistance) {
+      closestMatch = candidate;
+      closestDistance = distance;
+    }
+  }
+
+  return closestMatch ? { ...closestMatch, exact: false } : null;
 }
 
 function formatColorListValue(colors, fallback = "-") {
@@ -1408,6 +1611,125 @@ function formatColorListValue(colors, fallback = "-") {
 
 function syncItemColorFieldValue() {
   setFormValue("colors", serializeColors(selectedItemColors));
+}
+
+function saveAdminColorOption(color) {
+  const normalizedColor = normalizeAdminColorEntry(color);
+
+  if (!normalizedColor || typeof store.getColors !== "function" || typeof store.saveColors !== "function") {
+    return;
+  }
+
+  try {
+    const currentColors = store.getColors();
+    const currentColorKeys = new Set(currentColors.map((item) => getAdminColorLabelKey(item)));
+
+    if (currentColorKeys.has(getAdminColorLabelKey(normalizedColor))) {
+      return;
+    }
+
+    store.saveColors([...currentColors, normalizedColor]);
+    renderColorPresetOptions();
+  } catch (error) {
+    showStatus("Color added to this item, but it could not be saved to the shared color list.", "error");
+  }
+}
+
+function setAdminCustomColorMatchText(message, tone = "default") {
+  if (!adminCustomColorMatch) {
+    return;
+  }
+
+  adminCustomColorMatch.textContent = message;
+
+  if (tone === "default") {
+    delete adminCustomColorMatch.dataset.tone;
+    return;
+  }
+
+  adminCustomColorMatch.dataset.tone = tone;
+}
+
+function syncAdminCustomColorNameSuggestion(match) {
+  if (!adminCustomColorName || !match?.label) {
+    return;
+  }
+
+  const currentValue = String(adminCustomColorName.value ?? "").trim();
+  const canAutofill = !currentValue || adminCustomColorName.dataset.autoFilled === "true";
+
+  if (!canAutofill) {
+    return;
+  }
+
+  adminCustomColorName.value = match.label;
+  adminCustomColorName.dataset.autoFilled = "true";
+}
+
+function syncAdminCustomColorInputs({
+  source = "picker",
+  allowAutofillName = true,
+  normalizeCodeInput = false,
+} = {}) {
+  const codeValue = String(adminCustomColorCode?.value ?? "").trim();
+  const pickerValue = String(adminCustomColorHex?.value ?? "").trim();
+  const activeValue = source === "code" ? codeValue : pickerValue;
+  const normalizedHex = normalizeAdminColorHex(activeValue);
+
+  if (source === "code" && normalizeCodeInput && adminCustomColorCode) {
+    adminCustomColorCode.value = normalizedHex ? normalizedHex.toUpperCase() : codeValue.toUpperCase();
+  }
+
+  if (!normalizedHex) {
+    if (source === "code" && codeValue) {
+      setAdminCustomColorMatchText("Enter a valid hex code like #2BB673.", "invalid");
+    } else {
+      setAdminCustomColorMatchText("Type a hex code or use the picker to detect a color name.");
+    }
+
+    return "";
+  }
+
+  if (adminCustomColorCode) {
+    adminCustomColorCode.value = normalizedHex.toUpperCase();
+  }
+
+  if (adminCustomColorHex && adminCustomColorHex.value !== normalizedHex) {
+    adminCustomColorHex.value = normalizedHex;
+  }
+
+  const match = findAdminColorMatch(normalizedHex);
+
+  if (allowAutofillName && match) {
+    syncAdminCustomColorNameSuggestion(match);
+  }
+
+  if (match?.exact) {
+    setAdminCustomColorMatchText(`Matched color name: ${match.label}`);
+  } else if (match) {
+    setAdminCustomColorMatchText(`Closest color name: ${match.label}`, "closest");
+  } else {
+    setAdminCustomColorMatchText(`Color code ready: ${normalizedHex.toUpperCase()}`);
+  }
+
+  return normalizedHex;
+}
+
+function resetAdminCustomColorInputs() {
+  if (adminCustomColorName) {
+    adminCustomColorName.value = "";
+    adminCustomColorName.dataset.autoFilled = "false";
+  }
+
+  if (adminCustomColorHex) {
+    adminCustomColorHex.value = ADMIN_DEFAULT_CUSTOM_COLOR_HEX;
+  }
+
+  if (adminCustomColorCode) {
+    adminCustomColorCode.value = ADMIN_DEFAULT_CUSTOM_COLOR_HEX.toUpperCase();
+  }
+
+  syncAdminCustomColorInputs({ source: "picker", allowAutofillName: false, normalizeCodeInput: true });
 }
 
 function renderColorPresetOptions() {
@@ -1446,11 +1768,20 @@ function renderSelectedItemColors() {
   adminSelectedColors.innerHTML = selectedItemColors
     .map(
       (color, index) => `
-        <button class="admin-color-chip" type="button" data-admin-color-remove="${index}">
-          <span class="admin-color-chip__swatch" style="background-color:${escapeHtml(color.hex)};"></span>
-          <span>${escapeHtml(color.label)}</span>
-          <small>${escapeHtml(color.hex.toUpperCase())}</small>
-        </button>
+        <div class="admin-color-chip">
+          <span class="admin-color-chip__content">
+            <span class="admin-color-chip__swatch" style="background-color:${escapeHtml(color.hex)};"></span>
+            <span class="admin-color-chip__label">${escapeHtml(color.label)}</span>
+            <small>${escapeHtml(color.hex.toUpperCase())}</small>
+          </span>
+          <button
+            class="admin-color-chip__remove"
+            type="button"
+            data-admin-color-remove="${index}"
+            aria-label="Remove color ${escapeHtml(color.label)}"
+            title="Remove color"
+          >&times;</button>
+        </div>
       `,
     )
     .join("");
@@ -1467,9 +1798,9 @@ function setSelectedItemColors(colors) {
       continue;
     }
 
-    const colorKey = getAdminColorKey(normalizedColor);
+    const colorKey = getAdminColorLabelKey(normalizedColor);
 
-    if (seenKeys.has(colorKey)) {
+    if (!colorKey || seenKeys.has(colorKey)) {
       continue;
     }
 
@@ -1488,20 +1819,26 @@ function addSelectedItemColor(color) {
 
   if (!normalizedColor) {
     showStatus("Choose a valid color.", "error");
-    return;
+    return false;
   }
 
   const colorKey = getAdminColorKey(normalizedColor);
+  const colorLabelKey = getAdminColorLabelKey(normalizedColor);
 
-  if (selectedItemColors.some((item) => getAdminColorKey(item) === colorKey)) {
+  if (
+    selectedItemColors.some(
+      (item) => getAdminColorKey(item) === colorKey || getAdminColorLabelKey(item) === colorLabelKey,
+    )
+  ) {
     showStatus(`${normalizedColor.label} is already selected.`, "error");
-    return;
+    return false;
   }
 
   selectedItemColors = [...selectedItemColors, normalizedColor];
   syncItemColorFieldValue();
   renderColorPresetOptions();
   renderSelectedItemColors();
+  return true;
 }
 
 function addPresetItemColor() {
@@ -1516,16 +1853,25 @@ function addPresetItemColor() {
     return;
   }
 
-  addSelectedItemColor(selectedColor);
-  adminColorPresetSelect.value = "";
+  if (addSelectedItemColor(selectedColor)) {
+    adminColorPresetSelect.value = "";
+  }
 }
 
 function addCustomItemColor() {
   const label = String(adminCustomColorName?.value ?? "").trim();
-  const hex = normalizeAdminColorHex(adminCustomColorHex?.value);
+  const codeValue = String(adminCustomColorCode?.value ?? "").trim();
+  const codeHex = normalizeAdminColorHex(codeValue);
+  const hex = codeValue ? codeHex : normalizeAdminColorHex(adminCustomColorHex?.value);
+  const matchedColor = hex ? findAdminColorMatch(hex) : null;
 
   if (!label && !hex) {
     showStatus("Enter a color name or choose a color.", "error");
+    return;
+  }
+
+  if (codeValue && !codeHex) {
+    showStatus("Enter a valid color hex like #2BB673.", "error");
     return;
   }
 
@@ -1534,18 +1880,18 @@ function addCustomItemColor() {
     return;
   }
 
-  addSelectedItemColor({
-    label: label || hex.toUpperCase(),
+  const nextColor = {
+    label: label || matchedColor?.label || hex.toUpperCase(),
     hex,
-  });
+  };
 
-  if (adminCustomColorName) {
-    adminCustomColorName.value = "";
+  if (!addSelectedItemColor(nextColor)) {
+    return;
   }
 
-  if (adminCustomColorHex) {
-    adminCustomColorHex.value = "#2bb673";
-  }
+  saveAdminColorOption(nextColor);
+
+  resetAdminCustomColorInputs();
 }
 
 function removeSelectedItemColor(index) {
@@ -1921,7 +2267,7 @@ function syncSettingsCopy() {
 function getAdminIdleTimeoutOptions() {
   return Array.isArray(window.adminAuth?.idleTimeoutOptions) && window.adminAuth.idleTimeoutOptions.length > 0
     ? window.adminAuth.idleTimeoutOptions
-    : [1, 2, 5, 15, 30];
+    : [0, 1, 2, 5, 15, 30, 1440];
 }
 
 function renderSessionTimeoutOptions() {
@@ -1954,7 +2300,7 @@ function saveSessionTimeoutSetting(event) {
     const copy = getAdminCopy().settings;
     const timeoutMinutes = window.adminAuth?.saveIdleTimeoutMinutes?.(adminSettingsTimeoutInput?.value);
 
-    if (!timeoutMinutes) {
+    if (timeoutMinutes == null || Number.isNaN(Number(timeoutMinutes))) {
       throw new Error("Unable to save the selected session time.");
     }
 
@@ -2439,7 +2785,11 @@ function syncAuthSession() {
   const copy = getAdminCopy();
   const username = session?.username ?? copy.session.role;
   const issuedAt = formatAdminDateTime(session?.issuedAt);
-  const expiresAt = formatAdminDateTime(session?.expiresAt);
+  const expiresAt = session
+    ? (session.expiresAt == null || session.expiresAt === ""
+      ? copy.settings?.sessionNoExpiry ?? "No expiry"
+      : formatAdminDateTime(session.expiresAt))
+    : "-";
   const status = session ? copy.session.status : "-";
 
   if (adminSessionUser) {
@@ -3708,6 +4058,7 @@ function fillForm(product) {
   setFormValue("title", nextProduct.title);
   setFormValue("description", nextProduct.description);
   setSelectedItemColors(nextProduct.colors ?? []);
+  resetAdminCustomColorInputs();
   setFormValue("sizes", (nextProduct.sizes ?? []).join(", "));
   setFormValue(
     "specRows",
@@ -3922,6 +4273,8 @@ function serializeSpecRows(specRows) {
 
 function serializeColors(colors) {
   return (colors ?? [])
+    .map((color) => normalizeAdminColorEntry(color))
+    .filter(Boolean)
     .map((color) => `${color.label}|${color.hex}`)
     .join("\n");
 }
@@ -4096,6 +4449,48 @@ function buildImportedType(row, existingType) {
   };
 }
 
+function formatImportIssueDetails(baseMessage, issues, previewCount = 3) {
+  if (!issues.length) {
+    return baseMessage;
+  }
+
+  const previewIssues = issues.slice(0, previewCount);
+  const remainingCount = Math.max(issues.length - previewIssues.length, 0);
+  const previewText = previewIssues.map((issue) => `- ${issue}`).join("\n");
+  const remainingText = remainingCount
+    ? `\nPlus ${remainingCount} more ${pluralize(remainingCount, "issue")}.`
+    : "";
+
+  return `${baseMessage}\n\n${previewText}${remainingText}`;
+}
+
+function getImportedItemReferenceIssues(product, availableBrandsByKey, availableTypesByKey) {
+  const rowIssues = [];
+  const brandName = String(product?.brand ?? "").trim();
+  const typeName = String(product?.filterType ?? "").trim().toLowerCase();
+
+  if (brandName && !availableBrandsByKey.has(brandName.toLowerCase())) {
+    rowIssues.push(`Item Brand "${brandName}" does not exist in Item Brands.`);
+  }
+
+  if (typeName && !availableTypesByKey.has(typeName)) {
+    rowIssues.push(`Item Group "${formatTypeLabel(typeName)}" does not exist in Item Groups.`);
+  }
+
+  return rowIssues;
+}
+
+function applyImportedItemReferenceNames(product, availableBrandsByKey, availableTypesByKey) {
+  const brandName = availableBrandsByKey.get(String(product?.brand ?? "").trim().toLowerCase()) ?? product.brand;
+  const typeName = availableTypesByKey.get(String(product?.filterType ?? "").trim().toLowerCase()) ?? product.filterType;
+
+  return {
+    ...product,
+    brand: brandName,
+    filterType: typeName,
+  };
+}
+
 function exportItemsToExcel() {
   if (!ensureExcelSupport()) {
     return;
@@ -4216,6 +4611,8 @@ async function importItemsFromExcel(file) {
   }
 
   const rows = await readWorkbookRows(file);
+  const availableBrandsByKey = new Map(getSortedBrands().map((brand) => [brand.name.toLowerCase(), brand.name]));
+  const availableTypesByKey = new Map(getSortedTypes().map((type) => [type.name.toLowerCase(), type.name]));
   const nextProductsByCode = new Map(products.map((product) => [product.code.toLowerCase(), product]));
   let importedCount = 0;
   let skippedCount = 0;
@@ -4229,28 +4626,51 @@ async function importItemsFromExcel(file) {
     }
 
     const codeValue = String(getSpreadsheetValue(normalizedRow, ITEM_IMPORT_ALIASES.code, "").value ?? "").trim();
-    const existingProduct = codeValue
-      ? nextProductsByCode.get(codeValue.toLowerCase()) ?? store.getEmptyProduct()
-      : store.getEmptyProduct();
+    const existingProductMatch = codeValue ? nextProductsByCode.get(codeValue.toLowerCase()) ?? null : null;
+    const existingProduct = existingProductMatch ?? store.getEmptyProduct();
+    const resolvedFilterTypeValue = String(
+      getSpreadsheetValue(
+        normalizedRow,
+        ITEM_IMPORT_ALIASES.filterType,
+        existingProductMatch ? existingProduct.filterType : "",
+      ).value ?? "",
+    ).trim();
     const normalizedProduct = store.normalizeProduct(buildImportedProduct(normalizedRow, existingProduct));
 
-    if (!normalizedProduct.code || !normalizedProduct.brand || !normalizedProduct.title) {
+    if (!normalizedProduct.code || !normalizedProduct.brand || !normalizedProduct.title || !resolvedFilterTypeValue) {
       skippedCount += 1;
 
-      if (issues.length < 3) {
-        issues.push(`Row ${index + 2}: code, brand, and name are required.`);
+      if (issues.length < 5) {
+        issues.push(`Row ${index + 2}: code, item brand, item group, and name are required.`);
       }
 
       return;
     }
 
-    nextProductsByCode.set(normalizedProduct.code.toLowerCase(), normalizedProduct);
+    const referenceIssues = getImportedItemReferenceIssues(normalizedProduct, availableBrandsByKey, availableTypesByKey);
+
+    if (referenceIssues.length) {
+      skippedCount += 1;
+
+      if (issues.length < 5) {
+        issues.push(`Row ${index + 2}: ${referenceIssues.join(" ")}`);
+      }
+
+      return;
+    }
+
+    const normalizedImportProduct = applyImportedItemReferenceNames(
+      normalizedProduct,
+      availableBrandsByKey,
+      availableTypesByKey,
+    );
+
+    nextProductsByCode.set(normalizedImportProduct.code.toLowerCase(), normalizedImportProduct);
     importedCount += 1;
   });
 
   if (!importedCount) {
-    const detail = issues[0] ?? "The workbook did not contain any valid item rows.";
-    throw new Error(detail);
+    throw new Error(formatImportIssueDetails("The workbook did not contain any valid item rows.", issues));
   }
 
   store.saveProducts(sortProducts([...nextProductsByCode.values()]));
@@ -4260,7 +4680,11 @@ async function importItemsFromExcel(file) {
     ? `Imported ${importedCount} ${pluralize(importedCount, "item")} and skipped ${skippedCount} invalid ${pluralize(skippedCount, "row")}.`
     : `Imported ${importedCount} ${pluralize(importedCount, "item")} from Excel.`;
 
-  showImportExportNotice("Items imported", summary, skippedCount ? "warning" : "success");
+  showImportExportNotice(
+    "Items imported",
+    skippedCount ? formatImportIssueDetails(summary, issues) : summary,
+    skippedCount ? "warning" : "success",
+  );
 }
 
 async function importBrandsFromExcel(file) {
@@ -4489,9 +4913,7 @@ function readFormProduct() {
     description: getFormValue("description"),
     colors: getFormValue(
       "colors",
-      (selectedProduct.colors ?? [])
-        .map((color) => `${color.label}|${color.hex}`)
-        .join("\n"),
+      serializeColors(selectedProduct.colors),
     ),
     sizes: getFormValue("sizes", (selectedProduct.sizes ?? []).join(", ")),
     specRows: getFormValue(
@@ -5289,7 +5711,29 @@ for (const item of adminQrMenuItems) {
 }
 adminAddColorPresetButton?.addEventListener("click", addPresetItemColor);
 adminAddCustomColorButton?.addEventListener("click", addCustomItemColor);
+adminCustomColorHex?.addEventListener("input", () => {
+  syncAdminCustomColorInputs({ source: "picker" });
+});
+adminCustomColorCode?.addEventListener("input", () => {
+  syncAdminCustomColorInputs({ source: "code" });
+});
+adminCustomColorCode?.addEventListener("blur", () => {
+  syncAdminCustomColorInputs({ source: "code", normalizeCodeInput: true });
+});
+adminCustomColorName?.addEventListener("input", () => {
+  if (!adminCustomColorName) {
+    return;
+  }
+
+  adminCustomColorName.dataset.autoFilled = String(adminCustomColorName.value ?? "").trim() ? "false" : "true";
+});
 adminCustomColorName?.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    addCustomItemColor();
+  }
+});
+adminCustomColorCode?.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
     addCustomItemColor();
@@ -5347,5 +5791,6 @@ window.addEventListener("keydown", (event) => {
 
 applyAdminLanguage();
 syncItemImageFieldState();
+resetAdminCustomColorInputs();
 refreshCurrentSection();
 syncSidebarLayout();
